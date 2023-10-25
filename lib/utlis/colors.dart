@@ -21,6 +21,17 @@ const Color switchBackgroundColor = Color(0xfffbd0d0);
 
 
 const Color darkThemeColor = Color(0xFF202023);
+
+
+// 인증번호 버튼
+const sendTextColor = Color(0xff6387ff);
+const sendBackgroundColor = Color(0xffbecefd);
+
+// health chart
+const sleepChartColor = Color(0xFF9BA3EA);
+const stepChartColor = Color(0xFFEFC568);
+
+
 //const Color mainColor = Color(0xbbffbfbf);
 
 

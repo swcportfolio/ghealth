@@ -62,6 +62,7 @@ class CustomDialog{
                                   text: content,
                                   align: TextAlign.center,
                                   fontSize: 0.85,
+                                  maxLinesCount: 2,
                                   fontWeight: FontWeight.w500))
                         ],
                       ),

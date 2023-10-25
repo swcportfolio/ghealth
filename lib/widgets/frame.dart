@@ -18,14 +18,14 @@ class Frame{
       // ),
       title: Frame.myText(
         text: title,
-        fontSize: 0.8,
+        fontSize: 1.0,
         fontWeight: FontWeight.w600,
-        color: Colors.black
+        color: Colors.white
       ),
       centerTitle: true,
-      backgroundColor: Colors.white,
+      backgroundColor: mainColor,
       elevation: 0.5,
-      iconTheme: const IconThemeData(color: Colors.black),
+      iconTheme: const IconThemeData(color: Colors.white),
       actions:
       [
         /// 채팅화면 우측 상단 아이콘 버튼
@@ -35,7 +35,7 @@ class Frame{
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
                 onPressed: () => onPressed!(),
-                icon: Icon(iconData, size: 25)
+                icon: Icon(iconData, size: 30)
             ),
           ),
         ),
@@ -43,7 +43,7 @@ class Frame{
     );
   }
 
-  /// 텍스트
+  /// 커스텀 텍스트
   static Text myText({
     required String text,
     double fontSize = 1.0,
@@ -52,21 +52,24 @@ class Frame{
     TextAlign align = TextAlign.start,
     TextOverflow overflow = TextOverflow.visible,
     int maxLinesCount = 1,
+    bool softWrap = false,
   }){
    return Text(
      text,
      textScaleFactor: fontSize,
      overflow: overflow,
      maxLines: maxLinesCount,
+     softWrap: softWrap,
      style: TextStyle(
          color: color,
          fontWeight: fontWeight,
-         //fontFamily: 'NanumSquareRound'
      ),
      textAlign: align
      ,
    );
   }
+
+
 
 
   /// Navigator 화면 이동

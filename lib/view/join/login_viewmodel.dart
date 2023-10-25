@@ -7,14 +7,14 @@ import '../../widgets/dialog.dart';
 class LoginViewModel extends ChangeNotifier {
   late BuildContext context;
 
-  /// 아이디 입력 필드 컨트롤러
-  final _idController = TextEditingController();
+  /// 휴대폰번호 입력 필드 컨트롤러
+  final _phoneController = TextEditingController();
 
-  /// 비밀번호 입력 필드 컨트롤러
-  final _passwordController = TextEditingController();
+  /// 인증변호 입력 필드 컨트롤러
+  final _certificationController = TextEditingController();
 
-  TextEditingController get idController => _idController;
-  TextEditingController get passwordController => _passwordController;
+  TextEditingController get phoneController => _phoneController;
+  TextEditingController get certificationController => _certificationController;
 
 
   handleLogin() {
@@ -29,14 +29,14 @@ class LoginViewModel extends ChangeNotifier {
   ///
   /// return value: 로그인 정보가 유효한 경우 true를 반환하고, 그렇지 않으면 false를 반환합니다.
   bool checkLoginValidity() {
-    if(_idController.text.isEmpty){
+    if(_phoneController.text.isEmpty){
       CustomDialog.showMyDialog(
         title: '로그인 확인',
         content: "아이디를 입력해주세요.",
         mainContext: context,
       );
       return false;
-    } else if( _idController.text.isNotEmpty){
+    } else if( _phoneController.text.isNotEmpty){
       CustomDialog.showMyDialog(
           title: '로그인 확인',
           content: '비밀번호를 입력해주세요.',

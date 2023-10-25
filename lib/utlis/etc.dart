@@ -60,6 +60,14 @@ class Etc{
       }
     }
 
+  /// chart x축 날짜 format(MM/dd)
+  static String setDateTime(int duration) {
+    final now = DateTime.now();
+    final returnDate = now.subtract(Duration(days:duration));
+
+    return DateFormat('MM/dd').format(returnDate);
+  }
+
 
   /// 채팅 메시지 생성 날짜
   static chatTimeAgoDisplay(DateTime? targetDate){

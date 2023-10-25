@@ -43,6 +43,10 @@ dependencies:
   intl: ^0.18.1
   flutter_localizations:
     sdk: flutter
+  flutter_gallery_3d: ^1.1.1
+  health: ^7.0.0
+  permission_handler: ^11.0.1
+  syncfusion_flutter_charts: ^23.1.42
 
 dev_dependencies:
   flutter_test:
@@ -67,7 +71,22 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
+  assets:
+    - images/bi_white.png
+    - images/hospital_white.png
+    - images/organizations.png
+    - images/bell_image.png
+    - images/footstep.png
+    - images/sleeping.png
+    - images/ex_main_ghealth.png
+    - images/point_box.png
+    - images/chart_box.png
+    - images/ex_1.png
+    - images/ex_2.png
+    - images/ex_3.png
+    - images/ex_4.png
+
+
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
