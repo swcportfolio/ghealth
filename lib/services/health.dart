@@ -1,9 +1,5 @@
-
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:health/health.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../data/models/chart_health_data.dart';
 import '../main.dart';
 import '../widgets/dialog.dart';
@@ -37,7 +33,7 @@ class Health {
   Health.internal() {
     healthDataList = [];
     // TODO useHealthConnectIfAvailable: true => 데이터가 없을시 화면에 NullPointerException 남!
-    health = HealthFactory(useHealthConnectIfAvailable: true);
+    health = HealthFactory();
 
     now          = DateTime.now();               // 측정 현재 시간
     today24Hour  = DateTime(now.year, now.month, now.day, 0, 0);  // 오늘
@@ -53,11 +49,11 @@ class Health {
   /// Fetch Step, Sleep data
   Future<ChartHealthData> fetchData(BuildContext context) async
   {
-    final types = [HealthDataType.STEPS, HealthDataType.SLEEP_SESSION];  // define the types to get
+    final types = [HealthDataType.STEPS, HealthDataType.SLEEP_IN_BED];  // define the types to get
     final permissions = [HealthDataAccess.READ, HealthDataAccess.READ];// with coresponsing permissions
     bool requested = false;
     try {
-     requested = await health.requestAuthorization([HealthDataType.SLEEP_LIGHT, HealthDataType.SLEEP_SESSION], permissions: [HealthDataAccess.READ, HealthDataAccess.READ]); // needed, since we only want READ access.
+     requested = await health.requestAuthorization(types, permissions: permissions); // needed, since we only want READ access.
       mLog.d('[ChartHealthData requested]  $requested');
     } catch (error) {
       print("Exception in authorize: $error");
@@ -76,13 +72,13 @@ class Health {
 
 
         /// 일주일 수면시간 가져오기
-        List<HealthDataPoint> daySleep          = await health.getHealthDataFromTypes(today24Hour, now, [HealthDataType.SLEEP_SESSION]);
-        List<HealthDataPoint> agoDaySleep       = await health.getHealthDataFromTypes(agoDay, today24Hour, [HealthDataType.SLEEP_SESSION]);
-        List<HealthDataPoint> agoTwoDaySleep    = await health.getHealthDataFromTypes(agoTwoDay, agoDay, [HealthDataType.SLEEP_SESSION]);
-        List<HealthDataPoint> agoThreeDaySleep  = await health.getHealthDataFromTypes(agoThreeDay, agoTwoDay, [HealthDataType.SLEEP_SESSION]);
-        List<HealthDataPoint> agoFourthDaySleep = await health.getHealthDataFromTypes(agoFourthDay, agoThreeDay, [HealthDataType.SLEEP_SESSION]);
-        List<HealthDataPoint> agoFifthDaySleep  = await health.getHealthDataFromTypes(agoFifthDay, agoFourthDay, [HealthDataType.SLEEP_SESSION]);
-        List<HealthDataPoint> agoSixthDaySleep  = await health.getHealthDataFromTypes(agoSixthDay, agoFifthDay, [HealthDataType.SLEEP_SESSION]);
+        List<HealthDataPoint> daySleep          = await health.getHealthDataFromTypes(today24Hour, now, [HealthDataType.SLEEP_IN_BED]);
+        List<HealthDataPoint> agoDaySleep       = await health.getHealthDataFromTypes(agoDay, today24Hour, [HealthDataType.SLEEP_IN_BED]);
+        List<HealthDataPoint> agoTwoDaySleep    = await health.getHealthDataFromTypes(agoTwoDay, agoDay, [HealthDataType.SLEEP_IN_BED]);
+        List<HealthDataPoint> agoThreeDaySleep  = await health.getHealthDataFromTypes(agoThreeDay, agoTwoDay, [HealthDataType.SLEEP_IN_BED]);
+        List<HealthDataPoint> agoFourthDaySleep = await health.getHealthDataFromTypes(agoFourthDay, agoThreeDay, [HealthDataType.SLEEP_IN_BED]);
+        List<HealthDataPoint> agoFifthDaySleep  = await health.getHealthDataFromTypes(agoFifthDay, agoFourthDay, [HealthDataType.SLEEP_IN_BED]);
+        List<HealthDataPoint> agoSixthDaySleep  = await health.getHealthDataFromTypes(agoSixthDay, agoFifthDay, [HealthDataType.SLEEP_IN_BED]);
 
 
         mLog.i('daySleep: ${daySleep[0].value}');
@@ -92,13 +88,13 @@ class Health {
                         agoThreeDayStep: agoThreeDayStep, agoFourthDayStep: agoFourthDayStep,
                         agoFifthStep:agoFifthStep, agoSixthStep:agoSixthStep,
 
-            daySleep         : daySleep.isEmpty?          0 : int.parse(daySleep[0].value.toString()),
-            agoDaySleep      : agoDaySleep.isEmpty?       0 : int.parse(agoDaySleep[0].value.toString()),
-            agoTwoDaySleep   : agoTwoDaySleep.isEmpty?    0 : int.parse(agoTwoDaySleep[0].value.toString()),
-            agoThreeDaySleep : agoThreeDaySleep.isEmpty?  0 : int.parse(agoThreeDaySleep[0].value.toString()),
-            agoFourthDaySleep: agoFourthDaySleep.isEmpty? 0 : int.parse(agoFourthDaySleep[0].value.toString()),
-            agoFifthDaySleep : agoFifthDaySleep.isEmpty?  0 : int.parse(agoFifthDaySleep[0].value.toString()),
-            agoSixthDaySleep : agoSixthDaySleep.isEmpty?  0 : int.parse(agoSixthDaySleep[0].value.toString()),
+            daySleep         : daySleep.isEmpty?          0 : double.parse(daySleep[0].value.toString()).toInt(),
+            agoDaySleep      : agoDaySleep.isEmpty?       0 : double.parse(agoDaySleep[0].value.toString()).toInt(),
+            agoTwoDaySleep   : agoTwoDaySleep.isEmpty?    0 : double.parse(agoTwoDaySleep[0].value.toString()).toInt(),
+            agoThreeDaySleep : agoThreeDaySleep.isEmpty?  0 : double.parse(agoThreeDaySleep[0].value.toString()).toInt(),
+            agoFourthDaySleep: agoFourthDaySleep.isEmpty? 0 : double.parse(agoFourthDaySleep[0].value.toString()).toInt(),
+            agoFifthDaySleep : agoFifthDaySleep.isEmpty?  0 : double.parse(agoFifthDaySleep[0].value.toString()).toInt(),
+            agoSixthDaySleep : agoSixthDaySleep.isEmpty?  0 : double.parse(agoSixthDaySleep[0].value.toString()).toInt(),
         );
 
       } catch (error) {

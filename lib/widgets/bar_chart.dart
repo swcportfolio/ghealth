@@ -22,7 +22,7 @@ class BarChart{
 
     return SfCartesianChart(
       plotAreaBorderWidth: 0,
-      legend: const Legend(isVisible: false),
+      legend: Legend(isVisible: false),
       primaryXAxis: CategoryAxis(
         labelStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
         majorGridLines: const MajorGridLines(width: 0),

@@ -85,10 +85,6 @@ class _HealthViewState extends State<HealthView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children:
                         [
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Frame.myText(text:'오늘의 스트레스', fontWeight: FontWeight.w800, fontSize: 1.4),
-                          ),
 
                           /// 수면 차트
                           buildChart(0, chartHealthData!.chartSleepData),

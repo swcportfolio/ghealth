@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ghealth_app/utlis/colors.dart';
 import 'package:ghealth_app/utlis/logging.dart';
 import 'package:ghealth_app/view/home/home_frame_view.dart';
@@ -45,17 +44,17 @@ class MyApp extends StatelessWidget {
         colorScheme: themeData.colorScheme.copyWith(primary: mainColor),
         //primaryTextTheme: themeData.textTheme.apply(fontFamily: 'nanum_square')
       ),
-      localizationsDelegates:
-      const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-
-      supportedLocales:
-      const [
-        Locale('ko', ''),
-        Locale('en', ''),
-      ],
+      // localizationsDelegates:
+      // const [
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
+      //
+      // supportedLocales:
+      // const [
+      //   Locale('ko', ''),
+      //   Locale('en', ''),
+      // ],
 
       initialRoute:'login_view',
       routes:
