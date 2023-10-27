@@ -28,6 +28,7 @@ class _HomeViewState extends State<HomeView> {
       backgroundColor: Colors.white,
 
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             buildWelComeText(),

@@ -193,7 +193,7 @@ class Etc{
   /// 가로 라인 줄
   static solidLineCustom(BuildContext context){
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: Card(
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(0.0))
@@ -212,7 +212,7 @@ class Etc{
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 1.0,
-        color: Colors.grey.shade200,
+        color: Colors.grey,
       ),
     );
   }

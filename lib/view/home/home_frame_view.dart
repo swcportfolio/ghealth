@@ -5,6 +5,8 @@ import 'package:ghealth_app/view/home/home_view.dart';
 import '../../utlis/colors.dart';
 import '../../widgets/custom_appbar.dart';
 import '../health/health_view.dart';
+import '../reservation/reservation_history_view.dart';
+import '../reservation/reservation_view.dart';
 import '../result/myinfo_result_sheet_view.dart';
 
 class HomeFrameView extends StatefulWidget {
@@ -20,8 +22,8 @@ class _HomeFramePageState extends State<HomeFrameView> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeView(),
+    const ReservationHistoryView(),
     const MyInfoResultSheetView(),
-    const HealthView(),
   ];
 
   @override

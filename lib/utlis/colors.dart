@@ -31,8 +31,15 @@ const sendBackgroundColor = Color(0xffbecefd);
 const sleepChartColor = Color(0xFF9BA3EA);
 const stepChartColor = Color(0xFFEFC568);
 
+// point box button background color
+const accumulateColor = Color(0xFFffd562);
 
-//const Color mainColor = Color(0xbbffbfbf);
+// point history background color
+const historyBgColor = Color(0xFFf8f9ff);
+
+// reserved card background color
+const reservedCardBgColor = Color(0xFFf9faff);
+
 
 
 

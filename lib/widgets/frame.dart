@@ -69,6 +69,38 @@ class Frame{
    );
   }
 
+ /// 밑줄 커스텀 텍스트
+ static Text mySolidText({
+   required String text,
+   double fontSize = 1.0,
+   Color color = Colors.grey,
+   FontWeight fontWeight = FontWeight.normal,
+   TextAlign align = TextAlign.start,
+   TextOverflow overflow = TextOverflow.visible,
+   int maxLinesCount = 1,
+   bool softWrap = false,
+ }){
+   return Text(
+     text,
+     textScaleFactor: fontSize,
+     overflow: overflow,
+     maxLines: maxLinesCount,
+     softWrap: softWrap,
+     style: TextStyle(
+       color: color,
+       fontWeight: fontWeight,
+       decorationColor: Colors.grey,
+       decorationStyle: TextDecorationStyle.solid,
+       /// 밑줄의 형태, underline(아래), overline(위),  lineThrough(중간),
+       decoration: TextDecoration.lineThrough,
+       /// 밑줄의 두께
+       decorationThickness: 3,
+     ),
+     textAlign: align
+     ,
+   );
+ }
+
 
 
 

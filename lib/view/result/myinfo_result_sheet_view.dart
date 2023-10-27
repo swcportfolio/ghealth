@@ -25,6 +25,7 @@ class _MyInfoResultSheetViewState extends State<MyInfoResultSheetView> {
       backgroundColor: Colors.white,
 
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             // 종합 결과 내역

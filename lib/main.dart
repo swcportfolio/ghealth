@@ -5,6 +5,7 @@ import 'package:ghealth_app/view/home/home_frame_view.dart';
 import 'package:ghealth_app/view/home/home_view.dart';
 import 'package:ghealth_app/view/join/login_view.dart';
 import 'package:ghealth_app/view/join/login_viewmodel.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +18,7 @@ Future<void> main() async {
   await Permission.activityRecognition.request(); // 수면시간, 걷음 수 데이터 접근 퍼미션
   await Permission.location.request();
 
-  runApp(
+  initializeDateFormatting().then((_) => runApp(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(
@@ -26,7 +27,7 @@ Future<void> main() async {
         ],
         child: MyApp(),
       )
-  );
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
       //   GlobalMaterialLocalizations.delegate,
       //   GlobalCupertinoLocalizations.delegate,
       // ],
-      //
+
       // supportedLocales:
       // const [
       //   Locale('ko', ''),
