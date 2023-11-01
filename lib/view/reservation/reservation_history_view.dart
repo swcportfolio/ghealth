@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:ghealth_app/view/reservation/reservation_view.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 
-import '../../utlis/colors.dart';
+import '../../utils/colors.dart';
+import '../../widgets/dialog.dart';
 
 List<Reservation> reservationList = [ ];
 
@@ -61,13 +63,13 @@ class _ReservationHistoryViewState extends State<ReservationHistoryView> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset('images/reservation_empty.png', height: 120, width: 120, color: mainColor),
-          const SizedBox(height: 10),
+          const Gap(10),
           Frame.myText(
             text: '현재 예약하신 내역이 없습니다.',
               fontWeight: FontWeight.bold,
               fontSize: 1.5,
           ),
-          const SizedBox(height: 15),
+          const Gap(15),
 
           Frame.myText(
             text: '아직 대기 중인 예약이 없습니다. 새로운 예약을\n 만들려면 아래 버튼을 누르세요.',
@@ -75,7 +77,7 @@ class _ReservationHistoryViewState extends State<ReservationHistoryView> {
             maxLinesCount: 2,
             fontSize: 1.1,
           ),
-          const SizedBox(height: 20),
+          const Gap(20),
 
           GestureDetector(
             onTap: ()=> {
@@ -105,7 +107,7 @@ class _ReservationHistoryViewState extends State<ReservationHistoryView> {
                       fontSize: 1.2,
                       color: Colors.white
                     ),
-                    const SizedBox(width: 10),
+                    const Gap(10),
                     const Icon(Icons.arrow_forward, color: Colors.white, size: 20,)
                   ],
                 ),
@@ -199,9 +201,9 @@ class ReservedCardItem extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    reservationStatusBtn('예약 변경', Colors.white),
-                    const SizedBox(width: 20),
-                    reservationStatusBtn('예약 취소', const Color(0xFFececec)),
+                    reservationStatusBtn('예약 변경', Colors.white, context),
+                    const Gap(20),
+                    reservationStatusBtn('예약 취소', const Color(0xFFececec), context),
                   ],
                 ),
               )
@@ -212,19 +214,30 @@ class ReservedCardItem extends StatelessWidget {
       ),
     );
   }
-  Widget reservationStatusBtn(String text, Color bgColor){
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all( width: 1.5, color: Colors.grey)
 
-      ),
-      child: Frame.myText(
-        text: text,
-        fontSize: 1.1,
-        color: Colors.grey.shade700
+
+  Widget reservationStatusBtn(String text, Color bgColor, BuildContext context){
+    return InkWell(
+      onTap: ()=>{
+        if (text == '예약 변경') {
+            CustomDialog.showChangeReservationDialog(mainContext: context)
+        } else {
+          CustomDialog.showCancelReservationDialog(mainContext: context)
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all( width: 1.5, color: Colors.grey)
+
+        ),
+        child: Frame.myText(
+          text: text,
+          fontSize: 1.1,
+          color: Colors.grey.shade700
+        ),
       ),
     );
   }

@@ -40,6 +40,9 @@ const historyBgColor = Color(0xFFf8f9ff);
 // reserved card background color
 const reservedCardBgColor = Color(0xFFf9faff);
 
+// service Circle background color
+const serviceCircleBgColor = Color(0xFFf4f4f4);
+
 
 
 

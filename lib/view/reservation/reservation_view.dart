@@ -1,13 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:ghealth_app/utlis/etc.dart';
+import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/view/reservation/reservation_history_view.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 import 'package:ghealth_app/widgets/frame.dart';
+import 'package:ghealth_app/widgets/girdview/gridview_builder.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../utlis/colors.dart';
+import '../../utils/colors.dart';
+import '../../widgets/girdview/gridview_provider.dart';
 
 /// 예약 화면
 class ReservationView extends StatefulWidget {
@@ -25,8 +28,12 @@ class _ReservationViewState extends State<ReservationView> {
 
   late int? selectedIndex = 0;
 
+  late ReservationTime _reservationTime;
+
   @override
   Widget build(BuildContext context) {
+    _reservationTime = Provider.of<ReservationTime>(context, listen: false);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(
@@ -41,7 +48,8 @@ class _ReservationViewState extends State<ReservationView> {
             buildTitle(),
             buildCalendar(context),
             buildTimeTitle(),
-            buildMultiSelectTime(),
+            const SelectTimeGridview(
+                mWidth: double.infinity, mHeight: 140, childAspectRatio: 3.1),
             buildReservationBtn()
           ],
         ),
@@ -158,90 +166,86 @@ class _ReservationViewState extends State<ReservationView> {
     );
   }
 
-  Widget buildMultiSelectTime(){
-    return Container(
-      height: 140,
-      margin: const EdgeInsets.all(15),
-      child: GridView.builder(
-        itemCount: sampleTimeList.length,
-        scrollDirection: Axis.vertical,           //default
-        reverse: false,                           //default
-        controller: ScrollController(),
-        primary: false,
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(5.0),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 3,
-      mainAxisSpacing: 10.0,
-      crossAxisSpacing: 10.0,
-            childAspectRatio:3.1
-      ),
-      semanticChildCount: 3,
-      cacheExtent: 0.0,
-      dragStartBehavior: DragStartBehavior.start,
-      clipBehavior: Clip.hardEdge,
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
-      itemBuilder: (BuildContext context, int index) {
-          return _buildSortOption(sampleTimeList[index], isSelected[index], index);
-      },
-        // List of Widgets
-      ),
-    );
-  }
-
-  List<String> sampleTimeList = ['09:00','10:00','11:00','13:30','14:30','15:30','16:30'];
-  List<bool> isSelected = List.filled(7, false);
-
-  Widget _buildSortOption(String time, bool selected, int index) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          isSelected = List.filled(7, false); // Unselect all
-          if(selected){
-            isSelected[index] = false;
-            selectedIndex == null;
-          } else {
-            isSelected[index] = true; // Select the tapped item
-            selectedIndex = index;
-          }
-
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: selected ? mainColor : Colors.white,
-          border: Border.all(
-            color: selected ? mainColor : Colors.grey.shade400,
-            width: 1.5,
-            style: BorderStyle.solid,
-          ),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Center(
-            child: Frame.myText(
-              text: time,
-              fontSize: 1.1,
-              fontWeight: FontWeight.w400,
-              color: selected ? Colors.white : Colors.black,
-              ),
-            ),
-          ),
-        ),
-    );
-  }
+  // Widget buildMultiSelectTime(){
+  //   return Container(
+  //     height: 140,
+  //     margin: const EdgeInsets.all(15),
+  //     child: GridView.builder(
+  //       itemCount: sampleTimeList.length,
+  //       scrollDirection: Axis.vertical,           //default
+  //       reverse: false,                           //default
+  //       controller: ScrollController(),
+  //       primary: false,
+  //       physics: const NeverScrollableScrollPhysics(),
+  //       shrinkWrap: true,
+  //       padding: const EdgeInsets.all(5.0),
+  //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //     crossAxisCount: 3,
+  //     mainAxisSpacing: 10.0,
+  //     crossAxisSpacing: 10.0,
+  //           childAspectRatio:3.1
+  //     ),
+  //     semanticChildCount: 3,
+  //     cacheExtent: 0.0,
+  //     dragStartBehavior: DragStartBehavior.start,
+  //     clipBehavior: Clip.hardEdge,
+  //     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
+  //     itemBuilder: (BuildContext context, int index) {
+  //         return _buildSortOption(sampleTimeList[index], isSelected[index], index);
+  //     },
+  //       // List of Widgets
+  //     ),
+  //   );
+  // }
+  // Widget _buildSortOption(String time, bool selected, int index) {
+  //   return GestureDetector(
+  //     onTap: () {
+  //       setState(() {
+  //         isSelected = List.filled(7, false); // Unselect all
+  //         if(selected){
+  //           isSelected[index] = false;
+  //           selectedIndex == null;
+  //         } else {
+  //           isSelected[index] = true; // Select the tapped item
+  //           selectedIndex = index;
+  //         }
+  //
+  //       });
+  //     },
+  //     child: Container(
+  //       padding: const EdgeInsets.all(5),
+  //       decoration: BoxDecoration(
+  //         color: selected ? mainColor : Colors.white,
+  //         border: Border.all(
+  //           color: selected ? mainColor : Colors.grey.shade400,
+  //           width: 1.5,
+  //           style: BorderStyle.solid,
+  //         ),
+  //         borderRadius: BorderRadius.circular(20),
+  //       ),
+  //       child: Padding(
+  //         padding: const EdgeInsets.all(2.0),
+  //         child: Center(
+  //           child: Frame.myText(
+  //             text: time,
+  //             fontSize: 1.1,
+  //             fontWeight: FontWeight.w400,
+  //             color: selected ? Colors.white : Colors.black,
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //   );
+  // }
 
   /// 예약 버튼
   Widget buildReservationBtn(){
     return GestureDetector(
       onTap: ()=> {
-        if(selectedIndex == null){
+        if(_reservationTime.selectTime == null){
         Etc.showSnackBar('방문 시간을 선택해주세요.', context)
       }  else {
-        reservationList.add(Reservation(userID: 'admin', date: DateFormat('yy-MM-dd(EE)', 'ko_KR').format(selectedDay), time: sampleTimeList[selectedIndex!])),
+        reservationList.add(Reservation(userID: 'admin', date: DateFormat('yy-MM-dd(EE)', 'ko_KR').format(selectedDay), time: _reservationTime.selectTime!)),
         Etc.showSnackBar('방문 예약이 완료 되었습니다.', context),
         Navigator.pop(context),
       }

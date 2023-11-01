@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/point_hisstory.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
-import '../../utlis/colors.dart';
+import '../../utils/colors.dart';
 import '../../widgets/horizontal_dashed_line.dart';
 
 /// 포인트 관리 화면
@@ -76,7 +77,7 @@ class _PointManagementViewState extends State<PointManagementView> {
                         color: Colors.white,
                         fontSize: 1.2
                       ),
-                      const SizedBox(height: 10),
+                      const Gap(10),
                       Frame.myText(
                           text: '10,000 pt',
                           color: Colors.white,
@@ -95,16 +96,16 @@ class _PointManagementViewState extends State<PointManagementView> {
                 )
               ],
             ),
-            const SizedBox(height: 15),
+            const Gap(15),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 buildPointBoxBottomSubBtn('포인트 적립하기', accumulateColor),
-                const SizedBox(width: 5),
+                const Gap(5),
                 buildPointBoxBottomSubBtn('포인트 사용처', Colors.white),
-                const SizedBox(width: 10),
+                const Gap(10),
               ],
             )
           ],
@@ -158,7 +159,7 @@ class _PointManagementViewState extends State<PointManagementView> {
                fontWeight: FontWeight.bold,
                 fontSize: 1.5
               ),
-              const SizedBox(height: 20),
+              const Gap(20),
               Expanded(
                 child: ListView.separated(
                   physics: const BouncingScrollPhysics(),
@@ -204,7 +205,7 @@ class PointHistoryItem extends StatelessWidget {
                   color: Colors.black,
                   fontWeight: FontWeight.w600
               ),
-              const SizedBox(height: 5),
+              const Gap(5),
 
               Frame.myText(
                   text: pointHistory.date,
@@ -223,7 +224,7 @@ class PointHistoryItem extends StatelessWidget {
                   color: pointHistory.textColor,
                   fontWeight: FontWeight.w600
               ),
-              const SizedBox(height: 5),
+              const Gap(5),
 
               Frame.myText(
                   text: pointHistory.pointStatus,

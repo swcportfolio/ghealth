@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import '../utlis/colors.dart';
+import 'package:gap/gap.dart';
+import 'package:ghealth_app/widgets/girdview/gridview_builder.dart';
+import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
+import '../utils/colors.dart';
+import '../utils/etc.dart';
 import 'frame.dart';
 
 
@@ -39,7 +43,7 @@ class CustomDialog{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.error, color: mainColor, size: 35),
-                  const SizedBox(height: 10),
+                  const Gap(10),
                   Frame.myText(
                       text: title, fontSize: 0.95, fontWeight: FontWeight.w600)
                 ],
@@ -68,7 +72,7 @@ class CustomDialog{
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const Gap(20),
                   Expanded(
                     child: SizedBox(
                       width: double.infinity,
@@ -148,6 +152,260 @@ class CustomDialog{
           );
         });
   }
+
+
+  /// 예약 변경 다이얼로그
+  static showChangeReservationDialog({
+    required BuildContext mainContext,
+  }) {
+    return showDialog(
+        context: mainContext,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            content: SizedBox(
+              height: 410,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Frame.myText(
+                          text: '예약 변경',
+                          fontSize: 1.3,
+                          fontWeight: FontWeight.bold,
+                          color: mainColor
+                        ),
+
+                        // 오른쪽 상단 취소 버튼
+                        InkWell(
+                          onTap: ()=> Navigator.pop(context),
+                          child: const Icon(Icons.cancel_outlined,
+                              color: Colors.black, size: 25),
+                        ),
+                      ],
+                    ),
+                  ),
+
+
+
+                  // 예약일
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Frame.myText(
+                            text: '예약일',
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 1.0
+                        ),
+
+                        Container(
+                          height: 40,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(30)
+                          ),
+                          child: Center(
+                            child: Frame.myText(
+                                text: '2023-10-20',
+                                color: Colors.black,
+                                fontSize: 1.0
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+
+                  // horizontal 점선
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal:  20),
+                    child: HorizontalDottedLine(mWidth: double.infinity),
+                  ),
+
+                  // 예약시간 타이틀
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                    child: Frame.myText(
+                      text: '예약시간',
+                      fontSize: 1.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+
+                  // 변경할 예약 시간 선택지
+                  const SelectTimeGridview(
+                      mWidth: 250, mHeight: 70, childAspectRatio: 2.1),
+
+                  // 변경 버튼
+                  Container(
+                    height: 45,
+                    margin: const EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(30.0),
+                      color: mainColor
+                    ),
+                    child: Center(
+                      child: Frame.myText(
+                        text: '예약 변경',
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 0.9
+                      )
+                    ),
+                  )
+                ],
+              ),
+            ),
+            contentPadding: const EdgeInsets.all(0),
+            actionsAlignment: MainAxisAlignment.end,
+            actionsPadding: const EdgeInsets.all(0),
+
+          );
+        });
+  }
+
+
+  /// 예약 취소 다이얼로그
+  static showCancelReservationDialog({
+    required BuildContext mainContext,
+  }) {
+    return showDialog(
+        context: mainContext,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            content: SizedBox(
+              height: 270,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Frame.myText(
+                            text: '예약 취소',
+                            fontSize: 1.3,
+                            fontWeight: FontWeight.bold,
+                            color: mainColor
+                        ),
+
+                        // 오른쪽 상단 취소 버튼
+                        InkWell(
+                          onTap: ()=> Navigator.pop(context),
+                          child: const Icon(Icons.cancel_outlined,
+                              color: Colors.black, size: 25),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // 예약일
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
+                    child: Container(
+                      height: 40,
+                      width: 250,
+                      decoration: BoxDecoration(
+                          color: Colors.grey.shade200,
+                          borderRadius: BorderRadius.circular(30)
+                      ),
+                      child: Center(
+                        child: Frame.myText(
+                            text: '2023-10-20 월요일 11:00',
+                            color: Colors.black,
+                            fontSize: 0.9,
+                            fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // horizontal 점선
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal:  20),
+                    child: HorizontalDottedLine(mWidth: double.infinity),
+                  ),
+
+                  // 예약시간 타이틀
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Frame.myText(
+                          text: '해당 날짜의 ',
+                          fontSize: 0.85,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        Stack(children: [
+                          Frame.myText(
+                            text: '예약을 취소',
+                            fontSize: 0.85,
+                            fontWeight: FontWeight.bold,
+                            color: mainColor,
+                          ),
+                          Positioned.fill(
+                              bottom: 0.1,
+                              child: Container(
+                                  height: 0.5,
+                                  decoration: BoxDecoration(
+                                      border: Border(bottom: BorderSide(color: mainColor)))))
+                        ]),
+
+                        Frame.myText(
+                          text: ' 하시겠습니까?',
+                          fontSize: 0.85,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  // 취소 버튼
+                  Container(
+                    height: 45,
+                    margin: const EdgeInsets.symmetric(horizontal: 15),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.0),
+                        color: mainColor
+                    ),
+                    child: Center(
+                        child: Frame.myText(
+                            text: '예약 취소',
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 0.9
+                        )
+                    ),
+                  )
+                ],
+              ),
+            ),
+            contentPadding: const EdgeInsets.all(0),
+            actionsAlignment: MainAxisAlignment.end,
+            actionsPadding: const EdgeInsets.all(0),
+
+          );
+        });
+  }
+
 
   /// 설정 다이얼 로그
   static showSettingDialog({
@@ -346,9 +604,6 @@ class CustomDialog{
           );
         });
   }
-
-
-
 
   /// 팝업 형태로 표시
   static popup(context, {required Widget child, double width = 300, required double height,  double padding = 10,

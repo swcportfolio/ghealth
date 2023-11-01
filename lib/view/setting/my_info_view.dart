@@ -2,15 +2,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:ghealth_app/main.dart';
-import 'package:ghealth_app/utlis/etc.dart';
+import 'package:gap/gap.dart';
+import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../utlis/colors.dart';
+import '../../utils/colors.dart';
 
 enum UserInfoType {
   name,
@@ -45,7 +45,7 @@ class _MyInfoViewState extends State<MyInfoView> {
          children: [
            buildProfileImage(),
            buildName(),
-           const SizedBox(height: 15),
+           const Gap(15),
            buildLogoutBtn(),
            buildUserInfoBox(),
            buildBottomGuideText(),
@@ -130,7 +130,7 @@ class _MyInfoViewState extends State<MyInfoView> {
               ]),
             ],
           ),
-          const SizedBox(height: 12),
+          const Gap(12),
          // HighLightedText('홍길동 님', color: mainColor)
         ],
       ),

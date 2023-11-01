@@ -1,12 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:ghealth_app/view/health/health_view.dart';
 import 'package:ghealth_app/view/home/home_view.dart';
 
-import '../../utlis/colors.dart';
+import '../../utils/colors.dart';
 import '../../widgets/custom_appbar.dart';
-import '../health/health_view.dart';
 import '../reservation/reservation_history_view.dart';
-import '../reservation/reservation_view.dart';
 import '../result/myinfo_result_sheet_view.dart';
 
 class HomeFrameView extends StatefulWidget {
@@ -18,12 +17,14 @@ class HomeFrameView extends StatefulWidget {
 
 class _HomeFramePageState extends State<HomeFrameView> {
 
+  /// BottomNavigationBar selected location
   int _selectedIndex = 0;
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeView(),
     const ReservationHistoryView(),
     const MyInfoResultSheetView(),
+    const HealthView(),
   ];
 
   @override
@@ -44,27 +45,46 @@ class _HomeFramePageState extends State<HomeFrameView> {
         ),
         child: BottomNavigationBar(
           backgroundColor: Colors.white,
-          showUnselectedLabels: true, // 선택되지 않은 항목 라벨 항상 표시
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              label: '홈으로',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month),
-              label: '예약',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.medical_information_outlined),
-              label: '내건강 보고서',
-            ),
+          showUnselectedLabels: true,
+          items: <BottomNavigationBarItem>[
+            _buildNavigationBarItem('images/navigation_4.png', '홈으로', 35, 35, 0),
+            _buildNavigationBarItem('images/navigation_3.png', '예약', 35, 35, 1),
+            _buildNavigationBarItem('images/navigation_2.png', '내건강 보고서', 35, 35, 2),
+            _buildNavigationBarItem('images/navigation_1.png', '웨어러블', 25, 25, 3),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: mainColor,
           unselectedItemColor: Colors.grey,
           onTap: _onItemTapped,
-        ),
+        )
       ),
+    );
+  }
+
+
+  /// 사용자 정의된 BottomNavigationBarItem을 생성하는 함수.
+  ///
+  /// [imagePath]는 아이템의 이미지 경로입니다.
+  /// [label]은 아이템의 라벨(텍스트)입니다.
+  /// [iconWidth]와 [iconHeight]는 아이템 이미지의 가로 및 세로 크기입니다.
+  /// [itemIndex]는 아이템의 인덱스로, 선택 여부에 따라 이미지 색상이 변경됩니다.
+  ///
+  /// 반환 값은 구성된 BottomNavigationBarItem입니다.
+  BottomNavigationBarItem _buildNavigationBarItem(
+      String imagePath,
+      String label,
+      double iconWidth,
+      double iconHeight,
+      int itemIndex,
+      ) {
+    return BottomNavigationBarItem(
+      icon: ColorFiltered(
+        colorFilter: _selectedIndex == itemIndex
+            ? const ColorFilter.mode(mainColor, BlendMode.srcIn)
+            : const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+        child: Image.asset(imagePath, height: iconHeight, width: iconWidth),
+      ),
+      label: label,
     );
   }
 

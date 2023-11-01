@@ -219,13 +219,13 @@ class Etc{
 
 
   /// 세로 라인 줄
-  static solidLineVertical(){
+  static buildVerticalDivider(Color color){
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: Container(
-        width: 1.5,
-        height: 10,
-        color: Colors.grey,
+        width: 0.5,
+        height: 25,
+        color: color,
       ),
     );
   }

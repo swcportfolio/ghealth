@@ -1,6 +1,4 @@
-
-import '../../utlis/etc.dart';
-import 'authorization.dart';
+import '../../utils/etc.dart';
 import 'chart_data.dart';
 
 /// Chart data Class

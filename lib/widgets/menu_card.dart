@@ -1,9 +1,8 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
-import '../utlis/colors.dart';
+import '../utils/colors.dart';
 
 class MenuCard1 extends StatelessWidget {
   const MenuCard1({super.key});
@@ -65,7 +64,7 @@ class MenuCard2 extends StatelessWidget {
                 align: TextAlign.left,
                 fontWeight: FontWeight.w600,
               ),
-              const SizedBox(height: 15),
+              const Gap(15),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -73,7 +72,7 @@ class MenuCard2 extends StatelessWidget {
                   Image.asset('images/hospital_white.png', height: 100, width: 100),
                 ],
               ),
-              const SizedBox(height: 10),
+              const Gap(10),
 
               Container(
                 height: 90,
@@ -94,7 +93,7 @@ class MenuCard2 extends StatelessWidget {
                           color: Colors.black,
                           fontSize: 0.9
                         ),
-                        const SizedBox(width: 20),
+                        const Gap(20),
                         Frame.myText(
                             text: '2023-09-09',
                             color: Colors.black,
@@ -102,7 +101,7 @@ class MenuCard2 extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
+                    const Gap(10),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -112,7 +111,7 @@ class MenuCard2 extends StatelessWidget {
                             color: Colors.black,
                             fontSize: 0.9
                         ),
-                        const SizedBox(width: 20),
+                        const Gap(20),
                         Frame.myText(
                             text: '2023-10-09',
                             color: Colors.black,

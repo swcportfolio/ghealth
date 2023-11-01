@@ -12,7 +12,6 @@ class Authorization{
 
   Authorization.internal() {
     uid = '';
-
   }
 
   clear() async {

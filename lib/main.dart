@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ghealth_app/utlis/colors.dart';
-import 'package:ghealth_app/utlis/logging.dart';
+import 'package:ghealth_app/utils/colors.dart';
+import 'package:ghealth_app/utils/logging.dart';
 import 'package:ghealth_app/view/home/home_frame_view.dart';
-import 'package:ghealth_app/view/home/home_view.dart';
 import 'package:ghealth_app/view/join/login_view.dart';
 import 'package:ghealth_app/view/join/login_viewmodel.dart';
+import 'package:ghealth_app/widgets/girdview/gridview_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +23,9 @@ Future<void> main() async {
         providers: [
           ChangeNotifierProvider(
               create: (BuildContext context) => LoginViewModel()
+          ),
+          ChangeNotifierProvider(
+              create: (BuildContext context) => ReservationTime()
           ),
         ],
         child: MyApp(),

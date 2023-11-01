@@ -1,9 +1,10 @@
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'dart:io' show Platform;
 
-import '../utlis/colors.dart';
+import '../utils/colors.dart';
 
 
 class Frame{
@@ -77,6 +78,8 @@ class Frame{
    FontWeight fontWeight = FontWeight.normal,
    TextAlign align = TextAlign.start,
    TextOverflow overflow = TextOverflow.visible,
+   TextDecoration decoration = TextDecoration.lineThrough,
+   Color decorationColor = Colors.grey,
    int maxLinesCount = 1,
    bool softWrap = false,
  }){
@@ -89,12 +92,12 @@ class Frame{
      style: TextStyle(
        color: color,
        fontWeight: fontWeight,
-       decorationColor: Colors.grey,
+       decorationColor: decorationColor,
        decorationStyle: TextDecorationStyle.solid,
        /// 밑줄의 형태, underline(아래), overline(위),  lineThrough(중간),
-       decoration: TextDecoration.lineThrough,
+       decoration: decoration,
        /// 밑줄의 두께
-       decorationThickness: 3,
+       decorationThickness: 1,
      ),
      textAlign: align
      ,
@@ -127,21 +130,23 @@ class Frame{
 
  /// Empty View
  static buildEmptyView(String text) {
-   return Center(
-     child: Column(
-       crossAxisAlignment: CrossAxisAlignment.center,
-       mainAxisAlignment: MainAxisAlignment.center,
-       children:
-       [
-         const SizedBox(height: 20),
-         Frame.myText(text: text, fontSize: 1.2, color: Colors.grey.shade600, fontWeight: FontWeight.w600),
-       ],
-     ),
-   );
- }
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Gap(20),
+          Frame.myText(
+              text: text,
+              fontSize: 1.2,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w600),
+        ],
+      ),
+    );
+  }
 
-
- static buildTag({required String text, double textSize = 0.8}){
+  static buildTag({required String text, double textSize = 0.8}){
    return Container(
      margin: const EdgeInsets.only(right: 5),
      padding: const EdgeInsets.all(5),
@@ -169,7 +174,7 @@ class Frame{
      child: Row(
        children: [
          Image.asset('images/check.png', width: 25, height: 25),
-         const SizedBox(width: 7),
+         const Gap(7),
          Frame.myText(
              text: text,
              maxLinesCount: 2,
@@ -190,7 +195,7 @@ class Frame{
              text: '네트워크 및 서버가 불안정합니다.',
              fontSize: 1.1,
            ),
-           const SizedBox(height: 20),
+           const Gap(20),
 
            InkWell(
              onTap: () => {

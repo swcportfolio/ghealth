@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:ghealth_app/view/home/home_frame_view.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 import 'package:provider/provider.dart';
 
-import '../../utlis/colors.dart';
-import '../../utlis/etc.dart';
+import '../../utils/colors.dart';
+import '../../utils/etc.dart';
 import 'login_viewmodel.dart';
 
 enum LoginInput {
@@ -48,7 +49,7 @@ class _LoginViewState extends State<LoginView> {
                 [
                   // 메인 BI 이미지
                   buildBiImage(),
-                  const SizedBox(height: 40),
+                  const Gap(40),
 
                   // 휴대폰 번호 입력 필드
                   buildLoginTextField(
@@ -56,7 +57,7 @@ class _LoginViewState extends State<LoginView> {
                       inputType: LoginInput.phone,
                       controller: _viewModel.phoneController
                   ),
-                  const SizedBox(height: 15),
+                  const Gap(15),
 
                   // 인증번호 입력 필드
                     buildLoginTextField(
