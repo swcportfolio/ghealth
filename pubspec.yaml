@@ -50,6 +50,7 @@ dependencies:
   table_calendar: ^3.0.8
   youtube_player_flutter: ^8.1.2
   gap: ^3.0.1
+  vertical_percent_indicator: ^0.0.1
   #flutter_localization: 0.1.7
 
 
@@ -113,6 +114,10 @@ flutter:
     - images/kidneys_text_box.png
     - images/pee_text_box.png
     - images/walking_text_box.png
+    - images/arrow_blue.png
+    - images/exclamation_mark_red.png
+    - images/ai_result_ex.png
+    - images/ai_result_ex_1.png
 
 
   #   - images/a_dot_burr.jpeg

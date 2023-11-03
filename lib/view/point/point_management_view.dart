@@ -37,12 +37,15 @@ class _PointManagementViewState extends State<PointManagementView> {
         title: '포인트 관리',
       ),
 
-      body: Column(
-        children: [
-          buildCurrentPointBox(),
-          buildPointHistory()
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            buildCurrentPointBox(),
+            buildPointHistory()
 
-        ],
+          ],
+        ),
       ),
     );
   }

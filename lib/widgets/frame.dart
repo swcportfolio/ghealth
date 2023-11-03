@@ -19,7 +19,7 @@ class Frame{
       // ),
       title: Frame.myText(
         text: title,
-        fontSize: 1.0,
+        fontSize: 0.9,
         fontWeight: FontWeight.w600,
         color: Colors.white
       ),

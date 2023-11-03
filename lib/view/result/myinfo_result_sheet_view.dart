@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:ghealth_app/view/point/point_management_view.dart';
 import 'package:ghealth_app/view/result/examination_record_view.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
@@ -125,54 +126,57 @@ class _MyInfoResultSheetViewState extends State<MyInfoResultSheetView> {
   }
 
   buildHealthPointBox() {
-   return Container(
-     width: double.infinity,
-     height: 95,
-     margin: const EdgeInsets.symmetric(horizontal: 20),
-     padding: const EdgeInsets.all(20),
-     decoration: BoxDecoration(
-       color: mainColor,
-       borderRadius: BorderRadius.circular(25),
+   return InkWell(
+     onTap: ()=> Frame.doPagePush(context, const PointManagementView()),
+     child: Container(
+       width: double.infinity,
+       height: 95,
+       margin: const EdgeInsets.symmetric(horizontal: 20),
+       padding: const EdgeInsets.all(20),
+       decoration: BoxDecoration(
+         color: mainColor,
+         borderRadius: BorderRadius.circular(25),
+       ),
+       child: Row(
+         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         children: [
+           /// 포인트 이미지, 포인트 점수
+           Row(
+             children: [
+               Padding(
+                 padding: const EdgeInsets.all(2.0),
+                 child: Image.asset('images/point.png'),
+               ),
+               const Gap(10),
+
+               Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                   Frame.myText(
+                     text: '건강포인트',
+                     color: Colors.white,
+                     fontSize: 0.95,
+                   ),
+                   const Gap(3),
+
+                   /// 실제 포인트 점수 텍스트
+                   Frame.myText(
+                     text: '11,000pt',
+                     fontSize: 1.8,
+                     fontWeight: FontWeight.w500,
+                     color: Colors.white,
+                   )
+                 ],
+               )
+             ],
+           ),
+
+           // arrow 아이콘
+           const Icon(Icons.arrow_forward_ios, color: Colors.white,)
+
+         ]
+       )
      ),
-     child: Row(
-       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-       children: [
-         /// 포인트 이미지, 포인트 점수
-         Row(
-           children: [
-             Padding(
-               padding: const EdgeInsets.all(2.0),
-               child: Image.asset('images/point.png'),
-             ),
-             const Gap(10),
-
-             Column(
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 Frame.myText(
-                   text: '건강포인트',
-                   color: Colors.white,
-                   fontSize: 0.95,
-                 ),
-                 const Gap(3),
-
-                 /// 실제 포인트 점수 텍스트
-                 Frame.myText(
-                   text: '11,000pt',
-                   fontSize: 1.8,
-                   fontWeight: FontWeight.w500,
-                   color: Colors.white,
-                 )
-               ],
-             )
-           ],
-         ),
-
-         // arrow 아이콘
-         const Icon(Icons.arrow_forward_ios, color: Colors.white,)
-
-       ]
-     )
    );
   }
 }
