@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:ghealth_app/data/models/gallery3d_data.dart';
 import 'package:ghealth_app/widgets/girdview/gridview_builder.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 import '../utils/colors.dart';
@@ -404,6 +405,311 @@ class CustomDialog{
 
           );
         });
+  }
+
+
+  /// Gallery3dDialog
+  static showGallery3dDialog({
+    required BuildContext mainContext,
+    required double mHeight,
+    required GalleryType type,
+  }) {
+    return showDialog(
+        context: mainContext,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0)),
+            content: type == GalleryType.card1
+                ? buildCard1Content(mHeight, context)
+                : type == GalleryType.card2
+                    ? buildCard2Content(mHeight, context)
+                    : buildCard3Content(mHeight, context),
+            contentPadding: const EdgeInsets.all(0),
+            actionsAlignment: MainAxisAlignment.end,
+            actionsPadding: const EdgeInsets.all(0),
+
+          );
+        });
+  }
+
+  static buildCard1Content(double mHeight, BuildContext context) {
+    return SizedBox(
+            height: mHeight,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Frame.myText(
+                          text: '동구 라이프로그',
+                          fontSize: 1.3,
+                          fontWeight: FontWeight.bold,
+                          color: mainColor
+                      ),
+
+                      // 오른쪽 상단 취소 버튼
+                      InkWell(
+                        onTap: ()=> Navigator.pop(context),
+                        child: const Icon(Icons.cancel_outlined,
+                            color: Colors.black, size: 25),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 15),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Frame.myText(
+                          text: '• 신청절차: ',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 0.9
+                      ),
+                      const Gap(10),
+                      Frame.myText(
+                        text: '\“동구라이프로그 건강관리소\“\n신청하기 클릭 후, 원하는\n방문일자와 시간으로 예약 신청',
+                        maxLinesCount: 4,
+                        fontSize: 0.8
+                      )
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Frame.myText(
+                        text: '• 혜택:      ',
+                        fontSize: 0.9,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      const Gap(10),
+                      Frame.myText(
+                          text: '라이프로그 실증장비 체험\n및 데이터 수집을 통해 포인트\n제공',
+                          maxLinesCount: 4,
+                          fontSize: 0.8
+                      )
+                    ],
+                  ),
+                ),
+
+                /// 닫기 버튼
+                InkWell(
+                  onTap: ()=> Navigator.pop(context),
+                  child: Container(
+                    height: 45,
+                    margin: const EdgeInsets.fromLTRB(15, 30, 15, 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.0),
+                        color: mainColor
+                    ),
+                    child: Center(
+                        child: Frame.myText(
+                            text: '닫기',
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 0.9
+                        )
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+  }
+  static buildCard2Content(double mHeight, BuildContext context) {
+    return SizedBox(
+      height: mHeight,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Frame.myText(
+                    text: '스트레스 샤워실',
+                    fontSize: 1.3,
+                    fontWeight: FontWeight.bold,
+                    color: mainColor
+                ),
+
+                // 오른쪽 상단 취소 버튼
+                InkWell(
+                  onTap: ()=> Navigator.pop(context),
+                  child: const Icon(Icons.cancel_outlined,
+                      color: Colors.black, size: 25),
+                ),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 15),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Frame.myText(
+                    text: '• 신청절차:',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 0.9
+                ),
+                const Gap(10),
+                Frame.myText(
+                    text: '\“동구라이프로그 스트레스 샤\n워실\“신청하기 클릭 후, 원하\n는방문일자와 시간으로 예약\n신청',
+                    maxLinesCount: 4,
+                    fontSize: 0.8
+                )
+              ],
+            ),
+          ),
+
+          /// 닫기 버튼
+          InkWell(
+            onTap: ()=> Navigator.pop(context),
+            child: Container(
+              height: 45,
+              margin: const EdgeInsets.fromLTRB(15, 30, 15, 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                  color: mainColor
+              ),
+              child: Center(
+                  child: Frame.myText(
+                      text: '닫기',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 0.9
+                  )
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  static buildCard3Content(double mHeight, BuildContext context) {
+    return SizedBox(
+      height: mHeight,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Frame.myText(
+                    text: 'G-Health 기업실증',
+                    fontSize: 1.3,
+                    fontWeight: FontWeight.bold,
+                    color: mainColor
+                ),
+
+                // 오른쪽 상단 취소 버튼
+                InkWell(
+                  onTap: ()=> Navigator.pop(context),
+                  child: const Icon(Icons.cancel_outlined,
+                      color: Colors.black, size: 25),
+                ),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 15),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Frame.myText(
+                    text: '• 신청절차: ',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 0.9
+                ),
+                const Gap(10),
+                Frame.myText(
+                    text: '\“G-Health 기업실증\“\n신청하기 클릭 후, 기업별\n실증내용을 확인하고 원하는\n기업으로 신청',
+                    maxLinesCount: 4,
+                    fontSize: 0.8
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Frame.myText(
+                  text: '•체험인원\n  선정방법: ',
+                  fontSize: 0.9,
+                  maxLinesCount: 2,
+                  align: TextAlign.start,
+                  fontWeight: FontWeight.w600,
+                ),
+                const Gap(10),
+                Frame.myText(
+                    text: '신청인원 중 기업들이 제품에\n 맞는 체험자 선정 후, 개별연락',
+                    maxLinesCount: 3,
+                    fontSize: 0.8
+                )
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Frame.myText(
+                  text: '• 혜택:      ',
+                  fontSize: 0.9,
+                  fontWeight: FontWeight.w600,
+                ),
+                const Gap(10),
+                Frame.myText(
+                    text: '기업실증 참여를 통한\n제품체험 및 데이터 제공에 \n따른 온누리상품권 제공(기업\n별상이, 기업안내 참고',
+                    maxLinesCount: 5,
+                    fontSize: 0.8
+                )
+              ],
+            ),
+          ),
+
+          /// 닫기 버튼
+          InkWell(
+            onTap: ()=> Navigator.pop(context),
+            child: Container(
+              height: 45,
+              margin: const EdgeInsets.fromLTRB(15, 30, 15, 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                  color: mainColor
+              ),
+              child: Center(
+                  child: Frame.myText(
+                      text: '닫기',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 0.9
+                  )
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
 

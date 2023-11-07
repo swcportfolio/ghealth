@@ -30,60 +30,27 @@ class _MyInfoResultSheetViewState extends State<MyInfoResultSheetView> {
 
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            buildFinalResult(),
-            buildHealthPointBox(),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              /// 페이지 안내 메시지 Top
+              buildFinalResult(),
+              const Gap(15),
 
-            /// 임시
-            const Gap(20),
-            InkWell(
-              onTap: ()=> Frame.doPagePush(context, const ExaminationRecordView()),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Image.asset('images/chart_box.png'),
-              ),
-            ),
-            const Gap(10),
+              /// 건강 포인트
+              buildHealthPointBox(),
+              const Gap(15),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: SizedBox(
-                width: double.infinity,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 5),
-                        child: Image.asset('images/ex_1.png'),
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Image.asset('images/ex_2.png'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+              /// 건강검진 결과 안내 Box
+              buildHealthCheckupResult()
 
-            const Gap(10),
-            Container(
-                width: double.infinity,
-                margin:const EdgeInsets.only(left: 15),
-                child: Image.asset('images/ex_3.png', fit: BoxFit.cover)
-            ),
 
-            const Gap(20),
-            Container(
-                width: double.infinity,
-                margin:const EdgeInsets.only(left: 15),
-                child: Image.asset('images/ex_4.png', fit: BoxFit.cover)
-            ),
 
-          ],
+
+
+            ],
+          ),
         )
       ),
     );
@@ -91,92 +58,186 @@ class _MyInfoResultSheetViewState extends State<MyInfoResultSheetView> {
 
   Widget buildFinalResult(){
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 10, 20, 0),
+      margin: const EdgeInsets.fromLTRB(20, 10, 20, 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          // 종 모양 이미지
-          SizedBox(
-            height: 160,
-              width: 160,
-              child: Image.asset('images/bell_image.png', fit: BoxFit.cover)),
-
-          // 사용자 성함, 지난 검진 결과 내용
-          Flexible(
-            flex: 6,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Frame.myText(
-                  text: '홍길동님',
-                  fontSize: 1.8,
-                  fontWeight: FontWeight.w600,
-                ),
-                const Gap(5),
-
-                MyRichText.infoResultRichTxt(context),
-
-              ],
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Frame.myText(
+                text: '안녕하세요. 홍길동님!',
+                fontSize: 1.2,
+                fontWeight: FontWeight.w500,
+              ),
+              const Gap(5),
+              Frame.myText(
+                text:'걷기 좋은 가을날,\n가벼운 산책 어떠세요?',
+                maxLinesCount: 2,
+                color: mainColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 1.9
+              )
+            ],
           )
         ]
       ),
     );
   }
 
-  buildHealthPointBox() {
+  Widget buildHealthPointBox() {
    return InkWell(
      onTap: ()=> Frame.doPagePush(context, const PointManagementView()),
-     child: Container(
-       width: double.infinity,
-       height: 95,
-       margin: const EdgeInsets.symmetric(horizontal: 20),
-       padding: const EdgeInsets.all(20),
-       decoration: BoxDecoration(
-         color: mainColor,
-         borderRadius: BorderRadius.circular(25),
+     child: Card(
+       elevation: 3,
+       shape: RoundedRectangleBorder(
+         borderRadius: BorderRadius.circular(20.0),
        ),
-       child: Row(
-         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-         children: [
-           /// 포인트 이미지, 포인트 점수
-           Row(
-             children: [
-               Padding(
-                 padding: const EdgeInsets.all(2.0),
-                 child: Image.asset('images/point.png'),
+       child: SizedBox(
+         width: double.infinity,
+         height: 130,
+         child: Column(
+           children: [
+             Container(
+               height: 50,
+               padding: const EdgeInsets.fromLTRB(25, 15, 10, 15),
+               decoration: const BoxDecoration(
+                 color: mainColor,
+                 borderRadius: BorderRadius.only(
+                   topLeft: Radius.circular(20.0),
+                   topRight: Radius.circular(20.0),
+                 ),
                ),
-               const Gap(10),
-
-               Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
+               child: Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                  children: [
                    Frame.myText(
                      text: '건강포인트',
                      color: Colors.white,
-                     fontSize: 0.95,
+                     fontSize: 1.2,
+                     fontWeight: FontWeight.w600
                    ),
-                   const Gap(3),
+                   // arrow 아이콘
+                   const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20,)
+                 ],
+               ),
+             ),
 
-                   /// 실제 포인트 점수 텍스트
+
+             /// 포인트 이미지, 포인트 점수
+             Container(
+               height: 80,
+               padding: const EdgeInsets.symmetric(horizontal: 20),
+               decoration: const BoxDecoration(
+                 color: Colors.white,
+                 borderRadius: BorderRadius.only(
+                   bottomRight: Radius.circular(20.0),
+                   bottomLeft: Radius.circular(20.0),
+                 ),
+               ),
+               child: Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceAround,
+                 crossAxisAlignment: CrossAxisAlignment.center,
+                 children: [
+                   Padding(
+                     padding: const EdgeInsets.all(2.0),
+                     child: Image.asset('images/point.png', color: mainColor, height: 40, width: 40),
+                   ),
+                   const Gap(5),
+
                    Frame.myText(
-                     text: '11,000pt',
-                     fontSize: 1.8,
-                     fontWeight: FontWeight.w500,
-                     color: Colors.white,
+                     text: '11,000',
+                     fontSize: 2.2,
+                     fontWeight: FontWeight.w400,
+                     color: Colors.black,
+                   ),
+                   const Gap(10),
+
+
+                   Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     crossAxisAlignment: CrossAxisAlignment.end,
+                     children: [
+                       Frame.myText(
+                           text:'나의 건강 포인트 확인하고'
+                       ),
+                       Frame.myText(
+                           text:'저렴하게 진료받으세요!',
+                         fontWeight: FontWeight.w600
+                       ),
+                     ],
                    )
                  ],
-               )
-             ],
-           ),
-
-           // arrow 아이콘
-           const Icon(Icons.arrow_forward_ios, color: Colors.white,)
-
-         ]
-       )
+               ),
+             ),
+           ]
+         )
+       ),
      ),
    );
+  }
+
+  Widget buildHealthCheckupResult() {
+    return Card(
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Container(
+        height: 200,
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          border: Border.all(color: Colors.greenAccent, width: 2),
+          
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Frame.myText(
+                    text: '건강 검진 결과 안내',
+                    color: Colors.black,
+                    fontSize: 1.2,
+                    fontWeight: FontWeight.w600
+                ),
+                // arrow 아이콘
+                const Icon(Icons.arrow_forward_ios, color: Colors.black, size: 20,)
+              ],
+            ),
+
+            Container(
+              height: 45,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: Colors.green,
+              ),
+              child: Center(
+                child: Frame.myText(
+                  text: '정상B(경계) 판정',
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 1.5
+                ),
+              ),
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              child: Frame.myText(
+                  text: '• 일주일에 2일 이상 신체 각 부위를 모두 포함하여 근력운동을 수행하십시오.',
+                  maxLinesCount: 2,
+                  fontSize: 1.1,
+                  softWrap: true
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -181,7 +181,7 @@ class Etc{
   /// 가로 라인 줄
   static solidLine(BuildContext context){
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 1.0,

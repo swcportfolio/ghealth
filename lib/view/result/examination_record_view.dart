@@ -112,7 +112,16 @@ class _ExaminationRecordViewState extends State<ExaminationRecordView> {
               left: 10,
               child: InkWell(
                   onTap: ()=> Frame.doPagePush(context, const AiDiseasePredictionView()),
-                  child: Image.asset('images/sight_text_box.png',height: 70, width: 170)),
+                  child: Stack(
+                    children: [
+                      Image.asset('images/sight_text_box.png',height: 70, width: 170),
+                      Positioned(
+                        top: 34,
+                        left: 40,
+                        child: Frame.myText(text:'10', fontWeight: FontWeight.w600, color: Colors.red),
+                      )
+                    ],
+                  )),
             ),
             Positioned(
               top: 50,

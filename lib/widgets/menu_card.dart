@@ -1,37 +1,117 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
+import '../data/models/gallery3d_data.dart';
+import '../main.dart';
 import '../utils/colors.dart';
+import 'dialog.dart';
 
-class MenuCard1 extends StatelessWidget {
-  const MenuCard1({super.key});
+class Gallery3DMenuCard extends StatelessWidget {
+  const Gallery3DMenuCard({super.key, required this.gallery3dData, required this.mContext});
+  final Gallery3dData gallery3dData;
+  final BuildContext mContext;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 100,
-      height: 200,
-      child: Card(
-        color: mainColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Frame.myText(
-                text: '나의 건강 정보\n종합결과지',
-                fontSize: 1.9,
-                maxLinesCount: 2,
+    return Card(
+      color: mainColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                /// 타이틀
+                GestureDetector(
+                  onTap: ()=> {mLog.i('클릭중..')},
+                  child: Frame.myText(
+                    text: gallery3dData.title,
+                    fontSize: 1.3,
+                    maxLinesCount: 2,
+                    color: Colors.white,
+                    align: TextAlign.left,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+
+                InkWell(
+                    onTap: ()=> {
+                      CustomDialog.showGallery3dDialog(mainContext: context, mHeight: gallery3dData.dialogHeight, type: gallery3dData.galleryType)
+                    },
+                    child: const Icon(Icons.info, color: Colors.white))
+              ],
+            ),
+            const Gap(15),
+
+            /// 서브 타이틀
+            Frame.myText(
+              text: gallery3dData.subTitle,
+              fontSize: 1.0,
+              maxLinesCount: 2,
+              color: Colors.white,
+              align: TextAlign.center,
+              fontWeight: FontWeight.w500,
+            ),
+            Etc.solidLine(context),
+
+             Row(
+               mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.location_on, color: Colors.white, size: 16,),
+                const Gap(5),
+
+                /// 주소
+                Frame.myText(
+                  text: gallery3dData.address,
+                  fontSize: 0.9,
+                  maxLinesCount: 2,
+                  color: Colors.white,
+                  align: TextAlign.center,
+                  fontWeight: FontWeight.w600,
+                ),
+              ],
+            ),
+
+            /// 상세 이미지
+            Container(
+                height: 140,
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.only(top: 5),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.asset('images/${gallery3dData.imagePath}', fit: BoxFit.fill))
+            ),
+
+            /// 신청하기 버튼
+            Container(
+              width: 170,
+              height: 40,
+              margin: const EdgeInsets.only(top: 5),
+              decoration: BoxDecoration(
                 color: Colors.white,
-                align: TextAlign.left,
-                fontWeight: FontWeight.w600,
-              )
-            ],
-          ),
+                borderRadius: BorderRadius.circular(20)
+              ),
+              child:  Center(
+                child: Frame.myText(
+                  text: '신청하기',
+                  fontSize: 1.0,
+                  color: mainColor,
+                  align: TextAlign.center,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            )
+
+
+          ],
         ),
       ),
     );

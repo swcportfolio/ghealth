@@ -1,10 +1,14 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gallery_3d/gallery3d.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
+import '../../data/models/gallery3d_data.dart';
 import '../../utils/colors.dart';
 import '../../widgets/list_item/service_list_item.dart';
+import '../../widgets/menu_card.dart';
 import '../../widgets/youtube_video_player.dart';
 
 
@@ -20,6 +24,20 @@ class _HomeViewState extends State<HomeView> {
   /// 서비스 라벨 리스트
   List<String> serviceLabel = ['헬스케어', '유전자 검사', '건강검진 기반\n 질환예측', '식습관 관리'];
 
+  late List<Widget> menuList;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    menuList = [
+      Gallery3DMenuCard(gallery3dData: Gallery3dData('동구라이프로그 건강관리소', '헬스케어 장비를 활용한\n시만 맞춤형 건강케어 서비스', '서남동 행정복지센터2층(동구 서남로 14)', 'card_image_1.jpg', 280, GalleryType.card1), mContext: context,),
+      Gallery3DMenuCard(gallery3dData: Gallery3dData('광주광역시 스트레스 샤워실', '스트레스 관리, 평온한 쉼을\n제공하는 힐링 솔루션 서비스', '광주광역시청(서남구 내방로 111)', 'card_image_2.jpg', 240, GalleryType.card2), mContext: context),
+      Gallery3DMenuCard(gallery3dData: Gallery3dData('G-Health 기업 실증', '새로운 헬스케어 제품을\n체험해보는 사용성 테스트', '기업별 상이(선정인원 개별 안내)', 'card_image_3.png', 360, GalleryType.card3), mContext: context),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,11 +48,25 @@ class _HomeViewState extends State<HomeView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// 소개글
             buildWelComeText(),
-            buildVisitReservations(),
-            buildServiceIntroduction(),
-            YoutubeVideoPlayer(),
+
+            buildCarouselSlider(),
+            ///buildGallery3D(),
+
+            /// 방문 예약 내역
+            ///buildVisitReservations(),
+
+            /// 서비스 소개
+            /// buildServiceIntroduction(),
+
+            /// 참여자 리뷰 및 현장
+            /// YoutubeVideoPlayer(),
+
+            /// 서비스 지원 버튼
             buildSupportServiceBtn(),
+
+            /// 협력사 이미지
             buildPOImage(),
           ],
         ),
@@ -61,7 +93,7 @@ class _HomeViewState extends State<HomeView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Frame.myText(
-                        text: 'GHealth 라이프로그',
+                        text: 'GHealth',
                         fontWeight: FontWeight.w600,
                         fontSize: 2.1,
                         color: mainColor
@@ -100,6 +132,59 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
+
+
+
+Widget buildCarouselSlider(){
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: CarouselSlider.builder(
+        itemCount: menuList.length,
+        options: CarouselOptions(
+          height: 350,
+          enlargeCenterPage: true,
+          enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+
+          viewportFraction: 0.75,
+          enlargeFactor: 0.45, //좌우 item 크기
+        ),
+        itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) =>
+        menuList[itemIndex]
+      ),
+    );
+}
+
+/// Disabled widget
+Widget buildGallery3D() {
+  return Gallery3D(
+      controller: Gallery3DController(itemCount: menuList.length, autoLoop: false, minScale: 0.7),
+      width: MediaQuery.of(context).size.width,
+      height: 500,
+      isClip: true,
+      // ellipseHeight: 80,
+      // currentIndex: currentIndex,
+      onItemChanged: (index) {
+        // setState(() {
+        //   currentIndex = index;
+        // });
+      },
+      itemConfig: const GalleryItemConfig(
+        width: 280,
+        height: 350,
+        radius: 20,
+        isShowTransformMask: true,
+        // shadows: [
+        //   BoxShadow(
+        //       color: Color(0x90000000), offset: Offset(2, 0), blurRadius: 5)
+        // ]
+      ),
+      onClickItem: (index) {
+         print("currentIndex:$index");
+      },
+      itemBuilder: (context, index) {
+        return menuList[index];
+      });
+}
 
   /// 방문 예약 내역
   Widget buildVisitReservations(){
@@ -277,6 +362,8 @@ class _HomeViewState extends State<HomeView> {
       )
     );
   }
+
+
 }
 
 
@@ -285,45 +372,7 @@ class _HomeViewState extends State<HomeView> {
 
 
 
-//
-// Disable
-// List<Widget> menuList = [
-//   const MenuCard1(),
-//   const MenuCard2(),
-//   const MenuCard3(),
-// ];
 
-// /// Disabled widget
-// Widget buildGallery3D() {
-//   return Gallery3D(
-//       controller: Gallery3DController(itemCount: menuList.length, autoLoop: false, minScale: 0.7),
-//       width: MediaQuery.of(context).size.width,
-//       height: 360,
-//       isClip: false,
-//       // ellipseHeight: 80,
-//       // currentIndex: currentIndex,
-//       onItemChanged: (index) {
-//         // setState(() {
-//         //   currentIndex = index;
-//         // });
-//       },
-//       itemConfig: const GalleryItemConfig(
-//         width: 280,
-//         height: 320,
-//         radius: 20,
-//         isShowTransformMask: true,
-//         // shadows: [
-//         //   BoxShadow(
-//         //       color: Color(0x90000000), offset: Offset(2, 0), blurRadius: 5)
-//         // ]
-//       ),
-//       // onClickItem: (index) {
-//       //   if (kDebugMode) print("currentIndex:$index");
-//       // },
-//       itemBuilder: (context, index) {
-//         return menuList[index];
-//       });
-// }
 
 
 
