@@ -9,7 +9,6 @@ import '../../data/models/gallery3d_data.dart';
 import '../../utils/colors.dart';
 import '../../widgets/list_item/service_list_item.dart';
 import '../../widgets/menu_card.dart';
-import '../../widgets/youtube_video_player.dart';
 
 
 class HomeView extends StatefulWidget {
@@ -31,10 +30,51 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     menuList = [
-      Gallery3DMenuCard(gallery3dData: Gallery3dData('동구라이프로그 건강관리소', '헬스케어 장비를 활용한\n시만 맞춤형 건강케어 서비스', '서남동 행정복지센터2층(동구 서남로 14)', 'card_image_1.jpg', 280, GalleryType.card1), mContext: context,),
-      Gallery3DMenuCard(gallery3dData: Gallery3dData('광주광역시 스트레스 샤워실', '스트레스 관리, 평온한 쉼을\n제공하는 힐링 솔루션 서비스', '광주광역시청(서남구 내방로 111)', 'card_image_2.jpg', 240, GalleryType.card2), mContext: context),
-      Gallery3DMenuCard(gallery3dData: Gallery3dData('G-Health 기업 실증', '새로운 헬스케어 제품을\n체험해보는 사용성 테스트', '기업별 상이(선정인원 개별 안내)', 'card_image_3.png', 360, GalleryType.card3), mContext: context),
+      Gallery3DMenuCard(
+        gallery3dData: Gallery3dData(
+            '동구라이프로그 건강관리소',
+            '헬스케어 장비를 활용한\n시만 맞춤형 건강케어 서비스',
+            '서남동 행정복지센터2층(동구 서남로 14)',
+            'card_image_1.jpg',
+            280,
+            Uri(
+              scheme: 'https',
+              host: 'lifelog.ghealth.or.kr',
+              path: '',
+            ),
+            GalleryType.card1),
+        mContext: context,
+      ),
+      Gallery3DMenuCard(
+          gallery3dData: Gallery3dData(
+              '광주광역시 스트레스 샤워실',
+              '스트레스 관리, 평온한 쉼을\n제공하는 힐링 솔루션 서비스',
+              '광주광역시청(서남구 내방로 111)',
+              'card_image_2.jpg',
+              240,
+              Uri(
+                scheme: 'https',
+                host: 'www.ghealth.or.kr',
+                path: '/reservation/ssroom/',
+              ),
+              GalleryType.card2),
+          mContext: context),
+      Gallery3DMenuCard(
+          gallery3dData: Gallery3dData(
+              'G-Health 기업 실증',
+              '새로운 헬스케어 제품을\n체험해보는 사용성 테스트',
+              '기업별 상이(선정인원 개별 안내)',
+              'card_image_3.png',
+              360,
+              Uri(
+                scheme: 'https',
+                host: 'ecrf.ghealth.or.kr',
+                path: '/pub/apply',
+              ),
+              GalleryType.card3),
+          mContext: context),
     ];
   }
 
@@ -141,7 +181,7 @@ Widget buildCarouselSlider(){
       child: CarouselSlider.builder(
         itemCount: menuList.length,
         options: CarouselOptions(
-          height: 350,
+          height: 360,
           enlargeCenterPage: true,
           enlargeStrategy: CenterPageEnlargeStrategy.zoom,
 

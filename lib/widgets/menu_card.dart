@@ -15,6 +15,8 @@ class Gallery3DMenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Card(
       color: mainColor,
       shape: RoundedRectangleBorder(
@@ -29,16 +31,13 @@ class Gallery3DMenuCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 /// 타이틀
-                GestureDetector(
-                  onTap: ()=> {mLog.i('클릭중..')},
-                  child: Frame.myText(
-                    text: gallery3dData.title,
-                    fontSize: 1.3,
-                    maxLinesCount: 2,
-                    color: Colors.white,
-                    align: TextAlign.left,
-                    fontWeight: FontWeight.w600,
-                  ),
+                Frame.myText(
+                  text: gallery3dData.title,
+                  fontSize: 1.3,
+                  maxLinesCount: 2,
+                  color: Colors.white,
+                  align: TextAlign.left,
+                  fontWeight: FontWeight.w600,
                 ),
 
                 InkWell(
@@ -91,21 +90,29 @@ class Gallery3DMenuCard extends StatelessWidget {
             ),
 
             /// 신청하기 버튼
-            Container(
-              width: 170,
-              height: 40,
-              margin: const EdgeInsets.only(top: 5),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20)
-              ),
-              child:  Center(
-                child: Frame.myText(
-                  text: '신청하기',
-                  fontSize: 1.0,
-                  color: mainColor,
-                  align: TextAlign.center,
-                  fontWeight: FontWeight.w600,
+            /// 동구라이프로그 건강관리소: https://lifelog.ghealth.or.kr
+            /// 스트레스 샤워실: https://www.ghealth.or.kr/reservation/ssroom
+            /// 기업실증: https://ecrf.ghealth.or.kr/pub/apply
+            InkWell(
+              onTap: ()=> {
+                Frame.doLaunchUniversalLink(gallery3dData.uri)
+              },
+              child: Container(
+                width: 170,
+                height: 40,
+                margin: const EdgeInsets.only(top: 5),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20)
+                ),
+                child:  Center(
+                  child: Frame.myText(
+                    text: '신청하기',
+                    fontSize: 1.0,
+                    color: mainColor,
+                    align: TextAlign.center,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             )

@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/models/chart_data.dart';
 import '../../data/models/chart_health_data.dart';
@@ -8,6 +9,12 @@ import '../../services/health.dart';
 import '../../utils/colors.dart';
 import '../../widgets/bar_chart.dart';
 import '../../widgets/frame.dart';
+import '../../widgets/health_circular_chart.dart';
+
+enum HealthDataType  {
+  sleep,
+  step,
+}
 
 class HealthView extends StatefulWidget {
   const HealthView({super.key});
@@ -40,71 +47,92 @@ class _HealthViewState extends State<HealthView> {
     }
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildAppTopMessage(),
 
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder(
-              /// The steps and sleep time are called through Health().
-              future: Health().fetchData(context),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-
-                if(snapshot.hasError){
-                  return Center(
-                      child: Text(snapshot.error.toString().replaceFirst('Exception: ', ''),
-                          textScaleFactor: 1.1, style: const TextStyle(color: Colors.black)));
-                }
-
-                if (!snapshot.hasData) {
-                  return const Center(
-                      child: SizedBox(height: 40.0, width: 40.0,
-                          child: CircularProgressIndicator(strokeWidth: 5)));
-                }
-
-                if (snapshot.connectionState == ConnectionState.done) {
-                  chartHealthData = snapshot.data;
-
-                  chartHealthData?.initStepChartData();  // 걸음수 차트 데이터 초기화
-                  chartHealthData?.initSleepChartData(); // 수면시간 차트 데이터 초기화
-
-                  if(isRunOnce){
-                    isRunOnce = false;
-                    //_insertHealthData();
-                  }
-                }
-
-                return chartHealthData == null ? buildEmptyView('건강 데이터가 없습니다.') :
-
-                SingleChildScrollView(
-                  child: Container(
-                    padding: const EdgeInsets.all(15),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children:
-                        [
-
-                          /// 수면 차트
-                          buildChart(0, chartHealthData!.chartSleepData),
-
-                          const Gap(10),
-
-                          /// 걸음 수 차트
-                          buildChart(1, chartHealthData!.chartStepData),
-                        ]
-                    ),
-                  ),
-                );
-              },
+            /// 수면 시간 진행 위젯
+            const HealthCircularChart(
+              mainValue: '5시간',
+              targetValue: '7시간',
+              type: HealthDataType.sleep,
             ),
-          ),
-        ],
+
+            /// 걸음 수 진행 위젯
+            const HealthCircularChart(
+              mainValue: '2341',
+              targetValue: '6000',
+              type: HealthDataType.step,
+            ),
+
+            // Expanded(
+            //   child: FutureBuilder(
+            //     /// The steps and sleep time are called through Health().
+            //     future: Health().fetchData(context),
+            //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            //
+            //       if(snapshot.hasError){
+            //         return Center(
+            //             child: Text(snapshot.error.toString().replaceFirst('Exception: ', ''),
+            //                 textScaleFactor: 1.1, style: const TextStyle(color: Colors.black)));
+            //       }
+            //
+            //       if (!snapshot.hasData) {
+            //         return const Center(
+            //             child: SizedBox(height: 40.0, width: 40.0,
+            //                 child: CircularProgressIndicator(strokeWidth: 5)));
+            //       }
+            //
+            //       if (snapshot.connectionState == ConnectionState.done) {
+            //         chartHealthData = snapshot.data;
+            //
+            //         chartHealthData?.initStepChartData();  // 걸음수 차트 데이터 초기화
+            //         chartHealthData?.initSleepChartData(); // 수면시간 차트 데이터 초기화
+            //
+            //         if(isRunOnce){
+            //           isRunOnce = false;
+            //           //_insertHealthData();
+            //         }
+            //       }
+            //
+            //       return chartHealthData == null ? buildEmptyView('건강 데이터가 없습니다.') :
+            //
+            //       SingleChildScrollView(
+            //         child: Container(
+            //           padding: const EdgeInsets.all(15),
+            //           child: Column(
+            //               crossAxisAlignment: CrossAxisAlignment.start,
+            //               children:
+            //               [
+            //
+            //                 /// 수면 차트
+            //                 buildChart(0, chartHealthData!.chartSleepData),
+            //
+            //                 const Gap(10),
+            //
+            //                 /// 걸음 수 차트
+            //                 buildChart(1, chartHealthData!.chartStepData),
+            //               ]
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+          ],
+        ),
       ),
     );
   }
+
+
+
 
   /// Health Empty View
  Widget buildEmptyView(String text) {
@@ -159,6 +187,36 @@ class _HealthViewState extends State<HealthView> {
               ],
             )
         )
+    );
+  }
+
+  /// 앱 상단 메시지 표시
+  buildAppTopMessage() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 40, left: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Frame.myText(
+                  text: '홍길동님의 ',
+                  fontSize: 1.7,
+                  fontWeight: FontWeight.bold
+              ),
+              Frame.myText(
+                text: '웨어러블',
+                fontSize: 1.7,
+                fontWeight: FontWeight.bold,
+                color: mainColor,
+              )
+            ],
+          ),
+          Frame.myText(
+            text: '수면패턴과 걸음 수에 대한 정보를 제공합니다.',
+          ),
+        ],
+      ),
     );
   }
 }

@@ -43,6 +43,12 @@ const reservedCardBgColor = Color(0xFFf9faff);
 // service Circle background color
 const serviceCircleBgColor = Color(0xFFf4f4f4);
 
+// blood result box background color
+const bloodResultBgColor = Color(0xFFfcedee);
+
+// 걔측검사 결과 박스 background color
+const metrologyInspectionBgColor = Color(0xFFebf0fe);
+
 
 
 

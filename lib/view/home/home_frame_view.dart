@@ -44,6 +44,7 @@ class _HomeFramePageState extends State<HomeFrameView> {
           ],
         ),
         child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed, // 고정 크기 아이템 사용
           backgroundColor: Colors.white,
           showUnselectedLabels: true,
           items: <BottomNavigationBarItem>[

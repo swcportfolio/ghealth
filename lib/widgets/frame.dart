@@ -2,6 +2,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 
 import '../utils/colors.dart';
@@ -125,6 +126,24 @@ class Frame{
  static doPageAndRemoveUntil(context, Widget page)
  {
    return Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => page), (route) => false);
+ }
+
+ /// Universal 화면이동
+ static Future<void> doLaunchUniversalLink(Uri uri) async {
+   LaunchMode mode;
+   if(Platform.isIOS){
+     mode = LaunchMode.externalNonBrowserApplication;
+   } else {
+     mode = LaunchMode.inAppBrowserView;
+   }
+
+   final bool nativeAppLaunchSucceeded = await launchUrl(
+     uri,
+     mode: mode,
+   );
+   if (!nativeAppLaunchSucceeded) {
+     await launchUrl(uri, mode: LaunchMode.externalApplication);
+   }
  }
 
 

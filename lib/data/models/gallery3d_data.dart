@@ -5,6 +5,7 @@ class Gallery3dData {
  late String address;
  late String imagePath;
  late double dialogHeight;
+ late Uri uri;
  late GalleryType galleryType;
 
  Gallery3dData(
@@ -13,6 +14,7 @@ class Gallery3dData {
      this.address,
      this.imagePath,
      this.dialogHeight,
+     this.uri,
      this.galleryType);
 }
 
