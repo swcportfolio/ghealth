@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:ghealth_app/view/home/home_frame_view.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 import 'package:provider/provider.dart';
 
@@ -22,36 +21,30 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  LoginViewModel _viewModel = LoginViewModel();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  late LoginViewModel _viewModel;
 
   @override
   Widget build(BuildContext context) {
     _viewModel = Provider.of<LoginViewModel>(context, listen: false);
-
+    _viewModel.context = context;
     return Scaffold(
       backgroundColor: mainColor,
 
       body: SafeArea(
-        child: GestureDetector(
-          onTap: ()=> FocusScope.of(context).unfocus(),
-          child: Stack(
-            children: [
-              Column(
+        child: Stack(
+          children: [
+            GestureDetector(
+              onTap: ()=> FocusScope.of(context).unfocus(),
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children:
                 [
-                  // 메인 BI 이미지
+                  /// 메인 BI 이미지 위젯
                   buildBiImage(),
-                  const Gap(40),
+                  const Gap(20),
 
-                  // 휴대폰 번호 입력 필드
+                  /// 휴대폰 번호 입력 필드 위젯
                   buildLoginTextField(
                       hint: '휴대폰 번호 \'-\'제외한 11자리',
                       inputType: LoginInput.phone,
@@ -59,21 +52,50 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   const Gap(15),
 
-                  // 인증번호 입력 필드
-                    buildLoginTextField(
-                      hint: '휴대폰 인증번호',
-                      inputType: LoginInput.certification,
-                      controller: _viewModel.certificationController
+                  /// 인증번호 입력 필드
+                  Consumer<LoginViewModel>(
+                    builder: (BuildContext context, value, Widget? child) {
+                      bool visible = value.isMessageSent;
+                      return Visibility(
+                        visible: visible,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            buildLoginTextField(
+                                hint: '휴대폰 인증번호',
+                                inputType: LoginInput.certification,
+                                controller: _viewModel.certificationController,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(25, 20, 0, 5),
+                              child: Frame.myText(
+                                  text: '• 3분 이내로 인증번호(5자리)를 입력헤주세요.',
+                                  fontSize: 0.85,
+                                  color: Colors.white),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                              child: Frame.myText(
+                                  text: '• 인증번호가 전송되지 않을경우 3분이후 "재전송"버튼을 눌러주세요.',
+                                  fontSize: 0.85,
+                                  color: Colors.white),
+                            ),
+                            const Gap(15),
+                          ],
+                        ),
+                      );
+                    },
                   ),
 
-                  // 로그인 버튼
+                  /// 로그인 버튼 위젯
                   buildLoginButton(),
+                  const Gap(50),
                 ],
               ),
-              // 라이센스 마크
-              licenseText()
-            ],
-          ),
+            ),
+            // 라이센스 마크
+            licenseText()
+          ],
         ),
       ),
     );
@@ -99,7 +121,7 @@ class _LoginViewState extends State<LoginView> {
   Widget buildLoginTextField({
     required String hint,
     required LoginInput inputType,
-    required TextEditingController controller
+    required TextEditingController controller,
   }){
     return Container(
         height: 60.0,
@@ -118,7 +140,7 @@ class _LoginViewState extends State<LoginView> {
                 child: TextField(
                   autofocus: false,
                   controller: controller,
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.number,
                   style: const TextStyle(color: Colors.black, decorationThickness: 0),
                   decoration: InputDecoration(
                       border: InputBorder.none,
@@ -134,22 +156,46 @@ class _LoginViewState extends State<LoginView> {
               visible: inputType == LoginInput.phone? true : false,
               child: Padding(
                 padding: const EdgeInsets.only(right: 15),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: sendBackgroundColor,
-                      foregroundColor: sendBackgroundColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      )),
-                  onPressed: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    child: Frame.myText(
-                        text: '전송',
-                        color: sendTextColor,
-                        fontSize: 1.1,
-                        fontWeight: FontWeight.w600),
-                  ),
+                child: Consumer<LoginViewModel>(
+                  builder: (BuildContext context, value, Widget? child) {
+                    bool isProgress = value.isSendMessageProgress;
+                    bool isStartTimer = value.isStartTimer;
+                    int minutes = value.minutes;
+                    int seconds = value.seconds;
+
+                    bool isMessageSent = value.isMessageSent;// 인증번호 필드가 활성화 되어 있는가?
+
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: sendBackgroundColor,
+                          foregroundColor: sendBackgroundColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          )),
+                      onPressed: () => {
+                        if(!isProgress && !isStartTimer){
+                          FocusScope.of(context).unfocus(),
+                          _viewModel.handleSendMessage(),
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: isProgress
+                            ? Frame.buildSendMessageProgressIndicator()
+                            : isStartTimer
+                                ? Frame.myText(
+                                    text: (minutes == 0 && seconds == 0)? '재전송' : '$minutes:${seconds.toString().padLeft(2, '0')}',
+                                    color: Colors.black,
+                                    fontSize: 1.1,
+                                    fontWeight: FontWeight.w600)
+                                : Frame.myText(
+                                    text: isMessageSent ? '재전송' : '전송',
+                                    color: sendTextColor,
+                                    fontSize: 1.1,
+                                    fontWeight: FontWeight.w600),
+                      ),
+                    );
+                  },
                 ),
               ),
             )
@@ -161,11 +207,11 @@ class _LoginViewState extends State<LoginView> {
   /// 로그인 버튼
   Widget buildLoginButton(){
     return InkWell(
-      onTap: ()=> Frame.doPagePush(context, const HomeFrameView()),
+      onTap: ()=> _viewModel.handleLogin(),
       child: Container(
-        height: 60,
+        height: 50,
         width: double.infinity,
-        margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(30)),
           border: Border.all(

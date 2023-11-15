@@ -14,10 +14,14 @@ class Etc{
   static showSnackBar(String meg, BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            duration: const Duration(milliseconds: 1500),
+            duration: const Duration(milliseconds: 2000),
             behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.grey.shade600,
-            content: Text(meg, textScaleFactor: 1.0),
+            backgroundColor: Colors.white,
+            content: Frame.myText(
+              text: meg,
+              fontSize: 1.0,
+              color: Colors.black
+            ),
             ));
     }
 
@@ -59,6 +63,19 @@ class Etc{
         return DateFormat('yyyy년 MM월 dd일').format(targetDate?? now);
       }
     }
+
+  static defaultDateFormat(String dateInput) {
+    // 날짜 부분 추출
+    String dateString = dateInput.replaceAll(RegExp(r'[^0-9]'), '');
+
+    // DateTime 객체로 변환
+    DateTime date = DateTime.parse(dateString);
+
+    // 원하는 형식으로 날짜 포맷
+    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+
+    return formattedDate;
+  }
 
   /// chart x축 날짜 format(MM/dd)
   static String setDateTime(int duration) {
@@ -262,14 +279,14 @@ class Etc{
 
   /// map() print
   static void getValuesFromMap(Map map) {
-
+      logger.f(map);
     // Get all values
-    mLog.i('\n-----------------------');
-    mLog.i('Map Get values:');
-    map.entries.forEach((entry){
-      mLog.d('${entry.key} : ${entry.value}');
-    });
-    mLog.i('-----------------------\n');
+    // mLog.i('\n-----------------------');
+    // mLog.i('Map Get values:');
+    // map.entries.forEach((entry){
+    //   mLog.d('${entry.key} : ${entry.value}');
+    // });
+    // mLog.i('-----------------------\n');
   }
 
   /// font size fixation
@@ -319,16 +336,6 @@ class Etc{
 
   }
 
-  /// 상담메뉴 사용할 수 있는 시간 설정
-  /// 데드라인 안쪽이면 true
-  /// 데드라인을 넘으면 false
-  static bool checkDeadline() {
-    final now = DateTime.now();
-    final deadline = DateTime(2022, 12, 25, 23, 59, 0, 0 ,0);
-    mLog.d('Deadline ${!deadline.isBefore(now)}');
-    return !deadline.isBefore(now);
-  }
-
 
   /// 채팅 그룹 아이디 생성시 사용된다.
   /// 두 개의 아이디를 정렬한 후에 조합하여 채팅 그룹 아이디를 만듭니다.
@@ -338,6 +345,15 @@ class Etc{
     beforeSortedIds.sort();
 
     return '${beforeSortedIds[0]}_${beforeSortedIds[1]}';
+  }
+
+  ///MetrologyInspection 계측 검사 결과 불필요한 String 자르기
+  static String removeAfterSpace(String input) {
+    // 문자열에서 첫 번째 띄워쓰기의 인덱스를 찾습니다.
+    int spaceIndex = input.indexOf(' ');
+
+    // 띄워쓰기 이후의 부분을 제거하고 결과를 반환합니다.
+    return spaceIndex != -1 ? input.substring(0, spaceIndex) : input;
   }
 }
 

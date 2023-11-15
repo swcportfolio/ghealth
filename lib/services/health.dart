@@ -54,9 +54,9 @@ class Health {
     bool requested = false;
     try {
      requested = await health.requestAuthorization(types, permissions: permissions); // needed, since we only want READ access.
-      mLog.d('[ChartHealthData requested]  $requested');
+      logger.d('[Health fetchData] => $requested');
     } catch (error) {
-      print("Exception in authorize: $error");
+      logger.d('[Health fetchData] => Exception in authorize: $error');
     }
 
     if (requested){
@@ -95,7 +95,7 @@ class Health {
         );
 
       } catch (error) {
-        mLog.e("Exception in getHealthDataFromTypes: $error");
+        logger.e("[Health fetchData] => Exception in getHealthDataFromTypes: $error");
         CustomDialog.showMyDialog(
           title: '건강 데이터!',
           content: '데이터 접근 또는 계정이\n 승인되지 않았습니다.',

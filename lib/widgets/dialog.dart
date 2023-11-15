@@ -46,7 +46,7 @@ class CustomDialog{
                   const Icon(Icons.error, color: mainColor, size: 35),
                   const Gap(10),
                   Frame.myText(
-                      text: title, fontSize: 0.95, fontWeight: FontWeight.w600)
+                      text: title, fontSize: 1.0, fontWeight: FontWeight.w600)
                 ],
               ),
             ),
@@ -66,7 +66,7 @@ class CustomDialog{
                               child: Frame.myText(
                                   text: content,
                                   align: TextAlign.center,
-                                  fontSize: 0.85,
+                                  fontSize: 0.9,
                                   maxLinesCount: 2,
                                   fontWeight: FontWeight.w500))
                         ],
@@ -89,7 +89,7 @@ class CustomDialog{
                             Navigator.pop(context);
                           },
                           child: Frame.myText(
-                              text: '확인', fontSize: 1.1, color: Colors.white)),
+                              text: '확인', fontSize: 1.1, color: Colors.white, fontWeight: FontWeight.w600)),
                     ),
                   ),
                 ],

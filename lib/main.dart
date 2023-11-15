@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:ghealth_app/utils/colors.dart';
-import 'package:ghealth_app/utils/logging.dart';
 import 'package:ghealth_app/view/home/home_frame_view.dart';
 import 'package:ghealth_app/view/join/login_view.dart';
 import 'package:ghealth_app/view/join/login_viewmodel.dart';
+import 'package:ghealth_app/view/results/my_result_report_viewmodel.dart';
 import 'package:ghealth_app/widgets/girdview/gridview_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-final mLog = logger; // 커스텀 로그
+var logger = Logger(
+    printer: PrettyPrinter(
+        methodCount: 1, // number of method calls to be displayed
+        errorMethodCount: 8, // number of method calls if stacktrace is provided
+        lineLength: 120, // width of the output
+        colors: true, // Colorful log messages
+        printEmojis: true, // Print an emoji for each log message
+        printTime: false // Should each log print contain a timestamp
+    ));
 
 Future<void> main() async {
 
@@ -26,6 +35,9 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider(
               create: (BuildContext context) => ReservationTime()
+          ),
+          ChangeNotifierProvider(
+              create: (BuildContext context) => MyHealthReportViewModel()
           ),
         ],
         child: MyApp(),

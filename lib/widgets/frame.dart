@@ -210,18 +210,22 @@ class Frame{
          mainAxisAlignment: MainAxisAlignment.center,
          crossAxisAlignment: CrossAxisAlignment.center,
          children: [
+           const Icon(Icons.error_outline, size: 40, color: Colors.redAccent,),
+           const Gap(10),
            Frame.myText(
-             text: '네트워크 및 서버가 불안정합니다.',
+             text: '네트워크 연결 상태 확인 후\n다시시도 해주세요.',
              fontSize: 1.1,
+             maxLinesCount: 2,
+             align: TextAlign.center
            ),
-           const Gap(20),
+           const Gap(25),
 
            InkWell(
              onTap: () => {
                updateFunction()
              },
              child: Container(
-               padding: const EdgeInsets.all(8),
+               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                decoration: BoxDecoration(
                  color: Colors.grey.shade100 ,
                  border: Border.all(
@@ -254,6 +258,19 @@ class Frame{
               child: CupertinoActivityIndicator(radius: 15)),
         );
   }
+
+ /// 인증번호 전송버튼 Indicator
+ static buildSendMessageProgressIndicator() {
+   return Platform.isAndroid
+       ? const SizedBox(
+           height: 10.0,
+           width: 10.0,
+           child: CircularProgressIndicator(strokeWidth: 2))
+       : const SizedBox(
+           height: 10,
+           width: 10,
+           child: CupertinoActivityIndicator(radius: 8));
+ }
 
   static buildExtendedImage(AnimationController controller, String  url, double size){
    return ExtendedImage.network(

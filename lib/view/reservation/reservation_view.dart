@@ -115,6 +115,7 @@ class _ReservationViewState extends State<ReservationView> {
             /// 특정 날짜 비활성화
             enabledDayPredicate: (DateTime date){
               final disabledDate = DateTime(2023, 10, 30);
+
               return !isSameDay(disabledDate, date);
             },
             firstDay: DateTime.now(),

@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../data/models/picker_data.dart';
+import '../main.dart';
 import '../utils/colors.dart';
+import '../utils/contants.dart';
 import '../view/health/health_view.dart';
+import 'custom_picker.dart';
 import 'frame.dart';
 
 /// 파이 그래프 테스트
@@ -143,21 +147,32 @@ class HealthCircularChart extends StatelessWidget {
                             fontSize: 1.6),
                         const Gap(20),
 
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Frame.myText(
-                                text: type == HealthDataType.sleep
-                                    ? '목표 수면 시간'
-                                    : '목표 걸음 수'),
-                            const Gap(5),
-                            const Icon(Icons.arrow_drop_down, size: 20)
-                          ],
+                        InkWell(
+                          onTap: ()=>  CustomPicker().showBottomSheet(PickerData(19, Constants.targetStepsList, context,
+                                  (callbackData)=> onGetPickerData(callbackData))),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Frame.myText(
+                                      text: type == HealthDataType.sleep
+                                          ? '목표 수면 시간'
+                                          : '목표 걸음 수'),
+                                  const Gap(5),
+                                  const Icon(Icons.arrow_drop_down, size: 20)
+                                ],
+                              ),
+
+                              Frame.myText(
+                                  text: targetValue,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 1.6
+                              )
+                            ],
+                          ),
                         ),
-                        Frame.myText(
-                            text: targetValue,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 1.6)
                       ],
                     ),
                   )
@@ -168,6 +183,13 @@ class HealthCircularChart extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// Number picker Function callback
+  /// @param callbackData : 반환 값
+  onGetPickerData(callbackData) {
+    var getPickerData = callbackData.toString();
+    logger.d(getPickerData);
   }
 }
 

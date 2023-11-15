@@ -1,20 +1,44 @@
-/// 권한 계정 클래스
+
+/// Attributes to store user authorization information
 class Authorization{
-  late String uid;
+  late String userID; //ex)U00000
+  late String userName; //ex)강**
+  late String token; //ex)eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJV
+  late String gneder; //ex)(M:남자,F:여자)
 
-
-  /// 한번 초기화로 계속 사용할 수 있다.
+  // Authorization 클래스의 싱글톤 인스턴스
   static final Authorization _authInstance = Authorization.internal();
 
+  // 싱글톤 패턴을 위한 비공개 생성자
   factory Authorization(){
     return _authInstance;
   }
 
-  Authorization.internal() {
-    uid = '';
+  // 사용자 권한 값을 설정하는 메서드
+  void setValues(
+      {required String newUserID,
+      required String newUserName,
+      required String newToken,
+      required String newGender,
+      }) {
+    userID = newUserID;
+    userName = newUserName;
+    token = newToken;
+    gneder = newGender;
   }
 
-  clear() async {
-    uid = '';
+  // Authorization의 단일 인스턴스를 제공하기 위한 팩토리 메서드
+  Authorization.internal() {
+    init();
+  }
+  // 권한 값을 초기화하는 메서드
+  clean()=> init();
+
+  // 권한 값을 초기화하는 메서드
+  init() {
+    userID = '';
+    userName = '';
+    token = '';
+    gneder = '';
   }
 }

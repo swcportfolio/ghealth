@@ -2,11 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:ghealth_app/view/health/health_view.dart';
 import 'package:ghealth_app/view/home/home_view.dart';
+import 'package:ghealth_app/view/results/ai_disease_prediction_view.dart';
 
 import '../../utils/colors.dart';
 import '../../widgets/custom_appbar.dart';
 import '../reservation/reservation_history_view.dart';
-import '../result/myinfo_result_sheet_view.dart';
+import '../results/examination_record_view.dart';
+import '../results/my_health_report_view.dart';
 
 class HomeFrameView extends StatefulWidget {
   const HomeFrameView({super.key});
@@ -23,7 +25,8 @@ class _HomeFramePageState extends State<HomeFrameView> {
   final List<Widget> _widgetOptions = <Widget>[
     const HomeView(),
     const ReservationHistoryView(),
-    const MyInfoResultSheetView(),
+    const ExaminationRecordView(),
+    const MyHealthReportView(),
     const HealthView(),
   ];
 
@@ -48,14 +51,18 @@ class _HomeFramePageState extends State<HomeFrameView> {
           backgroundColor: Colors.white,
           showUnselectedLabels: true,
           items: <BottomNavigationBarItem>[
-            _buildNavigationBarItem('images/navigation_4.png', '홈으로', 35, 35, 0),
-            _buildNavigationBarItem('images/navigation_3.png', '예약', 35, 35, 1),
-            _buildNavigationBarItem('images/navigation_2.png', '내건강 보고서', 35, 35, 2),
-            _buildNavigationBarItem('images/navigation_1.png', '웨어러블', 25, 25, 3),
+            _buildNavigationBarItem('images/navigation_4.png', '홈으로', 25, 25, 0),
+            _buildNavigationBarItem('images/navigation_3.png', '예약', 25, 25, 1),
+            _buildNavigationBarItem('images/navigation_2.png', '내건강 보고서', 25, 25, 2),
+            _buildNavigationBarItem('images/navigation_2.png', '마이데이터', 25, 25, 3),
+            _buildNavigationBarItem('images/navigation_1.png', '웨어러블', 25, 25, 4),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: mainColor,
+          selectedFontSize: 12,
+          unselectedFontSize: 12,
           unselectedItemColor: Colors.grey,
+
           onTap: _onItemTapped,
         )
       ),
@@ -86,6 +93,7 @@ class _HomeFramePageState extends State<HomeFrameView> {
         child: Image.asset(imagePath, height: iconHeight, width: iconWidth),
       ),
       label: label,
+
     );
   }
 

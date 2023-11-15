@@ -135,21 +135,23 @@ class _HealthViewState extends State<HealthView> {
 
 
   /// Health Empty View
- Widget buildEmptyView(String text) {
+  Widget buildEmptyView(String text) {
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
-        children:
-        [
+        children: [
           const Icon(Icons.question_mark, size: 40),
           const Gap(20),
-          Frame.myText(text: text, fontSize: 1.3, color: mainColor, fontWeight: FontWeight.w600),
+          Frame.myText(
+              text: text,
+              fontSize: 1.3,
+              color: mainColor,
+              fontWeight: FontWeight.w600),
         ],
       ),
     );
   }
-
 
   /// 차트 widget
   Widget buildChart(int index, List<ChartData> chartData) {
