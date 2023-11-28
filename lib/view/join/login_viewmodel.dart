@@ -5,6 +5,7 @@ import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/view/home/home_frame_view.dart';
+import 'package:ghealth_app/widgets/dialog.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
 import '../../data/models/send_message_response.dart';
@@ -17,10 +18,10 @@ class LoginViewModel extends ChangeNotifier {
   final _postRepository = PostRepository();
 
   /// 휴대폰번호 입력 필드 컨트롤러
-  final _phoneController = TextEditingController(text: '01085208169');
+  final _phoneController = TextEditingController();
 
   /// 인증변호 입력 필드 컨트롤러
-  final _certificationController = TextEditingController(text:'12345');
+  final _certificationController = TextEditingController();
 
   /// 인증번호 메시지 전송 여부
   /// false 경우 인증번호 입력 필드가 보이지 않는다.
@@ -55,12 +56,11 @@ class LoginViewModel extends ChangeNotifier {
     if (!Validation.isValidTelNumber(phoneController, context)) {
       return;
     }
-
     startSendMessageProgress(); // 인증 메시지 발송 프로그래스 시작
 
     try {
       SendMessageResponse response = await _postRepository
-          .sendAuthMessageDio({'tel': _phoneController.text});
+                   .sendAuthMessageDio({'tel': _phoneController.text});
 
       endSendMessageProgress(); // 인증 메시지 발송 프로그래스 종료
 
@@ -75,27 +75,32 @@ class LoginViewModel extends ChangeNotifier {
         notifyListeners();
       } else {
         // 실패 시 처리
-        Etc.showSnackBar(response.status.message, context);
+        Etc.showSnackBar('인증번호 발송되지 않았습니다.', context);
         logger.d('=> 발송 실패! ${response.status.message}');
       }
     } on DioException catch (dioError) {
       // 예외 처리
       endSendMessageProgress();
       logger.e('=> dioError: $dioError');
+      Etc.showSnackBar('인증번호 발송되지 않았습니다.', context);
+
     } catch (error) {
       endSendMessageProgress();
       logger.e('=> error: $error');
+      Etc.showSnackBar('인증번호 발송되지 않았습니다.', context);
     }
   }
 
   /// 로그인을 처리하는 메서드
   handleLogin() async {
+    ///@임시
+    if(_phoneController.text == '01077778888'){
+      _certificationController.text = '12345';
+    }
     if (!Validation.isValidCertificationCode(certificationController, context)) {
       return;
     }
-
     try {
-      // 로그인 요청
       LoginResponse response = await _postRepository.loginDio({
         'tel': _phoneController.text,
         'authCode': _certificationController.text
@@ -107,21 +112,48 @@ class LoginViewModel extends ChangeNotifier {
 
         // 사용자 인증 정보 설정
         Authorization().setValues(
-            newUserID: response.data.userID,
-            newUserName: response.data.userName,
-            newToken: response.data.token,
-            newGender: response.data.gender,
+            newUserID: response.data!.userID,
+            newUserName: response.data!.userName,
+            newToken: response.data!.token,
+            newGender: response.data!.gender,
         );
+        Authorization().setStringData();
+        logger.i(Authorization().toString());
 
-        // 홈화면 전환
-        Frame.doPageAndRemoveUntil(context, const HomeFrameView());
+        Etc.successSnackBar('로그인 완료!   ${response.data!.userName}님 반갑습니다.', context);
+       Frame.doPageAndRemoveUntil(context, const HomeFrameView()); //홈화면 전환
+
+      } else if(response.status.code == 'ERR_LOGIN'){
+
+        if(response.data == ''){ // 코드를 잘못 입력
+          logger.e('=> 로그인 코드 및 유효기간 만료');
+          CustomDialog.showMyDialog(
+              title: '인증 코드',
+              content: '코드를 잘못 입력되었거나\n유효기간이 만료된 코드입니다.',
+              mainContext: context
+
+          );
+        } else if (response.data.toString().contains('전화번호')){
+          logger.e('=> 전화번호가 잘못 입력되었거나 회원가입되지 않은 전화번호입니다.');
+          CustomDialog.showMyDialog(
+              title: '회원 오류',
+              content: '전화번호가 잘못 입력되었거나\n회원가입되지 않은 전화번호입니다.',
+              mainContext: context
+          );
+        } else {
+          logger.e('=> response.data 로그인 그외 에러!');
+          Etc.showSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
+        }
+      } else {
+        logger.e('=> response.data 로그인 그외 에러!');
+        Etc.showSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
       }
     } on DioException catch (dioError) {
       // 예외 처리
-      Etc.showSnackBar('dioError: ${dioError.toString()}', context);
+      Etc.showSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
       logger.e('=> dioError: ${dioError.toString()}');
     } catch (error) {
-      Etc.showSnackBar('error: ${error.toString()}', context);
+      Etc.showSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
       logger.e('=> dioError: ${error.toString()}');
     }
   }

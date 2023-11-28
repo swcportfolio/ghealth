@@ -2,14 +2,14 @@ import '../../utils/etc.dart';
 import 'health_screening_data.dart';
 
 class MetrologyInspection {
-  String? _vision;
-  String? _bloodPressure;
-  String? _weight;
-  String? _height;
-  String? _hearingAbility;
-  String? _waistCircumference;
-  String? _bodyMassIndex;
-  String? _issuedDate;
+  String _vision = '-';
+  String _bloodPressure= '-';
+  String _weight= '-';
+  String _height= '-';
+  String _hearingAbility = '-';
+  String _waistCircumference = '-';
+  String _bodyMassIndex = '-';
+  String _issuedDate = '-';
 
   String? get issuedDate => _issuedDate;
   set issuedDate(String? value) => _issuedDate = value!;

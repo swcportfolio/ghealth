@@ -15,19 +15,17 @@ class Gallery3DMenuCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Card(
       color: mainColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 /// 타이틀
@@ -47,21 +45,24 @@ class Gallery3DMenuCard extends StatelessWidget {
                     child: const Icon(Icons.info, color: Colors.white))
               ],
             ),
-            const Gap(15),
+          ),
 
-            /// 서브 타이틀
-            Frame.myText(
+          /// 서브 타이틀
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+            child: Frame.myText(
               text: gallery3dData.subTitle,
               fontSize: 1.0,
               maxLinesCount: 2,
               color: Colors.white,
-              align: TextAlign.center,
               fontWeight: FontWeight.w500,
             ),
-            Etc.solidLine(context),
+          ),
 
-             Row(
-               mainAxisAlignment: MainAxisAlignment.center,
+           Padding(
+             padding: const EdgeInsets.fromLTRB(20,0,20,15),
+             child: Row(
+               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const Icon(Icons.location_on, color: Colors.white, size: 16,),
                 const Gap(5),
@@ -72,54 +73,55 @@ class Gallery3DMenuCard extends StatelessWidget {
                   fontSize: 0.9,
                   maxLinesCount: 2,
                   color: Colors.white,
-                  align: TextAlign.center,
                   fontWeight: FontWeight.w600,
                 ),
               ],
-            ),
+          ),
+           ),
 
-            /// 상세 이미지
-            Container(
-                height: 140,
-                width: double.infinity,
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.only(top: 5),
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: Image.asset('images/${gallery3dData.imagePath}', fit: BoxFit.fill))
-            ),
-
-            /// 신청하기 버튼
-            /// 동구라이프로그 건강관리소: https://lifelog.ghealth.or.kr
-            /// 스트레스 샤워실: https://www.ghealth.or.kr/reservation/ssroom
-            /// 기업실증: https://ecrf.ghealth.or.kr/pub/apply
-            InkWell(
-              onTap: ()=> {
-                Frame.doLaunchUniversalLink(gallery3dData.uri)
-              },
-              child: Container(
-                width: 170,
-                height: 40,
-                margin: const EdgeInsets.only(top: 5),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20)
+          /// 상세 이미지
+          Expanded(
+            child: Stack(
+              children: [
+                SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: ClipRRect(
+                        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(20.0), bottomRight: Radius.circular(20.0)),
+                        child: Image.asset('images/${gallery3dData.imagePath}', fit: BoxFit.cover))
                 ),
-                child:  Center(
-                  child: Frame.myText(
-                    text: '신청하기',
-                    fontSize: 1.0,
-                    color: mainColor,
-                    align: TextAlign.center,
-                    fontWeight: FontWeight.w600,
+
+                /// 신청하기 버튼
+                /// 동구라이프로그 건강관리소: https://lifelog.ghealth.or.kr
+                /// 스트레스 샤워실: https://www.ghealth.or.kr/reservation/ssroom
+                /// 기업실증: https://ecrf.ghealth.or.kr/pub/apply
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: InkWell(
+                    onTap: ()=> {
+                      Frame.doLaunchUniversalLink(gallery3dData.uri)
+                    },
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.7),
+                        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(20.0), bottomRight: Radius.circular(20.0))
+                      ),
+                      child: Center(
+                        child: Frame.myText(
+                          text: '신청하기',
+                          fontSize: 1.1,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            )
-
-
-          ],
-        ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -177,13 +179,11 @@ class MenuCard2 extends StatelessWidget {
                       children: [
                         Frame.myText(
                           text: '지난 방문 내역',
-                          color: Colors.black,
                           fontSize: 0.9
                         ),
                         const Gap(20),
                         Frame.myText(
                             text: '2023-09-09',
-                            color: Colors.black,
                             fontSize: 1.1
                         ),
                       ],
@@ -195,13 +195,11 @@ class MenuCard2 extends StatelessWidget {
                       children: [
                         Frame.myText(
                             text: '방문 예약 내역',
-                            color: Colors.black,
                             fontSize: 0.9
                         ),
                         const Gap(20),
                         Frame.myText(
                             text: '2023-10-09',
-                            color: Colors.black,
                             fontSize: 1.1
                         ),
                       ],

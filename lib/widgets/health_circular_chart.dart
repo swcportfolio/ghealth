@@ -1,20 +1,12 @@
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../data/models/picker_data.dart';
-import '../main.dart';
 import '../utils/colors.dart';
-import '../utils/contants.dart';
-import '../view/health/health_view.dart';
-import 'custom_picker.dart';
+import '../view/wearable/health_view.dart';
 import 'frame.dart';
 
-/// 파이 그래프 테스트
-final List<ChartData2> chartData2 = [
-  ChartData2('A', 90),
-];
+
 
 class HealthCircularChart extends StatelessWidget {
   const HealthCircularChart({
@@ -22,6 +14,8 @@ class HealthCircularChart extends StatelessWidget {
     required this.mainValue,
     required this.targetValue,
     required this.type,
+    required this.function,
+    required this.chartData,
   });
 
   /// 실제 수면시간, 실제 걸음
@@ -32,6 +26,10 @@ class HealthCircularChart extends StatelessWidget {
 
   /// 수집된 건강 데이터 타입
   final HealthDataType type;
+
+  final Function(HealthDataType tpye) function;
+
+  final List<ChartData2> chartData;
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +96,7 @@ class HealthCircularChart extends StatelessWidget {
                               ),
 
                               Frame.myText(
-                                text: targetValue,
+                                text: '$targetValue${type == HealthDataType.sleep? '시간': '걸음'}',
                                 fontSize: 1.4,
                               ),
                               const Gap(15),
@@ -112,8 +110,8 @@ class HealthCircularChart extends StatelessWidget {
                           ))
                     ], series: <CircularSeries>[
                       RadialBarSeries<ChartData2, String>(
-                          dataSource: chartData2,
-                          innerRadius: '90%',
+                          dataSource: chartData,
+                          innerRadius: '85%',
                           maximumValue: 100,
                           pointColorMapper: (ChartData2 data, _) =>
                               type == HealthDataType.sleep
@@ -144,12 +142,11 @@ class HealthCircularChart extends StatelessWidget {
                         Frame.myText(
                             text: mainValue,
                             fontWeight: FontWeight.w600,
-                            fontSize: 1.6),
+                            fontSize: 1.4),
                         const Gap(20),
 
                         InkWell(
-                          onTap: ()=>  CustomPicker().showBottomSheet(PickerData(19, Constants.targetStepsList, context,
-                                  (callbackData)=> onGetPickerData(callbackData))),
+                          onTap: ()=> function(type),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -166,9 +163,9 @@ class HealthCircularChart extends StatelessWidget {
                               ),
 
                               Frame.myText(
-                                  text: targetValue,
+                                  text: '$targetValue${type == HealthDataType.sleep? '시간': '걸음'}',
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 1.6
+                                  fontSize: 1.4
                               )
                             ],
                           ),
@@ -178,6 +175,21 @@ class HealthCircularChart extends StatelessWidget {
                   )
                 ],
               ),
+
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Frame.myText(
+                      text: type == HealthDataType.sleep
+                          ? '목표 수면 시간을 설정해보세요'
+                          : '목표 걸음 수를 설정해보세요',
+                      color: Colors.grey
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ),
@@ -185,12 +197,7 @@ class HealthCircularChart extends StatelessWidget {
     );
   }
 
-  /// Number picker Function callback
-  /// @param callbackData : 반환 값
-  onGetPickerData(callbackData) {
-    var getPickerData = callbackData.toString();
-    logger.d(getPickerData);
-  }
+
 }
 
 class ChartData2 {

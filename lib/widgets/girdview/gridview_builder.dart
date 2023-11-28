@@ -5,14 +5,17 @@ import 'package:ghealth_app/widgets/frame.dart';
 import 'package:ghealth_app/widgets/girdview/gridview_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../main.dart';
+
 class SelectTimeGridview extends StatefulWidget {
   const SelectTimeGridview({
     super.key,
     required this.mWidth,
     required this.mHeight,
-    required this.childAspectRatio
+    required this.childAspectRatio,
+    required this.possibleDateTimeList
   });
-
+  final List<String> possibleDateTimeList;
   final double mWidth;
   final double mHeight;
   final double childAspectRatio;
@@ -29,6 +32,12 @@ class _SelectTimeGridviewState extends State<SelectTimeGridview> {
 
   late ReservationTime _reservationTime;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //logger.i(widget.possibleDateTimeList);
+  }
   @override
   Widget build(BuildContext context) {
     _reservationTime = Provider.of<ReservationTime>(context, listen: false);
@@ -58,35 +67,42 @@ class _SelectTimeGridviewState extends State<SelectTimeGridview> {
         clipBehavior: Clip.hardEdge,
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
         itemBuilder: (BuildContext context, int index) {
-          return _buildSortOption(sampleTimeList[index], isSelected[index], index);
+          return _buildSortOption(
+            sampleTimeList[index],
+            isSelected[index],
+            index,
+            widget.possibleDateTimeList.contains(sampleTimeList[index])
+          );
         },
         // List of Widgets
       ),
     );
   }
 
-  Widget _buildSortOption(String time, bool selected, int index) {
+  Widget _buildSortOption(String time, bool selected, int index, bool possible) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          isSelected = List.filled(7, false); // Unselect all
-          if(selected){
-            isSelected[index] = false;
-            selectedIndex == null;
-          } else {
-            isSelected[index] = true; // Select the tapped item
-            selectedIndex = index;
-            _reservationTime.setSelectTime = sampleTimeList[index];
-          }
-        });
+        if(possible){
+          setState(() {
+            isSelected = List.filled(7, false); // Unselect all
+            if(selected){
+              isSelected[index] = false;
+              selectedIndex == null;
+            } else {
+              isSelected[index] = true; // Select the tapped item
+              selectedIndex = index;
+              _reservationTime.setSelectTime = sampleTimeList[index];
+            }
+          });
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: selected ? mainColor : Colors.white,
+          color: selected ? mainColor : possible?  Colors.white : Colors.grey.shade200,
           border: Border.all(
             color: selected ? mainColor : Colors.grey.shade400,
-            width: 1.5,
+            width: 1.0,
             style: BorderStyle.solid,
           ),
           borderRadius: BorderRadius.circular(20),
@@ -94,11 +110,12 @@ class _SelectTimeGridviewState extends State<SelectTimeGridview> {
         child: Padding(
           padding: const EdgeInsets.all(2.0),
           child: Center(
-            child: Frame.myText(
+            child: Frame.mySolidText(
               text: time,
               fontSize: 1.0,
-              fontWeight: FontWeight.w400,
+              fontWeight: possible? FontWeight.w600 : FontWeight.w400,
               color: selected ? Colors.white : Colors.black,
+              decorationThickness: possible? 0 : 2
             ),
           ),
         ),

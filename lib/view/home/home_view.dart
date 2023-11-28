@@ -38,7 +38,7 @@ class _HomeViewState extends State<HomeView> {
             '헬스케어 장비를 활용한\n시만 맞춤형 건강케어 서비스',
             '서남동 행정복지센터2층(동구 서남로 14)',
             'card_image_1.jpg',
-            280,
+            350,
             Uri(
               scheme: 'https',
               host: 'lifelog.ghealth.or.kr',
@@ -184,7 +184,6 @@ Widget buildCarouselSlider(){
           height: 360,
           enlargeCenterPage: true,
           enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-
           viewportFraction: 0.75,
           enlargeFactor: 0.45, //좌우 item 크기
         ),
@@ -209,7 +208,7 @@ Widget buildGallery3D() {
         // });
       },
       itemConfig: const GalleryItemConfig(
-        width: 280,
+        width: 250,
         height: 350,
         radius: 20,
         isShowTransformMask: true,
@@ -348,28 +347,35 @@ Widget buildGallery3D() {
 
   /// 지원 서비스 더 알아보기 버튼
   Widget buildSupportServiceBtn(){
-    return Container(
-      height: 60,
-      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30.0),
-        border: Border.all(color: mainColor, width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 7,
-            offset: const Offset(0, 3), // changes position of shadow
+    return InkWell(
+      onTap: ()=> Frame.doLaunchUniversalLink(Uri(
+        scheme: 'https',
+        host: 'www.ghealth.or.kr',
+        path: '/service/healthCare',
+      )),
+      child: Container(
+        height: 60,
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(30.0),
+          border: Border.all(color: mainColor, width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 7,
+              offset: const Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Center(
+          child: Frame.myText(
+            text: '지원 서비스 더 알아보기',
+            fontSize: 1.3,
+            fontWeight: FontWeight.w600,
+            color: mainColor,
           ),
-        ],
-      ),
-      child: Center(
-        child: Frame.myText(
-          text: '지원 서비스 더 알아보기',
-          fontSize: 1.3,
-          fontWeight: FontWeight.w600,
-          color: mainColor,
         ),
       ),
     );

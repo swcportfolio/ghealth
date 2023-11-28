@@ -8,6 +8,15 @@ import 'package:ghealth_app/data/models/user_response.dart';
 
 import '../../main.dart';
 import '../../utils/custom_log_interceptor.dart';
+import '../models/health_blood_response.dart';
+import '../models/health_report_response.dart';
+import '../models/mediacation_info_response.dart';
+import '../models/medication_Info_data.dart';
+import '../models/reservation_dayoff_response.dart';
+import '../models/reservation_default_response.dart';
+import '../models/reservation_history_response.dart';
+import '../models/reservation_possible_response.dart';
+import '../models/reservation_recent_response.dart';
 import '../repository/api_constants.dart';
 
 /// 데이터를 가져오는 영역
@@ -16,8 +25,8 @@ class RemoteDataSource {
   Dio _createPublicDio() {
     Dio dio = Dio();
     dio.interceptors.add(CustomLogInterceptor());
-    dio.options.connectTimeout =  const Duration(seconds: 6);
-    dio.options.receiveTimeout =  const Duration(seconds: 6);
+    dio.options.connectTimeout =  const Duration(seconds: 7);
+    dio.options.receiveTimeout =  const Duration(seconds: 7);
 
     dio.options.headers = {
       'Content-Type': 'application/json',
@@ -28,14 +37,33 @@ class RemoteDataSource {
   Dio _createPrivateDio() {
     Dio dio = Dio();
     dio.interceptors.add(CustomLogInterceptor());
-    dio.options.connectTimeout =  const Duration(seconds: 6);
-    dio.options.receiveTimeout =  const Duration(seconds: 6);
+    dio.options.connectTimeout =  const Duration(seconds: 7);
+    dio.options.receiveTimeout =  const Duration(seconds: 7);
 
     dio.options.headers = {
       'Content-Type': 'application/json',
       'Authorization': 'GHEALTH  ${Authorization().token}'
     };
     return dio;
+  }
+
+  /// Authorization 토큰 유효성 체크
+  Future<DefaultResponse> checkAuthDio() async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(checkAuthApiUrl);
+
+      // API 응답을 모델로 변환
+      // 임시로 ReservationDefaultResponse 객체 사용
+      DefaultResponse defaultResponse = DefaultResponse.fromJson(response.data);
+
+      return defaultResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
   }
 
   /// 휴대폰 인증번호 전송
@@ -88,15 +116,13 @@ class RemoteDataSource {
       SummaryResponse summaryResponse = SummaryResponse.fromJson(response.data);
 
       return summaryResponse;
-    } on DioException catch (dioError){
-      rethrow;
     } catch (error) {
       // 에러 처리
       rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
     }
   }
 
-  /// 이력조회
+  /// 계측 검사 이력조회
   Future<HealthInstrumentationResponse> getHealthInstrumentationDio(String dataType) async {
     try {
       // Dio를 사용하여 API 호출
@@ -108,6 +134,221 @@ class RemoteDataSource {
                     = HealthInstrumentationResponse.fromJson(response.data);
 
       return healthInstrumentationResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+  /// 계측 검사 이력조회
+  Future<HealthInstrumentationResponse> getHealthBloodDio(String dataType) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(healthBloodApiUrl,
+          queryParameters: {'dataType': dataType});
+
+      // API 응답을 모델로 변환
+      HealthInstrumentationResponse healthInstrumentationResponse
+                    = HealthInstrumentationResponse.fromJson(response.data);
+
+      return healthInstrumentationResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 계측 검사 이력조회
+  Future<MedicationInfoResponse> getMedicationInfoDataDio(int pageIdx) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(healthMedicationInfoApiUrl,
+          queryParameters: {'page': pageIdx});
+
+      // API 응답을 모델로 변환
+      MedicationInfoResponse medicationInfoResponse
+                = MedicationInfoResponse.fromJson(response.data);
+
+      return medicationInfoResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 라이프로그 건강검진 결과 조회
+  Future<HealthReportResponse> getHealthReportLifeLogDio(String deviceID) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(healthLifeLogApiUrl,
+          queryParameters: {'deviceID': deviceID});
+
+      // API 응답을 모델로 변환
+      HealthReportResponse healthReportResponse
+                = HealthReportResponse.fromJson(response.data);
+
+      return healthReportResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 내 최신 예약현황 조회
+  Future<ReservationRecentResponse> getRecentReservationDio() async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(recentReservationApiUrl,
+          queryParameters: {'serviceType': 'lifelog'});
+
+      // API 응답을 모델로 변환
+      ReservationRecentResponse reservationRecentResponse
+                = ReservationRecentResponse.fromJson(response.data);
+
+      return reservationRecentResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+
+  /// 방문예약 히스트로 조회
+  Future<ReservationHistoryResponse> getHistoryReservationDio(int pageIdx) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(historyReservationApiUrl,
+          queryParameters: {'page': pageIdx, 'serviceType': 'lifelog'});
+
+      // API 응답을 모델로 변환
+      ReservationHistoryResponse reservationHistoryResponse
+                            = ReservationHistoryResponse.fromJson(response.data);
+
+      return reservationHistoryResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 방문예약 휴일 날짜 조회
+  Future<ReservationDayOffResponse> getDayOffReservationDio(DateTime date) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(dayOffReservationApiUrl,
+          queryParameters: {'serviceType': 'lifelog', 'year': date.year, 'month': date.month});
+
+      // API 응답을 모델로 변환
+      ReservationDayOffResponse reservationDayOffResponse
+                            = ReservationDayOffResponse.fromJson(response.data);
+
+      return reservationDayOffResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 예약가능한 시간 조회
+  Future<ReservationPossibleResponse> getPossibleReservationDio(DateTime date) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(possibleReservationApiUrl,
+          queryParameters: {'serviceType': 'lifelog', 'reservationDate': '${date.year}-${date.month}-${date.day}'});
+
+      // API 응답을 모델로 변환
+      ReservationPossibleResponse reservationPossibleResponse
+                          = ReservationPossibleResponse.fromJson(response.data);
+
+      return reservationPossibleResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 예약 저장
+  Future<DefaultResponse> saveReservationDio(Map<String, dynamic> data) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().post(saveReservationApiUrl, data: data);
+
+      // API 응답을 모델로 변환
+      DefaultResponse defaultResponse = DefaultResponse.fromJson(response.data);
+
+      return defaultResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 예약 취소
+  Future<DefaultResponse> cancelReservationDio(Map<String, dynamic> data) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().delete(cancelReservationApiUrl, data: data);
+
+      // API 응답을 모델로 변환
+      DefaultResponse defaultResponse
+                        = DefaultResponse.fromJson(response.data);
+
+      return defaultResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 예약 취소
+  Future<DefaultResponse> logoutDio() async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().post(logoutApiUrl);
+
+      // API 응답을 모델로 변환
+      DefaultResponse defaultResponse
+                = DefaultResponse.fromJson(response.data);
+
+      return defaultResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 헬스 건강 데이터 저장
+  Future<DefaultResponse> saveHealthDataDio(String dataType, Map<String, dynamic> data) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio()
+          .post('$saveHealthDataApiUrl$dataType', data: data);
+
+      // API 응답을 모델로 변환
+      DefaultResponse defaultResponse
+            = DefaultResponse.fromJson(response.data);
+
+      return defaultResponse;
     } on DioException catch (dioError){
       rethrow;
     } catch (error) {

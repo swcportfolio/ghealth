@@ -93,15 +93,10 @@ class CustomPicker{
                       height: 160,
                       child: CupertinoPicker(
                           itemExtent: 40,
-                          onSelectedItemChanged: (int index)
-                          {
-                           // if(indexInitialValue is String){ // String List 일때
-                              tempData = itemList[index];
-                            // } else{  // int List 일때
-                            //   tempData = index+indexInitialValue;
-                            // }
+                          onSelectedItemChanged: (int index) {
+                            tempData = itemList[index];
                           },
-                          children: itemList.map((e) => Center(child: Text('$e', textScaleFactor: 0.95))).toList())
+                          children: itemList.map((e) => Center(child: Text(itemList.length == 10? '$e시간': '$e걸음', textScaleFactor: 0.95))).toList())
                   ))])
     );
   }

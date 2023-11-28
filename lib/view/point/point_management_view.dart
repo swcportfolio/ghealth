@@ -35,6 +35,7 @@ class _PointManagementViewState extends State<PointManagementView> {
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(
         title: '포인트 관리',
+        isIconBtn: false,
       ),
 
       body: Padding(
@@ -82,7 +83,7 @@ class _PointManagementViewState extends State<PointManagementView> {
                       ),
                       const Gap(10),
                       Frame.myText(
-                          text: '10,000 pt',
+                          text: '0 pt',
                           color: Colors.white,
                           fontSize: 3.0,
                           fontWeight: FontWeight.w600
@@ -92,53 +93,41 @@ class _PointManagementViewState extends State<PointManagementView> {
                 ),
 
                 // 포인트 Image
-                Image.asset(
-                  'images/point_image.png',
-                  height: 130,
-                  width: 130
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Image.asset(
+                    'images/point_image.png',
+                    height: 110,
+                    width: 110
+                  ),
                 )
               ],
             ),
-            const Gap(15),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                buildPointBoxBottomSubBtn('포인트 적립하기', accumulateColor),
-                const Gap(5),
-                buildPointBoxBottomSubBtn('포인트 사용처', Colors.white),
-                const Gap(10),
-              ],
-            )
+            Container(
+              height: 50,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: Card(
+                elevation: 5,
+                color: Colors.white,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0))
+                ),
+                child: Center(
+                  child: Frame.myText(
+                      text: '포인트 사용처',
+                      fontSize: 1.1
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  /// 하단 버튼을 생성하는 위젯을 반환합니다.
-  Widget buildPointBoxBottomSubBtn(String text, Color backgroundColor) {
-    return SizedBox(
-      child: Card(
-        elevation: 5,
-        color: backgroundColor,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20.0))
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
-          child: Center(
-            child: Frame.myText(
-              text: text,
-              color: Colors.black,
-              fontSize: 1.1
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+
 
   /// 포인트 사용/적립 내역을 나타내는 위젯을 생성합니다.
   Widget buildPointHistory(){
@@ -157,10 +146,9 @@ class _PointManagementViewState extends State<PointManagementView> {
             children: [
               // 타이틀
               Frame.myText(
-               text: '사용/적립 내역',
-               color: Colors.black,
+               text: '사용 / 적립 내역',
                fontWeight: FontWeight.bold,
-                fontSize: 1.5
+                fontSize: 1.3
               ),
               const Gap(20),
               Expanded(
@@ -204,8 +192,7 @@ class PointHistoryItem extends StatelessWidget {
             children: [
               Frame.myText(
                   text: pointHistory.title,
-                  fontSize: 1.3,
-                  color: Colors.black,
+                  fontSize: 1.2,
                   fontWeight: FontWeight.w600
               ),
               const Gap(5),

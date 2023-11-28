@@ -54,6 +54,7 @@ dependencies:
   carousel_slider: ^4.2.1
   url_launcher: ^6.2.1
   dio: ^5.3.3
+  flutter_native_splash: ^2.3.6
   #flutter_localization: 0.1.7
 
 
@@ -128,6 +129,19 @@ flutter:
     - images/body_image.png
     - images/medicine_image_1.png
     - images/medicine_image_2.png
+    - images/step_0.png
+    - images/step_1.png
+    - images/step_2.png
+    - images/step_3.png
+    - images/step_4.png
+    - images/plus_1.png
+    - images/plus_2.png
+    - images/plus_3.png
+    - images/plus_4.png
+    - images/empty_search_image.png
+    - images/heart_rate.png
+    - images/reservation_background_image.png
+    - images/my_data_icon.png
 
 
   #   - images/a_dot_burr.jpeg

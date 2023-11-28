@@ -1,14 +1,17 @@
 
 import 'package:flutter/material.dart';
-import 'package:ghealth_app/view/health/health_view.dart';
+import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/view/home/home_view.dart';
-import 'package:ghealth_app/view/results/ai_disease_prediction_view.dart';
+import 'package:ghealth_app/widgets/dialog.dart';
 
+import '../../main.dart';
+import '../../services/health_service.dart';
 import '../../utils/colors.dart';
 import '../../widgets/custom_appbar.dart';
-import '../reservation/reservation_history_view.dart';
-import '../results/examination_record_view.dart';
-import '../results/my_health_report_view.dart';
+import '../mydata/my_health_report_view.dart';
+import '../report/my_health_record_view.dart';
+import '../reservation/reservation_view.dart';
+import '../wearable/health_view.dart';
 
 class HomeFrameView extends StatefulWidget {
   const HomeFrameView({super.key});
@@ -24,16 +27,27 @@ class _HomeFramePageState extends State<HomeFrameView> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeView(),
-    const ReservationHistoryView(),
-    const ExaminationRecordView(),
+    const ReservationView(),
+    const MyHealthRecordView(),
     const MyHealthReportView(),
     const HealthView(),
   ];
+  @override
+  void initState() {
+    super.initState();
+
+    if(Authorization().token.isNotEmpty){
+      HealthService().fetchPreviousDayData();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'GHealth'),
+      appBar: const CustomAppBar(
+          title: 'GHealth',
+        isIconBtn: true
+      ),
 
       body: _widgetOptions.elementAt(_selectedIndex),
 
@@ -53,8 +67,8 @@ class _HomeFramePageState extends State<HomeFrameView> {
           items: <BottomNavigationBarItem>[
             _buildNavigationBarItem('images/navigation_4.png', '홈으로', 25, 25, 0),
             _buildNavigationBarItem('images/navigation_3.png', '예약', 25, 25, 1),
-            _buildNavigationBarItem('images/navigation_2.png', '내건강 보고서', 25, 25, 2),
-            _buildNavigationBarItem('images/navigation_2.png', '마이데이터', 25, 25, 3),
+            _buildNavigationBarItem('images/navigation_2.png', '라이프로그', 25, 25, 2),
+            _buildNavigationBarItem('images/my_data_icon.png', '나의 건강기록', 25, 25, 3),
             _buildNavigationBarItem('images/navigation_1.png', '웨어러블', 25, 25, 4),
           ],
           currentIndex: _selectedIndex,
@@ -98,8 +112,17 @@ class _HomeFramePageState extends State<HomeFrameView> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if(index > 0 && Authorization().token.isEmpty){
+      logger.i('=> 로그인이 필요합니다.');
+      CustomDialog.showLoginDialog(
+          title: '로그인',
+          content:'인증이 필요합니다.\n 로그인화면으로 이동하시겠습니까?',
+          mainContext: context
+      );
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 }

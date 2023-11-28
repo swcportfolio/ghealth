@@ -16,13 +16,13 @@ class ChartHealthData{
   late List<ChartData> chartSleepData;
 
   // 걸음 수
-  int? dayStep;
-  int? agoDayStep;
-  int? agoTwoDayStep;
-  int? agoThreeDayStep;
-  int? agoFourthDayStep;
-  int? agoFifthStep;
-  int? agoSixthStep;
+  int? dayStep = 0;
+  int? agoDayStep = 0;
+  int? agoTwoDayStep = 0;
+  int? agoThreeDayStep = 0;
+  int? agoFourthDayStep = 0;
+  int? agoFifthStep = 0;
+  int? agoSixthStep = 0;
   late List<ChartData> chartStepData;
 
 

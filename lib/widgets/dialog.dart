@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/gallery3d_data.dart';
+import 'package:ghealth_app/view/join/login_view.dart';
 import 'package:ghealth_app/widgets/girdview/gridview_builder.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 import '../utils/colors.dart';
@@ -103,6 +104,107 @@ class CustomDialog{
         });
   }
 
+
+  static showLoginDialog({
+    required String title,
+    required String content,
+    required BuildContext mainContext,
+  }) {
+    return showDialog(
+        context: mainContext,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            title: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error, color: mainColor, size: 35),
+                  const Gap(10),
+                  Frame.myText(text: title, fontSize: 1.0, fontWeight: FontWeight.w600)
+                ],
+              ),
+            ),
+            content: SizedBox(
+              height: 130,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+                    child: SizedBox(
+                      height: 60,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              width: 220,
+                              child: Frame.myText(
+                                  text: content,
+                                  align: TextAlign.center,
+                                  fontSize: 0.9,
+                                  maxLinesCount: 2,
+                                  fontWeight: FontWeight.w500))
+                        ],
+                      ),
+                    ),
+                  ),
+                  const Gap(20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          width: 60,
+                          height: 45,
+                          child: TextButton(
+                              style: TextButton.styleFrom(
+                                  elevation: 3.0,
+                                  backgroundColor: mainColor,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(5.0)))),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Frame.myText(text: '취소', color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      const Gap(1),
+                      Expanded(
+                        child: SizedBox(
+                          height: 45,
+                          width: 60,
+                          child: TextButton(
+                              style: TextButton.styleFrom(
+                                  elevation: 5.0,
+                                  backgroundColor: mainColor,
+                                  shape: const RoundedRectangleBorder(
+                                      side: BorderSide(width: 1.0, color: mainColor),
+                                      borderRadius: BorderRadius.only(bottomRight: Radius.circular(5.0)))),
+                              onPressed: () =>{
+                                Navigator.pop(context),
+                                Frame.doPagePush(context, const LoginView()),
+                              } ,
+                              child: Frame.myText(text: '이동', color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+
+                ],
+              ),
+            ),
+            contentPadding: const EdgeInsets.all(0),
+            actionsAlignment: MainAxisAlignment.end,
+            actionsPadding: const EdgeInsets.all(0),
+
+          );
+        });
+  }
+
   /// 네트워크 연결 상태 다이얼로그
   static showNetworkDialog(String title, String text, BuildContext mainContext, Function onPressed) {
     return showDialog(
@@ -155,9 +257,13 @@ class CustomDialog{
   }
 
 
-  /// 예약 변경 다이얼로그
-  static showChangeReservationDialog({
+  /// 예약 다이얼로그
+  static showReservationDialog({
+    required double width,
     required BuildContext mainContext,
+    required String reservationDate,
+    required String reservationTime,
+    required Function() saveReservationFunction,
   }) {
     return showDialog(
         context: mainContext,
@@ -167,105 +273,144 @@ class CustomDialog{
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             content: SizedBox(
-              height: 410,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              width: width * 0.9,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(30),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Frame.myText(
+                            text: '건강관리소 방문 예약',
+                            fontSize: 1.2,
+                            fontWeight: FontWeight.bold,
+                            color: mainColor
+                          ),
+
+                          // 오른쪽 상단 취소 버튼
+                          InkWell(
+                            onTap: ()=> Navigator.pop(context),
+                            child: const Icon(Icons.close,
+                                color: Colors.black, size: 25),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // 예약일
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Frame.myText(
+                              text: '예약일',
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 1.0
+                          ),
+
+                          Container(
+                            height: 35,
+                            width: 150,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(30)
+                            ),
+                            child: Center(
+                              child: Frame.myText(
+                                  text: reservationDate,
+                                  fontSize: 0.9
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // 예약시간 타이틀
+                          Frame.myText(
+                            text: '예약시간',
+                            fontSize: 1.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey.shade600,
+                          ),
+                          Container(
+                            height: 35,
+                            width: 150,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(30)
+                            ),
+                            child: Center(
+                              child: Frame.myText(
+                                  text: reservationTime,
+                                  fontSize: 0.9
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const Gap(5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Frame.myText(
-                          text: '예약 변경',
-                          fontSize: 1.3,
-                          fontWeight: FontWeight.bold,
+                            text: '해당 날짜의 ',
+                            align: TextAlign.center,
+                            fontSize: 0.9
+                        ),
+                        Frame.myText(
+                            text: '예약을 진행',
+                            align: TextAlign.center,
+                            fontSize: 0.9,
+                            fontWeight: FontWeight.w600,
+                            color: mainColor,
+                        ),
+                        Frame.myText(
+                            text: '하시겠습니까?',
+                            align: TextAlign.center,
+                            fontSize: 0.9
+                        ),
+                      ],
+                    ),
+
+                    const Gap(15),
+                    // 예약하기
+                    InkWell(
+                      onTap: ()=> {
+                        Navigator.pop(context),
+                        saveReservationFunction(),
+                      },
+                      child: Container(
+                        height: 43,
+                        margin: const EdgeInsets.symmetric(horizontal: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.0),
                           color: mainColor
                         ),
-
-                        // 오른쪽 상단 취소 버튼
-                        InkWell(
-                          onTap: ()=> Navigator.pop(context),
-                          child: const Icon(Icons.cancel_outlined,
-                              color: Colors.black, size: 25),
-                        ),
-                      ],
-                    ),
-                  ),
-
-
-
-                  // 예약일
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Frame.myText(
-                            text: '예약일',
-                            color: Colors.black,
+                        child: Center(
+                          child: Frame.myText(
+                            text: '예약 하기',
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: 1.0
+                            fontSize: 0.9
+                          )
                         ),
-
-                        Container(
-                          height: 40,
-                          width: 150,
-                          decoration: BoxDecoration(
-                              color: Colors.grey.shade200,
-                              borderRadius: BorderRadius.circular(30)
-                          ),
-                          child: Center(
-                            child: Frame.myText(
-                                text: '2023-10-20',
-                                color: Colors.black,
-                                fontSize: 1.0
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-
-                  // horizontal 점선
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal:  20),
-                    child: HorizontalDottedLine(mWidth: double.infinity),
-                  ),
-
-                  // 예약시간 타이틀
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                    child: Frame.myText(
-                      text: '예약시간',
-                      fontSize: 1.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-
-                  // 변경할 예약 시간 선택지
-                  const SelectTimeGridview(
-                      mWidth: 250, mHeight: 70, childAspectRatio: 2.1),
-
-                  // 변경 버튼
-                  Container(
-                    height: 45,
-                    margin: const EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30.0),
-                      color: mainColor
-                    ),
-                    child: Center(
-                      child: Frame.myText(
-                        text: '예약 변경',
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 0.9
-                      )
-                    ),
-                  )
-                ],
+                    const Gap(15),
+                  ],
+                ),
               ),
             ),
             contentPadding: const EdgeInsets.all(0),
@@ -280,6 +425,9 @@ class CustomDialog{
   /// 예약 취소 다이얼로그
   static showCancelReservationDialog({
     required BuildContext mainContext,
+    required String reservationDate,
+    required String reservationTime,
+    required Function() cancelReservationFunction,
   }) {
     return showDialog(
         context: mainContext,
@@ -289,7 +437,7 @@ class CustomDialog{
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             content: SizedBox(
-              height: 270,
+              height: 280,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -299,8 +447,8 @@ class CustomDialog{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Frame.myText(
-                            text: '예약 취소',
-                            fontSize: 1.3,
+                            text: '방문 예약 취소',
+                            fontSize: 1.2,
                             fontWeight: FontWeight.bold,
                             color: mainColor
                         ),
@@ -308,7 +456,7 @@ class CustomDialog{
                         // 오른쪽 상단 취소 버튼
                         InkWell(
                           onTap: ()=> Navigator.pop(context),
-                          child: const Icon(Icons.cancel_outlined,
+                          child: const Icon(Icons.close,
                               color: Colors.black, size: 25),
                         ),
                       ],
@@ -317,83 +465,90 @@ class CustomDialog{
 
                   // 예약일
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
-                    child: Container(
-                      height: 40,
-                      width: 250,
-                      decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(30)
-                      ),
-                      child: Center(
-                        child: Frame.myText(
-                            text: '2023-10-20 월요일 11:00',
-                            color: Colors.black,
-                            fontSize: 0.9,
-                            fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // horizontal 점선
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal:  20),
-                    child: HorizontalDottedLine(mWidth: double.infinity),
-                  ),
-
-                  // 예약시간 타이틀
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Frame.myText(
-                          text: '해당 날짜의 ',
-                          fontSize: 0.85,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                        Stack(children: [
-                          Frame.myText(
-                            text: '예약을 취소',
-                            fontSize: 0.85,
+                            text: '예약일',
                             fontWeight: FontWeight.bold,
-                            color: mainColor,
-                          ),
-                          Positioned.fill(
-                              bottom: 0.1,
-                              child: Container(
-                                  height: 0.5,
-                                  decoration: BoxDecoration(
-                                      border: Border(bottom: BorderSide(color: mainColor)))))
-                        ]),
-
-                        Frame.myText(
-                          text: ' 하시겠습니까?',
-                          fontSize: 0.85,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                            fontSize: 1.0
                         ),
+
+                        Container(
+                          height: 40,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(30)
+                          ),
+                          child: Center(
+                            child: Frame.myText(
+                                text: reservationDate,
+                                fontSize: 0.9
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
 
-                  // 취소 버튼
-                  Container(
-                    height: 45,
-                    margin: const EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.0),
-                        color: mainColor
-                    ),
-                    child: Center(
-                        child: Frame.myText(
-                            text: '예약 취소',
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 0.9
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // 예약시간 타이틀
+                        Frame.myText(
+                          text: '예약시간',
+                          fontSize: 1.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        Container(
+                          height: 40,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(30)
+                          ),
+                          child: Center(
+                            child: Frame.myText(
+                                text: reservationTime,
+                                fontSize: 0.9
+                            ),
+                          ),
                         )
+                      ],
+                    ),
+                  ),
+                  const Gap(5),
+                  Frame.myText(
+                      text: '예약을 취소하시겠습니까?',
+                      align: TextAlign.center,
+                      fontSize: 0.9
+                  ),
+                  const Gap(15),
+                  // 예약하기
+                  InkWell(
+                    onTap: ()=> {
+                      Navigator.pop(context),
+                      cancelReservationFunction(),
+                    },
+                    child: Container(
+                      height: 43,
+                      margin: const EdgeInsets.symmetric(horizontal: 15),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30.0),
+                          color: mainColor
+                      ),
+                      child: Center(
+                          child: Frame.myText(
+                              text: '취소하기',
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 0.9
+                          )
+                      ),
                     ),
                   )
                 ],
@@ -429,111 +584,110 @@ class CustomDialog{
             contentPadding: const EdgeInsets.all(0),
             actionsAlignment: MainAxisAlignment.end,
             actionsPadding: const EdgeInsets.all(0),
-
           );
         });
   }
 
   static buildCard1Content(double mHeight, BuildContext context) {
-    return SizedBox(
-            height: mHeight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Frame.myText(
-                          text: '동구 라이프로그',
-                          fontSize: 1.3,
-                          fontWeight: FontWeight.bold,
-                          color: mainColor
-                      ),
-
-                      // 오른쪽 상단 취소 버튼
-                      InkWell(
-                        onTap: ()=> Navigator.pop(context),
-                        child: const Icon(Icons.cancel_outlined,
-                            color: Colors.black, size: 25),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 15),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Frame.myText(
-                          text: '• 신청절차: ',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 0.9
-                      ),
-                      const Gap(10),
-                      Frame.myText(
-                        text: '\“동구라이프로그 건강관리소\“\n신청하기 클릭 후, 원하는\n방문일자와 시간으로 예약 신청',
-                        maxLinesCount: 4,
-                        fontSize: 0.8
-                      )
-                    ],
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Frame.myText(
-                        text: '• 혜택:      ',
-                        fontSize: 0.9,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      const Gap(10),
-                      Frame.myText(
-                          text: '라이프로그 실증장비 체험\n및 데이터 수집을 통해 포인트\n제공',
-                          maxLinesCount: 4,
-                          fontSize: 0.8
-                      )
-                    ],
-                  ),
-                ),
-
-                /// 닫기 버튼
-                InkWell(
-                  onTap: ()=> Navigator.pop(context),
-                  child: Container(
-                    height: 45,
-                    margin: const EdgeInsets.fromLTRB(15, 30, 15, 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30.0),
-                        color: mainColor
-                    ),
-                    child: Center(
-                        child: Frame.myText(
-                            text: '닫기',
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 0.9
-                        )
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-  }
-  static buildCard2Content(double mHeight, BuildContext context) {
-    return SizedBox(
-      height: mHeight,
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            padding: const EdgeInsets.all(25.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Frame.myText(
+                    text: '동구 라이프로그',
+                    fontSize: 1.2,
+                    fontWeight: FontWeight.bold,
+                    color: mainColor
+                ),
+
+                // 오른쪽 상단 취소 버튼
+                InkWell(
+                  onTap: ()=> Navigator.pop(context),
+                  child: const Icon(Icons.clear,
+                      color: Colors.black, size: 25),
+                ),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Frame.myText(
+                    text: '신청절차',
+                    fontSize: 1.0,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500
+                ),
+                const Gap(5),
+                Frame.myText(
+                  text: '\“동구라이프로그 건강관리소\“신청하기 \n클릭 후, 원하는방문일자와 시간으로\n예약 신청',
+                  maxLinesCount: 4,
+                  fontSize: 0.8
+                )
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 20, top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Frame.myText(
+                  text: '혜택',
+                  fontSize: 1.0,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500
+                ),
+                const Gap(5),
+                Frame.myText(
+                    text: '1. 라이프로그 실증장비 체험\n2. 데이터수집을 통해 포인트 제공',
+                    maxLinesCount: 4,
+                    fontSize: 0.8
+                )
+              ],
+            ),
+          ),
+
+          /// 닫기 버튼
+          InkWell(
+            onTap: ()=> Navigator.pop(context),
+            child: Container(
+              height: 45,
+              margin: const EdgeInsets.fromLTRB(15, 30, 15, 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                  color: mainColor
+              ),
+              child: Center(
+                  child: Frame.myText(
+                      text: '닫기',
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 0.9
+                  )
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  static buildCard2Content(double mHeight, BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(25),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -547,7 +701,7 @@ class CustomDialog{
                 // 오른쪽 상단 취소 버튼
                 InkWell(
                   onTap: ()=> Navigator.pop(context),
-                  child: const Icon(Icons.cancel_outlined,
+                  child: const Icon(Icons.close,
                       color: Colors.black, size: 25),
                 ),
               ],
@@ -555,18 +709,19 @@ class CustomDialog{
           ),
 
           Padding(
-            padding: const EdgeInsets.only(left: 20, top: 15),
-            child: Row(
+            padding: const EdgeInsets.only(left: 20, top: 10),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Frame.myText(
-                    text: '• 신청절차:',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 0.9
+                    text: '신청절차',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 0.9,
+                    color: Colors.grey
                 ),
                 const Gap(10),
                 Frame.myText(
-                    text: '\“동구라이프로그 스트레스 샤\n워실\“신청하기 클릭 후, 원하\n는방문일자와 시간으로 예약\n신청',
+                    text: '\“동구라이프로그 스트레스 샤워실\“신청\n하기 클릭 후, 원하는방문일자와 시간으로\n예약신청',
                     maxLinesCount: 4,
                     fontSize: 0.8
                 )
@@ -599,13 +754,12 @@ class CustomDialog{
     );
   }
   static buildCard3Content(double mHeight, BuildContext context) {
-    return SizedBox(
-      height: mHeight,
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            padding: const EdgeInsets.all(25),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -619,7 +773,7 @@ class CustomDialog{
                 // 오른쪽 상단 취소 버튼
                 InkWell(
                   onTap: ()=> Navigator.pop(context),
-                  child: const Icon(Icons.cancel_outlined,
+                  child: const Icon(Icons.close,
                       color: Colors.black, size: 25),
                 ),
               ],
@@ -627,18 +781,19 @@ class CustomDialog{
           ),
 
           Padding(
-            padding: const EdgeInsets.only(left: 20, top: 15),
-            child: Row(
+            padding: const EdgeInsets.only(left: 20, top: 10),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Frame.myText(
-                    text: '• 신청절차: ',
+                    text: '신청절차',
                     fontWeight: FontWeight.w600,
-                    fontSize: 0.9
+                    fontSize: 0.9,
+                    color: Colors.grey
                 ),
-                const Gap(10),
+                const Gap(5),
                 Frame.myText(
-                    text: '\“G-Health 기업실증\“\n신청하기 클릭 후, 기업별\n실증내용을 확인하고 원하는\n기업으로 신청',
+                    text: '\“G-Health 기업실증\“신청하기 클릭 후\n, 기업별 실증내용을 확인하고 원하는\n기업으로 신청',
                     maxLinesCount: 4,
                     fontSize: 0.8
                 )
@@ -646,20 +801,20 @@ class CustomDialog{
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20, top: 10),
-            child: Row(
+            padding: const EdgeInsets.only(left: 20, top: 15),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Frame.myText(
-                  text: '•체험인원\n  선정방법: ',
+                  text: '체험인원 선정방법',
                   fontSize: 0.9,
                   maxLinesCount: 2,
-                  align: TextAlign.start,
+                  color: Colors.grey,
                   fontWeight: FontWeight.w600,
                 ),
-                const Gap(10),
+                const Gap(5),
                 Frame.myText(
-                    text: '신청인원 중 기업들이 제품에\n 맞는 체험자 선정 후, 개별연락',
+                    text: '신청인원 중 기업들이 제품에 맞는 체험자 \n선정 후, 개별연락',
                     maxLinesCount: 3,
                     fontSize: 0.8
                 )
@@ -668,18 +823,19 @@ class CustomDialog{
           ),
 
           Padding(
-            padding: const EdgeInsets.only(left: 20, top: 10),
-            child: Row(
+            padding: const EdgeInsets.only(left: 20, top: 15),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Frame.myText(
-                  text: '• 혜택:      ',
+                  text: '혜택',
                   fontSize: 0.9,
+                  color: Colors.grey,
                   fontWeight: FontWeight.w600,
                 ),
-                const Gap(10),
+                const Gap(5),
                 Frame.myText(
-                    text: '기업실증 참여를 통한\n제품체험 및 데이터 제공에 \n따른 온누리상품권 제공(기업\n별상이, 기업안내 참고',
+                    text: '기업실증 참여를 통한 제품체험 및 데이터\n제공에 따른 온누리상품권 제공(기업별상\n이, 기업안내 참고',
                     maxLinesCount: 5,
                     fontSize: 0.8
                 )
@@ -763,16 +919,18 @@ class CustomDialog{
                                 style: TextButton.styleFrom(
                                     elevation: 3.0,
                                     backgroundColor: mainColor,
-                                    shape: RoundedRectangleBorder(
+                                    shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.only(
                                             bottomLeft: Radius.circular(5.0)))),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
-                                child: Text('취소', textScaleFactor: 1.0, style: TextStyle(color: Colors.white))
+                                child: Frame.myText(text: '취소', color: Colors.white),
                             ),
                           ),
                         ),
+                        const Gap(1),
+
                         Expanded(
                           child: Container(
                             height: 45,
@@ -781,11 +939,11 @@ class CustomDialog{
                                 style: TextButton.styleFrom(
                                     elevation: 5.0,
                                     backgroundColor: mainColor,
-                                    shape: RoundedRectangleBorder(
+                                    shape: const RoundedRectangleBorder(
                                         side: BorderSide(width: 1.0, color: mainColor),
                                         borderRadius: BorderRadius.only(bottomRight: Radius.circular(5.0)))),
                                 onPressed: () => onPressed(),
-                                child: Text('확인', textScaleFactor: 1.0, style: TextStyle(color: Colors.white))
+                                child: Frame.myText(text: '확인', color: Colors.white),
                             ),
                           ),
                         ),

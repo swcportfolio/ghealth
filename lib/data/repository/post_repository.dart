@@ -4,7 +4,16 @@
 import '../datasource/local_data_source.dart';
 import '../datasource/remote_data_source.dart';
 
+import '../models/health_blood_response.dart';
 import '../models/health_instrumentation_response.dart';
+import '../models/health_report_response.dart';
+import '../models/mediacation_info_response.dart';
+import '../models/medication_Info_data.dart';
+import '../models/reservation_dayoff_response.dart';
+import '../models/reservation_default_response.dart';
+import '../models/reservation_history_response.dart';
+import '../models/reservation_possible_response.dart';
+import '../models/reservation_recent_response.dart';
 import '../models/send_message_response.dart';
 import '../models/summary_response.dart';
 import '../models/user_response.dart';
@@ -13,6 +22,10 @@ import '../models/user_response.dart';
 class PostRepository {
 late final RemoteDataSource _remoteDataSource = RemoteDataSource();
 late final LocalDataSource _localDataSource;
+
+Future<DefaultResponse> checkAuthDio(){
+  return _remoteDataSource.checkAuthDio();
+}
 
 Future<SendMessageResponse> sendAuthMessageDio(Map<String, dynamic> data){
   return _remoteDataSource.sendAuthMessageDio(data);
@@ -28,6 +41,50 @@ Future<SummaryResponse> getHealthSummaryDio(){
 
 Future<HealthInstrumentationResponse> getHealthInstrumentationDio(String dataType){
   return _remoteDataSource.getHealthInstrumentationDio(dataType);
+}
+
+Future<HealthInstrumentationResponse> getHealthBloodDio(String dataType){
+  return _remoteDataSource.getHealthBloodDio(dataType);
+}
+
+Future<MedicationInfoResponse> getMedicationInfoDataDio(int pageIdx){
+  return _remoteDataSource.getMedicationInfoDataDio(pageIdx);
+}
+
+Future<HealthReportResponse> getHealthReportLifeLogDio(String deviceID){
+  return _remoteDataSource.getHealthReportLifeLogDio(deviceID);
+}
+
+Future<ReservationRecentResponse> getRecentReservationDio(){
+  return _remoteDataSource.getRecentReservationDio();
+}
+
+Future<ReservationHistoryResponse> getHistoryReservationDio(int pageIndex){
+  return _remoteDataSource.getHistoryReservationDio(pageIndex);
+}
+
+Future<ReservationDayOffResponse> getDayOffReservationDio(DateTime date){
+  return _remoteDataSource.getDayOffReservationDio(date);
+}
+
+Future<ReservationPossibleResponse> getPossibleReservationDio(DateTime date){
+  return _remoteDataSource.getPossibleReservationDio(date);
+}
+
+Future<DefaultResponse> saveReservationDio(Map<String, dynamic> data){
+  return _remoteDataSource.saveReservationDio(data);
+}
+
+Future<DefaultResponse> cancelReservationDio(Map<String, dynamic> data){
+  return _remoteDataSource.cancelReservationDio(data);
+}
+
+Future<DefaultResponse> logoutDio(){
+  return _remoteDataSource.logoutDio();
+}
+
+Future<DefaultResponse> saveHealthDataDio(String dataType, Map<String, dynamic>data){
+  return _remoteDataSource.saveHealthDataDio(dataType, data);
 }
 
 

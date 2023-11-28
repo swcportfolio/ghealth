@@ -6,7 +6,7 @@ import 'mydata_predict_data.dart';
 
 class SummaryResponse {
   final Status status;
-  final SummaryData data;
+  final SummaryData? data;
 
   SummaryResponse({required this.status, required this.data});
 
@@ -20,9 +20,9 @@ class SummaryResponse {
 
 
 class SummaryData {
-  final MyDataPredictData mydataPredict;
-  final List<HealthScreeningData> healthScreeningList;
-  final List<MedicationInfoData> medicationInfoList;
+  final MyDataPredictData? mydataPredict;
+  final List<HealthScreeningData>? healthScreeningList;
+  final List<MedicationInfoData>? medicationInfoList;
 
   SummaryData(
       {required this.mydataPredict,
@@ -33,6 +33,7 @@ class SummaryData {
     return SummaryData(
         mydataPredict: MyDataPredictData.fromJson(json['mydataPredict']),
         healthScreeningList: HealthScreeningData.jsonList(json['healthScreeningList']),
-        medicationInfoList: MedicationInfoData.jsonList(json['medicationInfoList']));
+        medicationInfoList: MedicationInfoData.jsonList(json['medicationInfoList'])
+    );
   }
 }

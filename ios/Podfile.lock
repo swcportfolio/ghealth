@@ -12,6 +12,8 @@ PODS:
   - flutter_inappwebview/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 5.0)
+  - flutter_native_splash (0.0.1):
+    - Flutter
   - health (1.0.4):
     - Flutter
   - image_cropper (0.0.4):
@@ -38,6 +40,7 @@ DEPENDENCIES:
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
+  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - health (from `.symlinks/plugins/health/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
@@ -61,6 +64,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_inappwebview:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
+  flutter_native_splash:
+    :path: ".symlinks/plugins/flutter_native_splash/ios"
   health:
     :path: ".symlinks/plugins/health/ios"
   image_cropper:
@@ -81,6 +86,7 @@ SPEC CHECKSUMS:
   device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
+  flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   health: 5a380c0f6c4f619535845992993964293962e99e
   image_cropper: a3291c624a953049bc6a02e1f8c8ceb162a24b25
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5

@@ -38,8 +38,7 @@ class ServiceListItem extends StatelessWidget {
             text: label,
             fontSize: 1.1,
             maxLinesCount: 2,
-            align: TextAlign.center,
-            color: Colors.black)
+            align: TextAlign.center)
       ],
     );
   }

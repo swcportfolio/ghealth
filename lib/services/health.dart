@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:ghealth_app/services/health_service.dart';
+import 'package:ghealth_app/utils/api_exception.dart';
 import 'package:health/health.dart';
 import '../data/models/chart_health_data.dart';
 import '../main.dart';
@@ -22,6 +24,10 @@ class Health {
   late DateTime agoFourthDay;
   late DateTime agoFifthDay;
   late DateTime agoSixthDay;
+
+  bool requested = false;
+  double heartRate = 0;
+  DateTime? heartRateDate;
 
   /// 한번 초기화로 계속 사용할 수 있다.
   static final Health _healthInstance = Health.internal();
@@ -49,14 +55,17 @@ class Health {
   /// Fetch Step, Sleep data
   Future<ChartHealthData> fetchData(BuildContext context) async
   {
-    final types = [HealthDataType.STEPS, HealthDataType.SLEEP_IN_BED];  // define the types to get
-    final permissions = [HealthDataAccess.READ, HealthDataAccess.READ];// with coresponsing permissions
-    bool requested = false;
-    try {
-     requested = await health.requestAuthorization(types, permissions: permissions); // needed, since we only want READ access.
-      logger.d('[Health fetchData] => $requested');
-    } catch (error) {
-      logger.d('[Health fetchData] => Exception in authorize: $error');
+    final types = [HealthDataType.STEPS, HealthDataType.SLEEP_IN_BED, HealthDataType.HEART_RATE];  // define the types to get
+    final permissions = [HealthDataAccess.READ, HealthDataAccess.READ, HealthDataAccess.READ];// with coresponsing permissions
+
+    if(!requested){
+      try {
+        requested = await health.requestAuthorization(types, permissions: permissions); // needed, since we only want READ access.
+        logger.d('[Health fetchData] => $requested');
+      } catch (error) {
+        logger.d('[Health fetchData] => Exception in authorize: $error');
+        throw Exception('permissionsError');
+      }
     }
 
     if (requested){
@@ -80,6 +89,21 @@ class Health {
         List<HealthDataPoint> agoFifthDaySleep  = await health.getHealthDataFromTypes(agoFifthDay, agoFourthDay, [HealthDataType.SLEEP_IN_BED]);
         List<HealthDataPoint> agoSixthDaySleep  = await health.getHealthDataFromTypes(agoSixthDay, agoFifthDay, [HealthDataType.SLEEP_IN_BED]);
 
+        /// 심박동 가져오기
+        List<HealthDataPoint> recentHeartRate  = await health.getHealthDataFromTypes(today24Hour, now, [HealthDataType.HEART_RATE]);
+        recentHeartRate.sort((a, b) => b.dateFrom.compareTo(a.dateFrom));// 최신순으로 정렬
+        if (recentHeartRate.isNotEmpty) {
+          HealthDataPoint latestHeartRateData = recentHeartRate.first;
+
+          heartRate = double.parse(latestHeartRateData.value.toString());
+          heartRateDate = latestHeartRateData.dateFrom;
+
+          logger.i('최근 심박동 데이터: $heartRate');
+          logger.i('최근 심박동 데이터 dateFrom: ${latestHeartRateData.dateFrom.toString()}');
+          logger.i('최근 심박동 데이터 dateTo: ${latestHeartRateData.dateTo.toString()}');
+        } else {
+          logger.e('심박동 데이터 없음');
+        }
 
         return ChartHealthData(dayStep: dayStep, agoDayStep: agoDayStep, agoTwoDayStep: agoTwoDayStep,
                         agoThreeDayStep: agoThreeDayStep, agoFourthDayStep: agoFourthDayStep,
@@ -95,39 +119,42 @@ class Health {
         );
 
       } catch (error) {
-        logger.e("[Health fetchData] => Exception in getHealthDataFromTypes: $error");
-        CustomDialog.showMyDialog(
-          title: '건강 데이터!',
-          content: '데이터 접근 또는 계정이\n 승인되지 않았습니다.',
-          mainContext: context,
-        );
-
-
-        return ChartHealthData(dayStep: 0, agoDayStep: 0, agoTwoDayStep: 0,
-            agoThreeDayStep: 0, agoFourthDayStep: 0,
-            agoFifthStep:0, agoSixthStep:0,
-
-            daySleep : 0, agoDaySleep : 0, agoTwoDaySleep : 0, agoThreeDaySleep: 0,
-            agoFourthDaySleep : 0, agoFifthDaySleep: 0, agoSixthDaySleep: 0
-        );
+        throw ApiException('NotGranted');
+        // logger.e("[Health fetchData] => Exception in getHealthDataFromTypes: $error");
+        // CustomDialog.showMyDialog(
+        //   title: '건강 데이터!',
+        //   content: '데이터 접근 또는 계정이\n 승인되지 않았습니다.',
+        //   mainContext: context,
+        // );
+        //
+        //
+        // return ChartHealthData(dayStep: 0, agoDayStep: 0, agoTwoDayStep: 0,
+        //     agoThreeDayStep: 0, agoFourthDayStep: 0,
+        //     agoFifthStep:0, agoSixthStep:0,
+        //
+        //     daySleep : 0, agoDaySleep : 0, agoTwoDaySleep : 0, agoThreeDaySleep: 0,
+        //     agoFourthDaySleep : 0, agoFifthDaySleep: 0, agoSixthDaySleep: 0
+        // );
       }
     }
 
     else {
-      print("Authorization not granted!!");
-      CustomDialog.showMyDialog(
-        title: '건강 데이터!',
-        content: '데이터 접근 또는 계정이\n 승인되지 않았습니다.',
-        mainContext: context,
-      );
-
-      return ChartHealthData(dayStep: 0, agoDayStep: 0, agoTwoDayStep: 0,
-          agoThreeDayStep: 0, agoFourthDayStep: 0,
-          agoFifthStep:0, agoSixthStep:0,
-
-          daySleep : 0, agoDaySleep : 0, agoTwoDaySleep : 0, agoThreeDaySleep: 0,
-          agoFourthDaySleep : 0, agoFifthDaySleep: 0, agoSixthDaySleep: 0
-      );
+      throw ApiException('NotGranted');
+      // print("Authorization not granted!!");
+      // CustomDialog.showMyDialog(
+      //   title: '건강 데이터!',
+      //   content: '데이터 접근 또는 계정이\n 승인되지 않았습니다.',
+      //   mainContext: context,
+      // );
+      //
+      // return ChartHealthData(dayStep: 0, agoDayStep: 0, agoTwoDayStep: 0,
+      //     agoThreeDayStep: 0, agoFourthDayStep: 0,
+      //     agoFifthStep:0, agoSixthStep:0,
+      //
+      //     daySleep : 0, agoDaySleep : 0, agoTwoDaySleep : 0, agoThreeDaySleep: 0,
+      //     agoFourthDaySleep : 0, agoFifthDaySleep: 0, agoSixthDaySleep: 0
+      // );
     }
   }
+
 }

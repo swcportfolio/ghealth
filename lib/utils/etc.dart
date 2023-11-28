@@ -2,19 +2,22 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
+import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:intl/intl.dart';
 import '../widgets/frame.dart';
 import 'colors.dart';
 import '../main.dart';
+import 'constants.dart';
 
 
 class Etc{
 
   /// 스낵바
-  static showSnackBar(String meg, BuildContext context) {
+  static showSnackBar(String meg, BuildContext context, {int seconds = 2}) {
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            duration: const Duration(milliseconds: 2000),
+            duration: Duration(seconds: seconds),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.white,
             content: Frame.myText(
@@ -24,6 +27,45 @@ class Etc{
             ),
             ));
     }
+
+  ///성공 스낵바
+  static successSnackBar(String content, BuildContext context, {int seconds = 3}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: seconds),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          content: Container(
+            padding: const EdgeInsets.all(8.0),
+            height: 55,
+            decoration: BoxDecoration(
+              color: mainColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.check_circle, size: 30, color: Colors.white),
+                const Gap(20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Frame.myText(
+                          text: content,
+                          fontSize: 1.1,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ));
+  }
 
   static var snackBarWidget = SnackBar(
     content: SizedBox(
@@ -65,6 +107,9 @@ class Etc{
     }
 
   static defaultDateFormat(String dateInput) {
+      if(dateInput == ''){
+        return '';
+      }
     // 날짜 부분 추출
     String dateString = dateInput.replaceAll(RegExp(r'[^0-9]'), '');
 
@@ -73,6 +118,22 @@ class Etc{
 
     // 원하는 형식으로 날짜 포맷
     String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+
+    return formattedDate;
+  }
+
+  static chartDateFormat(String dateInput) {
+    if(dateInput == ''){
+      return '';
+    }
+    // 날짜 부분 추출
+    String dateString = dateInput.replaceAll(RegExp(r'[^0-9]'), '');
+
+    // DateTime 객체로 변환
+    DateTime date = DateTime.parse(dateString);
+
+    // 원하는 형식으로 날짜 포맷
+    String formattedDate = DateFormat('yy.MM').format(date);
 
     return formattedDate;
   }
@@ -198,11 +259,23 @@ class Etc{
   /// 가로 라인 줄
   static solidLine(BuildContext context){
     return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 1.0,
+        color: Colors.grey,
+      ),
+    );
+  }
+
+  /// 가로 라인 줄
+  static solidLineWhite(BuildContext context){
+    return Padding(
       padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 1.0,
-        color: Colors.grey.shade200,
+        color: Colors.white,
       ),
     );
   }
@@ -355,6 +428,215 @@ class Etc{
     // 띄워쓰기 이후의 부분을 제거하고 결과를 반환합니다.
     return spaceIndex != -1 ? input.substring(0, spaceIndex) : input;
   }
+
+  static Color calculateBloodStatusColor(BloodDataType type, double value,
+      {required Color badColor, required Color goodColor}){
+      switch(type) {
+        case BloodDataType.hemoglobin:
+          if(Authorization().gender == 'M'){
+            if(13.0 <= value && 16.5 >= value){
+              logger.i('=> $value');
+              return goodColor;
+            } else {
+              logger.i('=>${Authorization().gender} $value');
+              return badColor;
+            }
+          } else { // 여자
+            if (12.0 <= value && 15.5 >= value) {
+              logger.i('=> $value');
+              return goodColor;
+            } else {
+              logger.i('=>${Authorization().gender} $value');
+              return badColor;
+            }
+          }
+        case BloodDataType.fastingBloodSugar:
+          if (100 > value) {
+            return goodColor;
+          } else {
+            return badColor;
+          }
+        case BloodDataType.totalCholesterol:
+          if (200 > value) {
+            return goodColor;
+          } else {
+            return badColor;
+          }
+        case BloodDataType.highDensityCholesterol:
+          if (60 < value) {
+            return goodColor;
+          } else {
+            return badColor;
+          }
+        case BloodDataType.neutralFat:
+          if (150 > value) {
+            return goodColor;
+          } else {
+            return badColor;
+          }
+        case BloodDataType.lowDensityCholesterol:
+          if (130 > value) {
+            return goodColor;
+          } else {
+            return badColor;
+          }
+        case BloodDataType.serumCreatinine:
+          if (1.5 >= value) {
+            return goodColor;
+          } else {
+            return badColor;
+          }
+        case BloodDataType.shinsugularFiltrationRate:
+          if (60 <= value) {
+            return goodColor;
+          } else {
+            return badColor;
+          }
+        case BloodDataType.astSgot:
+          if (40 >= value) {
+            return goodColor;
+          } else {
+            return badColor;
+          }
+        case BloodDataType.altSGpt:
+          if (35 >= value) {
+            return goodColor;
+          } else {
+            return badColor;
+          }
+        case BloodDataType.gammaGtp:
+          if(Authorization().gender == 'M'){
+            if(63.0 >= value) {
+              return goodColor;
+            } else {
+              return badColor;
+            }
+          } else { // 여자
+            if(35.0 >= value) {
+              return goodColor;
+            } else {
+              return badColor;
+            }
+          }
+      }
+  }
+
+  /// 피 검사 기준 수치 반환
+  static double bloodTestStandardValue(BloodDataType type){
+    switch(type) {
+      case BloodDataType.hemoglobin:
+        return 0.0;
+      case BloodDataType.fastingBloodSugar:
+        return 100.0;
+      case BloodDataType.totalCholesterol:
+        return 200.0;
+      case BloodDataType.highDensityCholesterol:
+        return 60.0;
+      case BloodDataType.neutralFat:
+        return 150.0;
+      case BloodDataType.lowDensityCholesterol:
+       return 130.0;
+      case BloodDataType.serumCreatinine:
+        return 1.5;
+      case BloodDataType.shinsugularFiltrationRate:
+        return 60.0;
+      case BloodDataType.astSgot:
+       return 40.0;
+      case BloodDataType.altSGpt:
+        return 35.0;
+      case BloodDataType.gammaGtp:
+        if(Authorization().gender == 'M'){
+          return 63.0;
+        } else { // 여자
+         return 35.0;
+        }
+    }
+}
+
+  /// urine 상태값으로 이미지 경로 반환
+  static resultStatusToImageStr(String dataDesc, String value){
+    if(dataDesc == '비타민' || dataDesc == '비중' || dataDesc == '산성도'){
+      switch(value){
+        case '0' : return 'images/plus_1.png';
+        case '1' : return 'images/plus_2.png';
+        case '2' : return 'images/plus_3.png';
+        case '3' : return 'images/plus_4.png';
+        case '4' : return 'images/plus_4.png';
+        case '5' : return 'images/plus_4.png';
+        default  : return 'images/plus_1.png';
+      }
+    }
+    else {
+      switch(value){
+        case '0' : return 'images/step_0.png';
+        case '1' : return 'images/step_1.png';
+        case '2' : return 'images/step_2.png';
+        case '3' : return 'images/step_3.png';
+        case '4' : return 'images/step_4.png';
+        case '5' : return 'images/step_4.png';
+        default  : return 'images/step_0.png';
+      }
+    }
+  }
+
+  static resultStatusToText(String dataDesc, String value){
+    if(dataDesc == '비타민' || dataDesc == '비중' || dataDesc == '산성도'){
+      switch(value){
+        case '0' : return '낮음';
+        case '1' : return '낮음';
+        case '2' : return '보통';
+        case '3' : return '높음';
+        case '4' : return '다소 높음';
+        case '5' : return '다소 높음';
+        default  : return '미 측정';
+      }
+    }
+    else {
+      switch(value){
+        case '0' : return '안심';
+        case '1' : return '관심';
+        case '2' : return '주위';
+        case '3' : return '위험';
+        case '4' : return '심각';
+        case '5' : return '심각';
+        default  : return '미 측정';
+      }
+    }
+  }
+
+  static resultStatusToTextColor(String dataDesc, String value) {
+    if (dataDesc == '비타민' || dataDesc == '비중' || dataDesc == '산성도') {
+      return urineResultColor6;
+    }
+    else {
+      switch (value) {
+        case '0':
+          return urineResultColor1;
+        case '1':
+          return urineResultColor2;
+        case '2':
+          return urineResultColor3;
+        case '3':
+          return urineResultColor4;
+        case '4':
+          return urineResultColor5;
+        case '5':
+          return urineResultColor5;
+        default:
+          return urineResultColor1;
+      }
+    }
+  }
+
+  /// 예약 현황에서 예약취소버튼 활성화/비활성화
+ static bool possibleToCancel(String status){
+      if(status == '요청' || status == '확인'){
+        return true;
+      } else {
+        return false;
+      }
+  }
+
 }
 
 class NoSpaceInputFormatter extends TextInputFormatter {

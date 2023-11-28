@@ -35,7 +35,8 @@ class _MyInfoViewState extends State<MyInfoView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(
-        title: '개인 정보 수정'
+        title: '개인 정보 수정',
+        isIconBtn: false,
       ),
 
      body: SingleChildScrollView(
@@ -146,7 +147,6 @@ class _MyInfoViewState extends State<MyInfoView> {
           text: '홍길동',
           fontSize: 1.7,
           fontWeight: FontWeight.bold,
-          color: Colors.black
         ),
         Frame.myText(
           text: '님',

@@ -130,17 +130,17 @@ class BloodTest {
 
   List<String> toList() {
     return [
-      hemoglobin ?? '', // 혈색소
-      fastingBloodSugar ?? '', // 공복 혈당
-      totalCholesterol ?? '', // 총 콜레스테롤
-      highDensityCholesterol ?? '',
-      neutralFat ?? '',
-      lowDensityCholesterol ?? '',
-      serumCreatinine ?? '',
-      shinsugularFiltrationRate ?? '',
-      astSgot ?? '',
-      altSGpt ?? '',
-      gammaGtp ?? '',
+      hemoglobin ?? '-', // 혈색소
+      fastingBloodSugar ?? '-', // 공복 혈당
+      totalCholesterol ?? '-', // 총 콜레스테롤
+      highDensityCholesterol ?? '-',
+      neutralFat ?? '-',
+      lowDensityCholesterol ?? '-',
+      serumCreatinine ?? '-',
+      shinsugularFiltrationRate ?? '-',
+      astSgot ?? '-',
+      altSGpt ?? '-',
+      gammaGtp ?? '-',
     ];
   }
 
@@ -149,14 +149,14 @@ class BloodTest {
       '혈색소',
       '공복혈당',
       '총콜레스테롤',
-      '고밀도 콜레,스테롤',
+      '고밀도 콜레스테롤',
       '중성지방',
       '저밀도 콜레스테롤',
-      '혈청크레아티닌',
+      '혈청 크레아티닌',
       '신사구체여과율',
       'AST(SGOT)',
       'ALT(SGPT)',
-      '감마지티피(γ-GTP)',
+      '감마지피티(y-GPT)',
     ];
   }
 }

@@ -1,7 +1,7 @@
 import 'package:ghealth_app/data/models/summary_response.dart';
 
 class HealthScreeningData {
-  /// 검진일
+  /// 최근 검진일
   late String issuedDate;
 
   /// 검진명

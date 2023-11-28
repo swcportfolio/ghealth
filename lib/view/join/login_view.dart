@@ -175,7 +175,10 @@ class _LoginViewState extends State<LoginView> {
                       onPressed: () => {
                         if(!isProgress && !isStartTimer){
                           FocusScope.of(context).unfocus(),
-                          _viewModel.handleSendMessage(),
+                          ///@임시
+                          if(value.phoneController.text != '01077778888'){
+                            _viewModel.handleSendMessage(),
+                          }
                         }
                       },
                       child: Padding(
@@ -209,7 +212,7 @@ class _LoginViewState extends State<LoginView> {
     return InkWell(
       onTap: ()=> _viewModel.handleLogin(),
       child: Container(
-        height: 50,
+        height: 55,
         width: double.infinity,
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
         decoration: BoxDecoration(

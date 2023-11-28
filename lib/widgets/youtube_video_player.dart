@@ -28,7 +28,6 @@ class YoutubeVideoPlayer extends StatelessWidget {
               text: '참여자 리뷰 및 현장',
               fontWeight: FontWeight.bold,
               fontSize: 1.4,
-              color: Colors.black,
               align: TextAlign.start),
         ),
         Container(

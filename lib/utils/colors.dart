@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 const Color transparent = Color(0x00000000);
-const Color layerOneBg = Color(0x80000000);
-const Color layerTwoBg = Color(0x38FFFFFF);
 
+// 메인 색상
 const Color mainColor = Color(0xff5c80fb);
+
+// 기본 Black color
+const Color defaultBlack = Color(0xff333333);
 
 const Color forgotPasswordText = Color(0xFF024335);
 const Color signInButton = Color(0xbbffbfbf);
@@ -15,8 +17,8 @@ const Color signInBox = Color(0xFF024335);
 const Color hintText = Color(0xFFB4B4B4);
 const Color inputBorder = Color(0xFF707070);
 
-final textFieldBorderColor = Color(0xFFE5E5E5);
-final textFieldBorderColor2 = Color(0xffededef);
+const textFieldBorderColor = Color(0xFFE5E5E5);
+const textFieldBorderColor2 = Color(0xffededef);
 const Color switchBackgroundColor = Color(0xfffbd0d0);
 
 
@@ -47,8 +49,14 @@ const serviceCircleBgColor = Color(0xFFf4f4f4);
 const bloodResultBgColor = Color(0xFFfcedee);
 
 // 걔측검사 결과 박스 background color
-const metrologyInspectionBgColor = Color(0xFFebf0fe);
+const metrologyInspectionBgColor = Color(0xffeef1fb);
 
 
-
+// 소변 검사 결과데이터 텍스트 컬러
+const urineResultColor1 = Color(0xffa0cb63);
+const urineResultColor2 = Color(0xff99b8e1);
+const urineResultColor3 = Color(0xffe6b073);
+const urineResultColor4 = Color(0xffbb85da);
+const urineResultColor5 = Color(0xffd88d8d);
+const urineResultColor6 = Color(0xffffc0cb);
 

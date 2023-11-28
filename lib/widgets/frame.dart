@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 
+import '../main.dart';
 import '../utils/colors.dart';
 
 
@@ -37,7 +39,7 @@ class Frame{
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
                 onPressed: () => onPressed!(),
-                icon: Icon(iconData, size: 30)
+                icon: Icon(iconData, size: 25)
             ),
           ),
         ),
@@ -49,7 +51,7 @@ class Frame{
   static Text myText({
     required String text,
     double fontSize = 1.0,
-    Color color = Colors.black,
+    Color color = defaultBlack,
     FontWeight fontWeight = FontWeight.normal,
     TextAlign align = TextAlign.start,
     TextOverflow overflow = TextOverflow.visible,
@@ -80,7 +82,8 @@ class Frame{
    TextAlign align = TextAlign.start,
    TextOverflow overflow = TextOverflow.visible,
    TextDecoration decoration = TextDecoration.lineThrough,
-   Color decorationColor = Colors.grey,
+   Color decorationColor = Colors.black,
+   double decorationThickness = 0,
    int maxLinesCount = 1,
    bool softWrap = false,
  }){
@@ -98,7 +101,7 @@ class Frame{
        /// 밑줄의 형태, underline(아래), overline(위),  lineThrough(중간),
        decoration: decoration,
        /// 밑줄의 두께
-       decorationThickness: 1,
+       decorationThickness: decorationThickness,
      ),
      textAlign: align
      ,
@@ -203,45 +206,135 @@ class Frame{
      ),
    );
  }
+ static Widget buildFutureBuilderHasError(String errorMsg, VoidCallback updateFunction){
+   logger.e('=> 받은 에러메시지: $errorMsg');
+   switch(errorMsg) {
+     case 'Exception: networkError': // 네트워크 연결 상태 확인 요망 화면
+      return showMessageErrorScreen(
+          '네트워크 연결 상태 확인 후\n다시 시도해주세요.', ()=>updateFunction()
+      );
+     case 'Exception: badResponse': // 200이외의 코드 발생 잘못된 요청 화면
+       return showMessageErrorScreen(
+           '서버에서 예기치 않은 응답이 발생했습니다.\n나중에 다시 시도해주세요.', ()=>updateFunction()
+       );
+     case 'Exception: unknown': // 서바 상태가 불안정합니다. 다시 시도바랍니다.
+     return showMessageErrorScreen(
+         '서버 상태가 불안정합니다.\n나중에 다시 시도해주세요.', ()=>updateFunction()
+     );
+     default:
+      return showMessageErrorScreen(
+           '서버 상태가 불안정합니다.\n나중에 다시 시도해주세요.', ()=>updateFunction()
+       );
+   }
+ }
 
- static buildFutureBuilderHasError(VoidCallback updateFunction){
-     return Center(
-       child: Column(
-         mainAxisAlignment: MainAxisAlignment.center,
-         crossAxisAlignment: CrossAxisAlignment.center,
-         children: [
-           const Icon(Icons.error_outline, size: 40, color: Colors.redAccent,),
-           const Gap(10),
-           Frame.myText(
-             text: '네트워크 연결 상태 확인 후\n다시시도 해주세요.',
+ static showMessageErrorScreen(
+     String message,
+     VoidCallback updateFunction){
+   return Center(
+     child: Column(
+       mainAxisAlignment: MainAxisAlignment.center,
+       crossAxisAlignment: CrossAxisAlignment.center,
+       children: [
+         const Icon(Icons.error_outline, size: 40, color: Colors.redAccent,),
+         const Gap(10),
+         Frame.myText(
+             text: message,
              fontSize: 1.1,
              maxLinesCount: 2,
              align: TextAlign.center
-           ),
-           const Gap(25),
+         ),
+         const Gap(25),
 
-           InkWell(
-             onTap: () => {
-               updateFunction()
-             },
-             child: Container(
-               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-               decoration: BoxDecoration(
-                 color: Colors.grey.shade100 ,
-                 border: Border.all(
-                     color: textFieldBorderColor,
-                     width: 1.5),
-                 borderRadius: BorderRadius.circular(30),
-               ),
-               child: Frame.myText(
-                 text: '다시 시도',
-               ),
+         InkWell(
+           onTap: () =>{ updateFunction() },
+           child: Container(
+             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+             decoration: BoxDecoration(
+               color: Colors.grey.shade100 ,
+               border: Border.all(
+                   color: textFieldBorderColor,
+                   width: 1.5),
+               borderRadius: BorderRadius.circular(30),
              ),
-           )
-         ],
-       ),
-     );
+             child: Frame.myText(
+               text: '다시 시도',
+             ),
+           ),
+         )
+       ],
+     ),
+   );
  }
+
+
+ static showMessageHealthErrorScreen(
+     String message,
+     VoidCallback updateFunction){
+   return Center(
+     child: Column(
+       mainAxisAlignment: MainAxisAlignment.center,
+       crossAxisAlignment: CrossAxisAlignment.center,
+       children: [
+         const Icon(Icons.error_outline, size: 40, color: Colors.redAccent,),
+         const Gap(10),
+         Frame.myText(
+             text: message,
+             fontSize: 1.1,
+             maxLinesCount: 2,
+             align: TextAlign.center
+         ),
+         const Gap(25),
+
+         InkWell(
+           onTap: () =>{ updateFunction() },
+           child: Container(
+             padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+             decoration: BoxDecoration(
+               color: Colors.grey.shade100 ,
+               border: Border.all(
+                   color: textFieldBorderColor,
+                   width: 1.5),
+               borderRadius: BorderRadius.circular(30),
+             ),
+             child: Frame.myText(
+               text: '다시 시도',
+             ),
+           ),
+         )
+       ],
+     ),
+   );
+ }
+
+ /// Empty 공용화면
+ static Widget buildCommonEmptyView(String message){
+   return Center(
+     child: Column(
+       mainAxisAlignment: MainAxisAlignment.center,
+       crossAxisAlignment: CrossAxisAlignment.center,
+       children: [
+         Image.asset('images/empty_search_image.png', height: 60, width: 60),
+         const Gap(20),
+         Container(
+           padding: const EdgeInsets.all(10.0),
+           decoration: BoxDecoration(
+               color: Colors.grey.shade200,
+               borderRadius: BorderRadius.circular(10.0)
+           ),
+           child: Frame.myText(
+               text: message,
+               maxLinesCount: 2,
+               softWrap: true,
+               fontSize: 1.1,
+               fontWeight: FontWeight.w500
+           ),
+         )
+       ],
+     ),
+   );
+ }
+
 
   /// 데이터 로딩
   static buildFutureBuildProgressIndicator() {
@@ -250,7 +343,7 @@ class Frame{
             child: SizedBox(
                 height: 40.0,
                 width: 40.0,
-                child: CircularProgressIndicator(strokeWidth: 2)))
+                child: CircularProgressIndicator(strokeWidth: 4)))
         : const Center(
           child: SizedBox(
               height: 40.0,
