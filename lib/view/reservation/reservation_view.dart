@@ -133,7 +133,7 @@ class _ReservationViewState extends State<ReservationView> {
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                 if(snapshot.hasError){
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Center(
                       child: Frame.myText(
                           text: '방문 예약 내역을 불러오지 못했습니다.',
@@ -153,6 +153,7 @@ class _ReservationViewState extends State<ReservationView> {
                           child: Container(
                               height: 45,
                               padding: const EdgeInsets.all(15),
+                              margin: const EdgeInsets.symmetric(vertical: 15),
                               decoration: BoxDecoration(
                                   color: reservedCardBgColor,
                                   borderRadius:
@@ -168,7 +169,7 @@ class _ReservationViewState extends State<ReservationView> {
 
                             /// 예약장소
                             Padding(
-                              padding: const EdgeInsets.only(left:10, top:20),
+                              padding: const EdgeInsets.only(left:10, top:15),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,

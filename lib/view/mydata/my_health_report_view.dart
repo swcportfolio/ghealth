@@ -64,7 +64,7 @@ class _MyHealthReportViewState extends State<MyHealthReportView> {
               return SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Padding(
-                    padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: Column(
                       children: [
                         /// 페이지 안내 메시지 Top
@@ -77,7 +77,7 @@ class _MyHealthReportViewState extends State<MyHealthReportView> {
                           lifestyleManagementText: _viewModel.lifestyleManagementText,
                           issuedDate: _viewModel.issuedDate,
                         ),
-                        const Gap(15),
+                        const Gap(5),
 
                         /// 혈액 검사 결과 Box
                         BloodTestResultWidget(bloodTest: _viewModel.bloodTest),
@@ -86,11 +86,11 @@ class _MyHealthReportViewState extends State<MyHealthReportView> {
                         /// 계측 검사 위젯
                         MetrologyInspectionWidget(
                             metrologyInspection: _viewModel.metrologyInspection),
-                        const Gap(15),
+                        const Gap(5),
 
                         /// AI 질환 예측 결과
                         AiDiseasePredictionResults(mydataPredict: _viewModel.mydataPredict),
-                        const Gap(15),
+                        const Gap(5),
 
                         /// 처방 이력
                         MedicationInfoWidget(

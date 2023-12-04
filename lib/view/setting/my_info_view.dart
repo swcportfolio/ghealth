@@ -7,8 +7,6 @@ import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../utils/colors.dart';
 
@@ -44,7 +42,7 @@ class _MyInfoViewState extends State<MyInfoView> {
        child: Column(
          crossAxisAlignment: CrossAxisAlignment.center,
          children: [
-           buildProfileImage(),
+           //buildProfileImage(),
            buildName(),
            const Gap(15),
            buildLogoutBtn(),
@@ -57,86 +55,86 @@ class _MyInfoViewState extends State<MyInfoView> {
   }
 
   /// 프로필 사진 및 닉네임?
-  Widget buildProfileImage() {
-    return Container(
-      margin: const EdgeInsets.only(top: 50, bottom: 15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(children: [
-                CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 55,
-                    backgroundImage: croppedProfileFilePath == null
-                        ? Image.asset('images/profile_image.png').image
-                        : FileImage(File(croppedProfileFilePath.toString()))),
-                Positioned(
-                    right: 1,
-                    bottom: 1,
-                    child: Container(
-                        height: 35,
-                        width: 35,
-                        decoration: const BoxDecoration(
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(20))),
-                        child: InkWell(
-                            onTap: () async {
-                              final XFile? image = await ImagePicker().pickImage(
-                                  source: ImageSource.gallery);
-                              if (image == null) return;
-
-                              var croppedProfileFile = await ImageCropper().cropImage(
-                                sourcePath: image.path.toString(),
-                                aspectRatioPresets: [
-                                  CropAspectRatioPreset.square,
-                                  CropAspectRatioPreset.ratio3x2,
-                                  CropAspectRatioPreset.original,
-                                  CropAspectRatioPreset.ratio4x3,
-                                  CropAspectRatioPreset.ratio16x9
-                                ],
-                                uiSettings: [
-                                  AndroidUiSettings(
-                                      toolbarTitle: '사진 편집',
-                                      toolbarColor: mainColor,
-                                      toolbarWidgetColor: Colors.white,
-                                      initAspectRatio:
-                                      CropAspectRatioPreset.original,
-                                      lockAspectRatio: false),
-                                  IOSUiSettings(
-                                      title: '사진 편집', minimumAspectRatio: 1.0),
-                                ],
-                              );
-                              setState(() {
-                                croppedProfileFilePath = croppedProfileFile!.path;
-                              });
-                            },
-                            child: CircleAvatar(
-                                backgroundColor: mainColor,
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(Radius.circular(50))
-                                  ),
-                                  padding: const EdgeInsets.all(6),
-                                  child: const Icon(
-                                    Icons.camera_alt,
-                                    color: mainColor,
-                                    size: 21,
-                                  ),
-                                ))))
-                )
-              ]),
-            ],
-          ),
-          const Gap(12),
-         // HighLightedText('홍길동 님', color: mainColor)
-        ],
-      ),
-    );
-  }
+  // Widget buildProfileImage() {
+  //   return Container(
+  //     margin: const EdgeInsets.only(top: 50, bottom: 15),
+  //     child: Column(
+  //       mainAxisAlignment: MainAxisAlignment.start,
+  //       children: [
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             Stack(children: [
+  //               CircleAvatar(
+  //                   backgroundColor: Colors.white,
+  //                   radius: 55,
+  //                   backgroundImage: croppedProfileFilePath == null
+  //                       ? Image.asset('images/profile_image.png').image
+  //                       : FileImage(File(croppedProfileFilePath.toString()))),
+  //               Positioned(
+  //                   right: 1,
+  //                   bottom: 1,
+  //                   child: Container(
+  //                       height: 35,
+  //                       width: 35,
+  //                       decoration: const BoxDecoration(
+  //                           borderRadius:
+  //                           BorderRadius.all(Radius.circular(20))),
+  //                       child: InkWell(
+  //                           onTap: () async {
+  //                             final XFile? image = await ImagePicker().pickImage(
+  //                                 source: ImageSource.gallery);
+  //                             if (image == null) return;
+  //
+  //                             var croppedProfileFile = await ImageCropper().cropImage(
+  //                               sourcePath: image.path.toString(),
+  //                               aspectRatioPresets: [
+  //                                 CropAspectRatioPreset.square,
+  //                                 CropAspectRatioPreset.ratio3x2,
+  //                                 CropAspectRatioPreset.original,
+  //                                 CropAspectRatioPreset.ratio4x3,
+  //                                 CropAspectRatioPreset.ratio16x9
+  //                               ],
+  //                               uiSettings: [
+  //                                 AndroidUiSettings(
+  //                                     toolbarTitle: '사진 편집',
+  //                                     toolbarColor: mainColor,
+  //                                     toolbarWidgetColor: Colors.white,
+  //                                     initAspectRatio:
+  //                                     CropAspectRatioPreset.original,
+  //                                     lockAspectRatio: false),
+  //                                 IOSUiSettings(
+  //                                     title: '사진 편집', minimumAspectRatio: 1.0),
+  //                               ],
+  //                             );
+  //                             setState(() {
+  //                               croppedProfileFilePath = croppedProfileFile!.path;
+  //                             });
+  //                           },
+  //                           child: CircleAvatar(
+  //                               backgroundColor: mainColor,
+  //                               child: Container(
+  //                                 decoration: const BoxDecoration(
+  //                                     color: Colors.white,
+  //                                     borderRadius: BorderRadius.all(Radius.circular(50))
+  //                                 ),
+  //                                 padding: const EdgeInsets.all(6),
+  //                                 child: const Icon(
+  //                                   Icons.camera_alt,
+  //                                   color: mainColor,
+  //                                   size: 21,
+  //                                 ),
+  //                               ))))
+  //               )
+  //             ]),
+  //           ],
+  //         ),
+  //         const Gap(12),
+  //        // HighLightedText('홍길동 님', color: mainColor)
+  //       ],
+  //     ),
+  //   );
+  // }
 
   /// 사용자 이름
   Widget buildName(){

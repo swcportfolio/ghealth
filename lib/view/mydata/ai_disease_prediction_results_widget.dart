@@ -11,69 +11,72 @@ class AiDiseasePredictionResults extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey.shade100,
-      elevation: 3,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: Container(
-        height: 200,
-        width: double.infinity,
-        padding: const EdgeInsets.all(20),
-        child:
-        mydataPredict == null
-        ? _buildAiDiseasePredictionEmptyView()
-        : Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Frame.myText(
-                text: 'AI 질환 예측 결과',
-                fontSize: 1.3,
-                fontWeight: FontWeight.w600),
-            const Gap(5),
-            Frame.myText(
-              text: '유전체+건강검진이력+라이프로그 데이터를 결합한 예측결과 항목입니다.',
-              softWrap: true,
-              maxLinesCount: 2,
-              fontSize: 1.0,
-            ),
-            const Gap(15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buildPredictionItem('관절',
-                    mydataPredict!.bone == '0' || mydataPredict!.bone == ''
-                        ? Colors.greenAccent
-                        : Colors.redAccent),
-                const Gap(10),
-                buildPredictionItem('당뇨병',
-                    mydataPredict!.diabetes == '0' || mydataPredict!.diabetes == ''
-                        ? Colors.greenAccent
-                        : Colors.redAccent),
-                const Gap(10),
-                buildPredictionItem('눈건강',
-                    mydataPredict!.eye == '0' ||  mydataPredict!.eye == ''
-                        ? Colors.greenAccent
-                        : Colors.redAccent),
-              ],
-            ),
-            const Gap(10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buildPredictionItem('고혈압',
-                    mydataPredict!.highpress == '0' || mydataPredict!.highpress == ''
-                        ? Colors.greenAccent
-                        : Colors.redAccent),
-                const Gap(10),
-                buildPredictionItem('면역',
-                    mydataPredict!.immune == '0' ||  mydataPredict!.immune == ''
-                        ? Colors.greenAccent
-                        : Colors.redAccent),
-              ],
-            )
-          ],
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Card(
+        color: Colors.grey.shade100,
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Container(
+          height: 200,
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          child:
+          mydataPredict == null
+          ? _buildAiDiseasePredictionEmptyView()
+          : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Frame.myText(
+                  text: 'AI 질환 예측 결과',
+                  fontSize: 1.3,
+                  fontWeight: FontWeight.w600),
+              const Gap(5),
+              Frame.myText(
+                text: '유전체+건강검진이력+라이프로그 데이터를 결합한 예측결과 항목입니다.',
+                softWrap: true,
+                maxLinesCount: 2,
+                fontSize: 1.0,
+              ),
+              const Gap(15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildPredictionItem('관절',
+                      mydataPredict!.bone == '0' || mydataPredict!.bone == '' || mydataPredict!.bone == '-'
+                          ? Colors.greenAccent
+                          : Colors.redAccent),
+                  const Gap(10),
+                  buildPredictionItem('당뇨병',
+                      mydataPredict!.diabetes == '0' || mydataPredict!.diabetes == '' || mydataPredict!.bone == '-'
+                          ? Colors.greenAccent
+                          : Colors.redAccent),
+                  const Gap(10),
+                  buildPredictionItem('눈건강',
+                      mydataPredict!.eye == '0' ||  mydataPredict!.eye == '' || mydataPredict!.bone == '-'
+                          ? Colors.greenAccent
+                          : Colors.redAccent),
+                ],
+              ),
+              const Gap(10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildPredictionItem('고혈압',
+                      mydataPredict!.highpress == '0' || mydataPredict!.highpress == '' || mydataPredict!.bone == '-'
+                          ? Colors.greenAccent
+                          : Colors.redAccent),
+                  const Gap(10),
+                  buildPredictionItem('면역',
+                      mydataPredict!.immune == '0' ||  mydataPredict!.immune == '' || mydataPredict!.bone == '-'
+                          ? Colors.greenAccent
+                          : Colors.redAccent),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

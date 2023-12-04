@@ -21,94 +21,97 @@ class MetrologyInspectionWidget extends StatefulWidget {
 class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          width: double.infinity,
-          height: 610,
-          padding: const EdgeInsets.all(20.0),
-          decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(30.0)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              /// 검진 날짜 Text
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Frame.myText(
-                      text: '계측 검사',
-                      fontSize: 1.2,
-                      fontWeight: FontWeight.w600),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Stack(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 610,
+            padding: const EdgeInsets.all(20.0),
+            decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(30.0)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                /// 검진 날짜 Text
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Frame.myText(
+                        text: '계측 검사',
+                        fontSize: 1.2,
+                        fontWeight: FontWeight.w600),
 
-                  /// 검진 날짜
-                  Frame.myText(
-                    text: '최근 검진일 : ${widget.metrologyInspection.issuedDate}',
-                    fontSize: 0.9,
-                  )
-                ],
-              ),
-
-              /// 사람 이미지
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Image.asset(
-                  'images/body_image.png',
-                  height: 460,
-                  width: 180,
+                    /// 검진 날짜
+                    Frame.myText(
+                      text: '최근 검진일 : ${widget.metrologyInspection.issuedDate}',
+                      fontSize: 0.9,
+                    )
+                  ],
                 ),
-              ),
-              const Gap(15),
 
-              Frame.myText(
-                  text: '클릭하시면 자세한 결과를 보실수 있습니다.',
-                  color: Colors.grey.shade600,
-                  fontSize: 1.1),
-            ],
+                /// 사람 이미지
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Image.asset(
+                    'images/body_image.png',
+                    height: 460,
+                    width: 180,
+                  ),
+                ),
+                const Gap(15),
+
+                Frame.myText(
+                    text: '클릭하시면 자세한 결과를 보실수 있습니다.',
+                    color: Colors.grey.shade600,
+                    fontSize: 1.1),
+              ],
+            ),
           ),
-        ),
 
-        /// 각 항목 Positioned Container
-        buildMeasurementResultPositionedItem(
-            40, 80, null, null, '${widget.metrologyInspection.vision}',
-            '시력(좌/우)',
-            ScreeningsDataType.vision
-        ),
-        buildMeasurementResultPositionedItem(
-            20, 200, null, null, '${widget.metrologyInspection.bloodPressure}',
-            '혈압',
-            ScreeningsDataType.bloodPressure
-        ),
-        buildMeasurementResultPositionedItem(
-            30, 360, null, null, '${widget.metrologyInspection.weight}',
-            '몸무게',
-            ScreeningsDataType.weight
-        ),
-        buildMeasurementResultPositionedItem(
-            35, 460, null, null, '${widget.metrologyInspection.height}',
-            '키',
-            ScreeningsDataType.height
-        ),
-        buildMeasurementResultPositionedItem(
-            null, 83, 50, null,
-            '${widget.metrologyInspection.hearingAbility}',
-            '청력(좌/우)',
-            ScreeningsDataType.hearingAbility
-        ),
-        buildMeasurementResultPositionedItem(
-            null, 205, 40, null,
-            '${widget.metrologyInspection.waistCircumference}',
-            '허리둘레',
-            ScreeningsDataType.waistCircumference
-        ),
-        buildMeasurementResultPositionedItem(
-            null, 335, 25, null,
-            '${widget.metrologyInspection.bodyMassIndex}',
-            '체질량지수',
-            ScreeningsDataType.bodyMassIndex
-        ),
-      ],
+          /// 각 항목 Positioned Container
+          buildMeasurementResultPositionedItem(
+              40, 80, null, null, '${widget.metrologyInspection.vision}',
+              '시력(좌/우)',
+              ScreeningsDataType.vision
+          ),
+          buildMeasurementResultPositionedItem(
+              20, 200, null, null, '${widget.metrologyInspection.bloodPressure}',
+              '혈압',
+              ScreeningsDataType.bloodPressure
+          ),
+          buildMeasurementResultPositionedItem(
+              30, 360, null, null, '${widget.metrologyInspection.weight}',
+              '몸무게',
+              ScreeningsDataType.weight
+          ),
+          buildMeasurementResultPositionedItem(
+              35, 460, null, null, '${widget.metrologyInspection.height}',
+              '키',
+              ScreeningsDataType.height
+          ),
+          buildMeasurementResultPositionedItem(
+              null, 83, 50, null,
+              '${widget.metrologyInspection.hearingAbility}',
+              '청력(좌/우)',
+              ScreeningsDataType.hearingAbility
+          ),
+          buildMeasurementResultPositionedItem(
+              null, 205, 40, null,
+              '${widget.metrologyInspection.waistCircumference}',
+              '허리둘레',
+              ScreeningsDataType.waistCircumference
+          ),
+          buildMeasurementResultPositionedItem(
+              null, 335, 25, null,
+              '${widget.metrologyInspection.bodyMassIndex}',
+              '체질량지수',
+              ScreeningsDataType.bodyMassIndex
+          ),
+        ],
+      ),
     );
   }
 

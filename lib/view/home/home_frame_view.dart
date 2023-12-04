@@ -1,9 +1,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
+import 'package:ghealth_app/services/attendance_checker.dart';
 import 'package:ghealth_app/view/home/home_view.dart';
 import 'package:ghealth_app/widgets/dialog.dart';
+import 'package:hive/hive.dart';
 
+import '../../data/models/attendance_data.dart';
 import '../../main.dart';
 import '../../services/health_service.dart';
 import '../../utils/colors.dart';
@@ -21,6 +24,8 @@ class HomeFrameView extends StatefulWidget {
 }
 
 class _HomeFramePageState extends State<HomeFrameView> {
+  /// 앱 출석 및 Health 데이터 전송을 위한 클래스
+  final attendanceChecker = AttendanceChecker();
 
   /// BottomNavigationBar selected location
   int _selectedIndex = 0;
@@ -35,9 +40,21 @@ class _HomeFramePageState extends State<HomeFrameView> {
   @override
   void initState() {
     super.initState();
+    //checkAttendance();
 
-    if(Authorization().token.isNotEmpty){
-      HealthService().fetchPreviousDayData();
+    //로그인 상태일경우에만 Health 데이터를 가져온다.
+    if (Authorization().token.isNotEmpty) {
+      HealthService().requestPermission().then((required) {
+        if (required) {
+          attendanceChecker.checkAttendance();
+        } else {
+          CustomDialog.showMyDialog(
+            title: '헬스데이터',
+            content: '권한및 데이터 접근 퍼미션이\n 미 허용되었습니다.',
+            mainContext: context,
+          );
+        }
+      });
     }
   }
 
@@ -116,7 +133,7 @@ class _HomeFramePageState extends State<HomeFrameView> {
       logger.i('=> 로그인이 필요합니다.');
       CustomDialog.showLoginDialog(
           title: '로그인',
-          content:'인증이 필요합니다.\n 로그인화면으로 이동하시겠습니까?',
+          content:'인증이 필요합니다.\n 로그인화면으로 이동합니다.',
           mainContext: context
       );
     } else {

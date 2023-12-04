@@ -23,79 +23,87 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   late LoginViewModel _viewModel;
 
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _viewModel = LoginViewModel(context);
+  }
   @override
   Widget build(BuildContext context) {
-    _viewModel = Provider.of<LoginViewModel>(context, listen: false);
-    _viewModel.context = context;
     return Scaffold(
       backgroundColor: mainColor,
 
-      body: SafeArea(
-        child: Stack(
-          children: [
-            GestureDetector(
-              onTap: ()=> FocusScope.of(context).unfocus(),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children:
-                [
-                  /// 메인 BI 이미지 위젯
-                  buildBiImage(),
-                  const Gap(20),
+      body: ChangeNotifierProvider(
+        create: (BuildContext context) => _viewModel,
+        child: SafeArea(
+          child: Stack(
+            children: [
+              GestureDetector(
+                onTap: ()=> FocusScope.of(context).unfocus(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children:
+                  [
+                    /// 메인 BI 이미지 위젯
+                    buildBiImage(),
+                    const Gap(20),
 
-                  /// 휴대폰 번호 입력 필드 위젯
-                  buildLoginTextField(
-                      hint: '휴대폰 번호 \'-\'제외한 11자리',
-                      inputType: LoginInput.phone,
-                      controller: _viewModel.phoneController
-                  ),
-                  const Gap(15),
+                    /// 휴대폰 번호 입력 필드 위젯
+                    buildLoginTextField(
+                        hint: '휴대폰 번호 \'-\'제외한 11자리',
+                        inputType: LoginInput.phone,
+                        controller: _viewModel.phoneController
+                    ),
+                    const Gap(15),
 
-                  /// 인증번호 입력 필드
-                  Consumer<LoginViewModel>(
-                    builder: (BuildContext context, value, Widget? child) {
-                      bool visible = value.isMessageSent;
-                      return Visibility(
-                        visible: visible,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            buildLoginTextField(
-                                hint: '휴대폰 인증번호',
-                                inputType: LoginInput.certification,
-                                controller: _viewModel.certificationController,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(25, 20, 0, 5),
-                              child: Frame.myText(
-                                  text: '• 3분 이내로 인증번호(5자리)를 입력헤주세요.',
-                                  fontSize: 0.85,
-                                  color: Colors.white),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 25),
-                              child: Frame.myText(
-                                  text: '• 인증번호가 전송되지 않을경우 3분이후 "재전송"버튼을 눌러주세요.',
-                                  fontSize: 0.85,
-                                  color: Colors.white),
-                            ),
-                            const Gap(15),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                    /// 인증번호 입력 필드
+                    Consumer<LoginViewModel>(
+                      builder: (BuildContext context, value, Widget? child) {
+                        bool visible = value.isMessageSent;
+                        return Visibility(
+                          visible: visible,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              buildLoginTextField(
+                                  hint: '휴대폰 인증번호',
+                                  inputType: LoginInput.certification,
+                                  controller: _viewModel.certificationController,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(25, 20, 0, 5),
+                                child: Frame.myText(
+                                    text: '• 3분 이내로 인증번호(5자리)를 입력헤주세요.',
+                                    fontSize: 0.85,
+                                    color: Colors.white),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 25),
+                                child: Frame.myText(
+                                    text: '• 인증번호가 전송되지 않을경우 3분이후 "재전송"버튼을 눌러주세요.',
+                                    fontSize: 0.85,
+                                    color: Colors.white),
+                              ),
+                              const Gap(15),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
 
-                  /// 로그인 버튼 위젯
-                  buildLoginButton(),
-                  const Gap(50),
-                ],
+                    /// 로그인 버튼 위젯
+                    buildLoginButton(),
+                    const Gap(50),
+                  ],
+                ),
               ),
-            ),
-            // 라이센스 마크
-            licenseText()
-          ],
+              // 라이센스 마크
+              licenseText()
+            ],
+          ),
         ),
       ),
     );
@@ -147,7 +155,7 @@ class _LoginViewState extends State<LoginView> {
                       focusedBorder: InputBorder.none,
                       contentPadding: const EdgeInsets.only(left: 30.0),
                       hintText: hint,
-                      hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)
+                      hintStyle: const TextStyle(color: Colors.grey, fontWeight: FontWeight.w500)
                   ),
                 ),
               ),
@@ -241,7 +249,7 @@ class _LoginViewState extends State<LoginView> {
       child: Container(
         margin: const EdgeInsets.only(bottom: 15),
         child: Frame.myText(
-          text: '©2021 KIMIRo, Inc. All rights reserved.',
+          text: '©2023 KIMIRo, Inc. All rights reserved.',
           color: Colors.grey.shade400,
           fontSize: 1.0,
           fontWeight: FontWeight.w600

@@ -4,6 +4,9 @@ import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/models/column_series_chart_data.dart';
+import '../../data/models/default_series_chart_data.dart';
+import '../../data/models/health_screening_data.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
 import '../../widgets/chart/column_series_chart.dart';
@@ -15,13 +18,10 @@ import 'mydata_bottom_sheet_viewmodel.dart';
 /// 과거 이력에 대한 그래프 차트 및 표로 확인 할 수있습니다.
 class MyDataBottomSheetView extends StatefulWidget {
   const MyDataBottomSheetView(
-      {super.key, this.screeningsDataType, this.bloodDataType});
+      {super.key, required this.screeningsDataType});
 
   /// 마이데이터으 계측 검사에 해당되는 데이터 타입 enum class
-  final ScreeningsDataType? screeningsDataType;
-
-  /// 마이데이터의 혈액 검사에 해당되는 데이터 타입  enum class
-  final BloodDataType? bloodDataType;
+  final ScreeningsDataType screeningsDataType;
 
   @override
   State<MyDataBottomSheetView> createState() => _MyDataBottomSheetViewState();
@@ -29,6 +29,10 @@ class MyDataBottomSheetView extends StatefulWidget {
 
 class _MyDataBottomSheetViewState extends State<MyDataBottomSheetView> {
    late MyDataBottomSheetViewModel _viewModel;
+
+   late List<ColumnSeriesChartData> _columnDataList;
+   late List<DefaultSeriesChartData> _defaultDataList;
+   late List<HealthScreeningData> _hearingAbilityList;
 
    @override
   void initState() {
@@ -42,9 +46,7 @@ class _MyDataBottomSheetViewState extends State<MyDataBottomSheetView> {
     return ChangeNotifierProvider<MyDataBottomSheetViewModel>(
       create: (BuildContext context) => _viewModel,
       child: Container(
-      height: widget.screeningsDataType == ScreeningsDataType.hearingAbility
-      ? 400
-      : 480,
+      height: 480,
       padding: const EdgeInsets.all(15),
       decoration: const BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -63,39 +65,47 @@ class _MyDataBottomSheetViewState extends State<MyDataBottomSheetView> {
           Expanded(
             child: SingleChildScrollView(
               child: FutureBuilder(
-                // [screeningsDataType], [bloodDataType] 무조건 한개는 null이면 안된다.
-                future: widget.screeningsDataType != null
-                    ? _viewModel.handleInstrumentation(widget.screeningsDataType!)
-                    : _viewModel.handeBlood(widget.bloodDataType!),
+                future: _viewModel.handleInstrumentation(widget.screeningsDataType!),
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (snapshot.hasError) {
                     return Frame.buildFutureBuilderHasError(snapshot.data, () => {});
                   }
-                  else if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Frame.buildFutureBuildProgressIndicator();
+                  if (!snapshot.hasData) {
+                    return SizedBox(height: 250,
+                    child: Frame.buildFutureBuildProgressIndicator()
+                    );
                   }
-                  else {
-                    if (widget.screeningsDataType != null) {
-                      switch (widget.screeningsDataType!) {
-                        case ScreeningsDataType.vision:
-                        case ScreeningsDataType.bloodPressure:
-                          return buildMyHealthChartBox(true);
-                        case ScreeningsDataType.weight:
-                        case ScreeningsDataType.height:
-                        case ScreeningsDataType.waistCircumference:
-                        case ScreeningsDataType.bodyMassIndex:
-                          return buildMyHealthChartBox(false);
-                        case ScreeningsDataType.hearingAbility:
-                          return buildOnlyHearingAbilityResult();
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (widget.screeningsDataType == ScreeningsDataType.vision ||
+                          widget.screeningsDataType == ScreeningsDataType.bloodPressure) {
+                        _columnDataList = List.of(snapshot.data);
+                      }
+                      if (widget.screeningsDataType == ScreeningsDataType.weight ||
+                          widget.screeningsDataType == ScreeningsDataType.height ||
+                          widget.screeningsDataType == ScreeningsDataType.waistCircumference ||
+                          widget.screeningsDataType == ScreeningsDataType.bodyMassIndex) {
+                        _defaultDataList = List.of(snapshot.data);
+                      }
+                      if (widget.screeningsDataType == ScreeningsDataType.hearingAbility) {
+                        _hearingAbilityList = List.of(snapshot.data);
                       }
                     }
-                    return buildMyHealthChartBox(false); // 피검사 데이터 타입
-                  }
-                },
+                    switch (widget.screeningsDataType) {
+                      case ScreeningsDataType.vision:
+                      case ScreeningsDataType.bloodPressure:
+                        return buildMyHealthChartBox(true);
+                      case ScreeningsDataType.weight:
+                      case ScreeningsDataType.height:
+                      case ScreeningsDataType.waistCircumference:
+                      case ScreeningsDataType.bodyMassIndex:
+                        return buildMyHealthChartBox(false);
+                      case ScreeningsDataType.hearingAbility:
+                        return buildOnlyHearingAbilityResult();
+                    }
+                  },
               ),
             ),
           )
-
         ],
       ),
       ),
@@ -149,14 +159,16 @@ class _MyDataBottomSheetViewState extends State<MyDataBottomSheetView> {
                const Icon(Icons.bar_chart, color: mainColor, size: 30),
                const Gap(5),
                Frame.myText(
-                   text: widget.screeningsDataType?.label ??
-                       widget.bloodDataType!.label,
+                   text: widget.screeningsDataType.label,
                    color: mainColor,
                    fontSize: 1.5,
                    fontWeight: FontWeight.w600),
              ],
            ),
          ),
+         const Gap(10),
+
+
          Container(
              padding: const EdgeInsets.all(5),
              margin: const EdgeInsets.symmetric(vertical: 10),
@@ -170,11 +182,11 @@ class _MyDataBottomSheetViewState extends State<MyDataBottomSheetView> {
                      width: double.infinity - 90,
                      child: isColumnChart
                          ? ColumnSeriesChart(
-                         chartData: _viewModel.columnDataList,
-                         dataType: widget.screeningsDataType!)
+                         chartData: _columnDataList,
+                         dataType: widget.screeningsDataType)
                          : DefaultSeriesChart(
-                         chartData: _viewModel.defaultDataList,
-                         dataType: widget.screeningsDataType ?? widget.bloodDataType)
+                         chartData: _defaultDataList,
+                         dataType: widget.screeningsDataType)
                  )
                ],
              )),
@@ -231,76 +243,114 @@ class _MyDataBottomSheetViewState extends State<MyDataBottomSheetView> {
           ),
         ),
         const Gap(20),
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+        _hearingAbilityList.isEmpty
+        ? _buildResultEmptyView()
+        : Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
                 children: [
-                  Frame.myText(
-                    text: '최근 검진일',
-                    fontSize: 1.5,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Frame.myText(
+                        text: '최근 검진일',
+                        fontSize: 1.5,
+                      ),
+                      Frame.myText(text: '결과', fontSize: 1.5),
+                    ],
                   ),
-                  Frame.myText(text: '결과', fontSize: 1.5),
+                  const Gap(10),
+
+                  Etc.solidLine(context),
+                  SizedBox(
+                    height: _hearingAbilityList.length * 60,
+                    child: ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _hearingAbilityList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Frame.myText(
+                                text: Etc.defaultDateFormat(_hearingAbilityList[index].issuedDate),
+                                fontSize: 1.2,
+                              ),
+                              Frame.myText(
+                                  text: _hearingAbilityList[index].dataValue
+                                      .split(' ')[0],
+                                  fontSize: 1.2,
+                                  fontWeight: FontWeight.w600),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const HorizontalDottedLine(mWidth: 200);
+                      },
+                    ),
+                  ),
+                  const Gap(10),
+                  Etc.solidLine(context),
                 ],
               ),
-              const Gap(10),
-
-              Etc.solidLine(context),
-              SizedBox(
-                height: _viewModel.hearingAbilityList.length * 60,
-                child: ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _viewModel.hearingAbilityList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Frame.myText(
-                            text: Etc.defaultDateFormat(_viewModel
-                                .hearingAbilityList[index].issuedDate),
-                            fontSize: 1.2,
-                          ),
-                          Frame.myText(
-                              text: _viewModel
-                                  .hearingAbilityList[index].dataValue
-                                  .split(' ')[0],
-                              fontSize: 1.2,
-                              fontWeight: FontWeight.w600),
-                        ],
-                      ),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const HorizontalDottedLine(mWidth: 200);
-                  },
-                ),
+            ),
+            const Gap(15),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
               ),
-              Etc.solidLine(context),
-            ],
-          ),
-        ),
-        const Gap(20),
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(horizontal: 10),
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Frame.myText(
-              text: '청력(좌/우)결과는 정상/비정상 으로만 표현이 됩니다.',
-              softWrap: true,
-              maxLinesCount: 4,
-              fontSize: 0.9,
-              fontWeight: FontWeight.w600),
-        ),
+              child: Center(
+                child: Frame.myText(
+                    text: '청력(좌/우)결과는 정상/비정상 으로만 표현이 됩니다.',
+                    softWrap: true,
+                    maxLinesCount: 4,
+                    fontSize: 0.9,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            const Gap(20),
+          ],
+        )
+
       ],
     );
   }
+
+   /// EmptyView 화면을 보여준다.
+   _buildResultEmptyView(){
+     return SizedBox(
+       height: 300,
+       width: double.infinity,
+       child: Column(
+         mainAxisAlignment: MainAxisAlignment.center,
+         children: [
+           Image.asset('images/empty_search_image.png', height: 80, width: 80),
+           const Gap(15),
+           Container(
+             padding: const EdgeInsets.all(10.0),
+             decoration: BoxDecoration(
+                 color: Colors.white,
+                 borderRadius: BorderRadius.circular(10.0)
+             ),
+             child: Frame.myText(
+                 text: '측정된 데이터가 없습니다.',
+                 maxLinesCount: 2,
+                 softWrap: true,
+                 fontSize: 1.1,
+                 fontWeight: FontWeight.w500
+             ),
+           )
+         ],
+       ),
+     );
+   }
 }
 

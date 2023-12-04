@@ -7,66 +7,80 @@ import 'package:ghealth_app/utils/etc.dart';
 import '../../data/models/column_series_chart_data.dart';
 import '../../data/models/default_series_chart_data.dart';
 import '../../data/models/health_screening_data.dart';
+import '../../main.dart';
 import '../../utils/constants.dart';
+import '../../utils/my_exception.dart';
 
 
 class MyDataBottomSheetViewModel extends ChangeNotifier {
   final _postRepository = PostRepository();
 
   // 변환된 데이터를 담을 리스트
-  late List<ColumnSeriesChartData> _columnDataList = [];
-  late List<DefaultSeriesChartData> _defaultDataList = [];
-
+  List<ColumnSeriesChartData> _columnDataList = [];
+  List<DefaultSeriesChartData> _defaultDataList = [];
   List<HealthScreeningData> _hearingAbilityList = [];
 
   List<ColumnSeriesChartData> get columnDataList => _columnDataList;
   List<DefaultSeriesChartData> get defaultDataList => _defaultDataList;
   List<HealthScreeningData> get hearingAbilityList => _hearingAbilityList;
 
-  Future<void> handleInstrumentation(ScreeningsDataType screeningsDataType) async {
+  Future<dynamic> handleInstrumentation(ScreeningsDataType screeningsDataType) async {
     try{
       HealthInstrumentationResponse response =
         await _postRepository.getHealthInstrumentationDio(screeningsDataType.label);
 
       if(response.status.code == '200'){
         convertDataAndPopulateList(response.data, screeningsDataType);
-        notifyListeners();
-      }
-      else {
-        // 200이 아닐경우
-      }
-    } on DioException catch (dioError){
-    } catch (error){
-    }
-  }
-
-  Future<void> handeBlood(BloodDataType bloodDataType) async {
-    try{
-      HealthInstrumentationResponse response =
-      await _postRepository.getHealthBloodDio(bloodDataType.label);
-
-      if(response.status.code == '200'){
-        // 데이터 변환
-        for (var data in response.data) {
-          List<String> values = (data.dataValue).split(' ');
-
-          double y1 = double.parse(values[0]);
-
-          DefaultSeriesChartData chartData = DefaultSeriesChartData(
-            x: Etc.defaultDateFormat(data.issuedDate),
-            y1: y1,
-          );
-          _defaultDataList.add(chartData);
+        if(screeningsDataType == ScreeningsDataType.hearingAbility){
+          return _hearingAbilityList;
+        } else  if(screeningsDataType == ScreeningsDataType.vision
+            || screeningsDataType == ScreeningsDataType.bloodPressure){
+          return _columnDataList;
+        } else {
+          return _defaultDataList;
         }
-        notifyListeners();
       }
       else {
+        return [];
       }
     } on DioException catch (dioError){
-
+      logger.e('=> $dioError');
+      throw MyException.myDioException(dioError.type);
     } catch (error){
+      logger.e('=> $error');
+      throw Exception(error);
     }
   }
+
+  // Future<List<DefaultSeriesChartData>> handeBlood(BloodDataType bloodDataType) async {
+  //   try{
+  //     HealthInstrumentationResponse response =
+  //     await _postRepository.getHealthBloodDio(bloodDataType.label);
+  //
+  //     if(response.status.code == '200'){
+  //       List<DefaultSeriesChartData> defaultDataList = response.data.map((data) {
+  //         List<String> values = (data.dataValue).split(' ');
+  //         double y1 = double.parse(values[0]);
+  //
+  //         return DefaultSeriesChartData(
+  //           x: Etc.defaultDateFormat(data.issuedDate),
+  //           y1: y1,
+  //         );
+  //       }).toList();
+  //       _defaultDataList = List.of(defaultDataList);
+  //       return _defaultDataList;
+  //     }
+  //     else {
+  //       return _defaultDataList;
+  //     }
+  //   } on DioException catch (dioError){
+  //     logger.e('=> $dioError');
+  //     throw MyException.myDioException(dioError.type);
+  //   } catch (error){
+  //     logger.e('=> $error');
+  //     throw Exception(error);
+  //   }
+  // }
 
   /// 주어진 [dataList]를 특정 [dataType]에 따라 데이터를 변환하고,
   /// 해당 데이터를 적절한 목록에 추가하여 팝ULATE하는 메소드입니다.
@@ -85,7 +99,7 @@ class MyDataBottomSheetViewModel extends ChangeNotifier {
   void convertDataAndPopulateList(List<HealthScreeningData> dataList, ScreeningsDataType dataType) {
     if (dataType == ScreeningsDataType.vision ||
         dataType == ScreeningsDataType.bloodPressure) {
-      // 시력 또는 혈압 데이터 변환
+      /// 시력 또는 혈압 데이터 변환
       List<ColumnSeriesChartData> tempDataList = dataList.map((data) {
         List<String> values = (data.dataValue).split('/');
 
@@ -109,12 +123,12 @@ class MyDataBottomSheetViewModel extends ChangeNotifier {
     }
 
     else if (dataType == ScreeningsDataType.hearingAbility) {
-      // 청력 데이터 변환
+      /// 청력 데이터 변환
       _hearingAbilityList = List.of(dataList);
     }
 
     else {
-      // 기타 데이터 변환
+      /// 기타 데이터 변환
       List<DefaultSeriesChartData> tempDataList = dataList.map((data) {
         List<String> values = (data.dataValue).split(' ');
         double y1 = double.parse(values[0]);

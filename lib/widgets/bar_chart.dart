@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../data/models/chart_data.dart';
-
+import '../data/models/week_chart_data.dart';
 
 /// SfCartesian ColumnSeries Chart
 class BarChart{
-   late List<ChartData> chartData;
+   late List<WeekChartData> chartData;
    late Color chartColor;
    late String chartType;
 
   /// Returns the cartesian stacked line chart.
   SfCartesianChart buildColumnSeriesChart({
-    required List<ChartData> chartData,
+    required List<WeekChartData> chartData,
     required Color chartColor,
     required String chartType}) {
 
@@ -42,13 +41,13 @@ class BarChart{
 
    /// Returns the list of chart seris which need to render
    /// on the stacked line chart.
-   List<ChartSeries<ChartData, String>> _getColumnSeries() {
-     return <ChartSeries<ChartData, String>> [
-       ColumnSeries<ChartData, String>(
+   List<ChartSeries<WeekChartData, String>> _getColumnSeries() {
+     return <ChartSeries<WeekChartData, String>> [
+       ColumnSeries<WeekChartData, String>(
            dataSource: chartData,
-           xValueMapper: (ChartData sales, _) => sales.x.toString(),
-           yValueMapper: (ChartData sales, _) => sales.y,
-           dataLabelMapper: (ChartData sales, _)
+           xValueMapper: (WeekChartData sales, _) => sales.x.toString(),
+           yValueMapper: (WeekChartData sales, _) => sales.y,
+           dataLabelMapper: (WeekChartData sales, _)
            {
              if(chartType == 'sleep')
              {

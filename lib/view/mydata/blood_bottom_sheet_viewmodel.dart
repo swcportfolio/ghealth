@@ -6,8 +6,10 @@ import 'package:ghealth_app/utils/etc.dart';
 
 import '../../data/models/blood_series_chart_data.dart';
 import '../../data/models/health_screening_data.dart';
+import '../../main.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
+import '../../utils/my_exception.dart';
 
 
 class BloodBottomSheetViewModel extends ChangeNotifier {
@@ -15,10 +17,9 @@ class BloodBottomSheetViewModel extends ChangeNotifier {
 
   // 변환된 데이터를 담을 리스트
   late List<BloodSeriesChartData> _defaultDataList = [];
-
   List<BloodSeriesChartData> get defaultDataList => _defaultDataList;
 
-  Future<void> handeBlood(BloodDataType bloodDataType) async {
+  Future<List<BloodSeriesChartData>> handeBlood(BloodDataType bloodDataType) async {
     try{
       HealthInstrumentationResponse response =
       await _postRepository.getHealthBloodDio(bloodDataType.label);
@@ -44,13 +45,17 @@ class BloodBottomSheetViewModel extends ChangeNotifier {
         } else {
           _defaultDataList = List.of(_defaultDataList);
         }
-        notifyListeners();
+        return _defaultDataList;
       }
       else {
+        return [];
       }
     } on DioException catch (dioError){
-
+      logger.e('=> $dioError');
+      throw MyException.myDioException(dioError.type);
     } catch (error){
+      logger.e('=> $error');
+      throw Exception(error);
     }
   }
 

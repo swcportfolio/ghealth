@@ -5,6 +5,7 @@ import 'package:ghealth_app/view/report/report_bottom_sheet_viewmodel.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/models/lifelog_data.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
 import '../../widgets/frame.dart';
@@ -23,6 +24,9 @@ class ReportBottomSheetView extends StatefulWidget {
 
 class _ReportBottomSheetViewState extends State<ReportBottomSheetView> {
    late ReportBottomSheetViewModel _viewModel;
+
+   /// 라이프로그 건강검진 결과 데이터 리스트
+   late List<LifeLogData> _lifeLogDataList;
 
    @override
   void initState() {
@@ -61,132 +65,138 @@ class _ReportBottomSheetViewState extends State<ReportBottomSheetView> {
                           height: 300,
                           child: Frame.buildFutureBuilderHasError(snapshot.error.toString(), () => {}));
                     }
-                    else if (snapshot.connectionState == ConnectionState.waiting) {
-                      return
-                        SizedBox(
+                     if (!snapshot.hasData) {
+                      return SizedBox(
                           height: 300,
-                          child: Frame.buildFutureBuildProgressIndicator()
-                        );
+                          child: Frame.buildFutureBuildProgressIndicator());
                     }
-                    else {
-                      return Consumer<ReportBottomSheetViewModel>(
-                        builder: (BuildContext context, value, Widget? child) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+
+                    if (snapshot.connectionState == ConnectionState.done){
+                      _lifeLogDataList = List.of(snapshot.data);
+                    }
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Row(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.only(left: 20),
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.bar_chart, color: mainColor, size: 30),
-                                    const Gap(5),
-                                    Frame.myText(
-                                        text: '${widget.healthReportType.name} 검사 결과',
-                                        color: mainColor,
-                                        fontSize: 1.6,
-                                        fontWeight: FontWeight.w600
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Gap(20),
-
-                              widget.healthReportType == HealthReportType.pee
-                                  ? buildUrineResultList()
-                                  :
-                              value.lifeLogDataList.isEmpty
-                                  ? _buildReportResultEmptyView()
-                                  : Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    Etc.solidLine(context),
-                                    const Gap(20),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Frame.myText(
-                                          text: '구분',
-                                          fontSize: 1.4,
-                                        ),
-                                        Frame.myText(
-                                            text: '결과',
-                                            fontSize: 1.4,
-                                            fontWeight: FontWeight.w600
-                                        ),
-                                      ],
-                                    ),
-                                    const Gap(10),
-
-                                    Etc.solidLine(context),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                                      child: SizedBox(
-                                        height: value.lifeLogDataList.length * 70,
-                                        child: ListView.separated(
-                                          physics: const NeverScrollableScrollPhysics(),
-                                          itemCount: value.lifeLogDataList.length,
-                                          itemBuilder: (BuildContext context, int index) {
-                                            return buildLifeLogDataListItem(
-                                              value.lifeLogDataList[index].dataDesc,
-                                              value.lifeLogDataList[index].value,
-                                            );
-                                          },
-                                          separatorBuilder: (BuildContext context, int index) {
-                                            return const HorizontalDottedLine(mWidth: 200);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    Etc.solidLine(context),
-                                    const Gap(10),
-
-                                    Visibility(
-                                      visible: widget.healthReportType == HealthReportType.brains
-                                          ? true
-                                          : false,
-                                      child: Container(
-                                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                                        child:Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Frame.myText(
-                                                text: '• 자율 신경건강도 지수: 수치가 클수록 건강함을 의미합니다.(평균) 5.16~6.69',
-                                                softWrap: true,
-                                                maxLinesCount: 2,
-                                                color: Colors.grey,
-                                                fontSize: 0.9
-                                            ),
-                                            const Gap(5),
-                                            Frame.myText(
-                                                text: '• 두뇌 활동 정도: 중간 범위가 건강한 상태입니다.(정상범위) 11.7~19Hz',
-                                                softWrap: true,
-                                                maxLinesCount: 2,
-                                                color: Colors.grey,
-                                                fontSize: 0.9
-                                            ),
-                                            const Gap(5),
-
-                                            Frame.myText(
-                                                text: '• 두뇌 스트레스: 낮을수록 건강한 상태 입니다.',
-                                                softWrap: true,
-                                                maxLinesCount: 2,
-                                                color: Colors.grey,
-                                                fontSize: 0.9
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    const Gap(20),
-                                  ],
-                                ),
+                              const Icon(Icons.bar_chart, color: mainColor, size: 30),
+                              const Gap(5),
+                              Frame.myText(
+                                  text: '${widget.healthReportType.name} 검사 결과',
+                                  color: mainColor,
+                                  fontSize: 1.6,
+                                  fontWeight: FontWeight.w600
                               ),
                             ],
-                          );
-                        },
-                      );
-                    }
+                          ),
+                        ),
+                        const Gap(20),
+
+                        widget.healthReportType == HealthReportType.pee
+                            ? buildUrineResultList()
+                            : _lifeLogDataList.isEmpty
+                            ? _buildReportResultEmptyView()
+                            : Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Column(
+                                      children: [
+                                        Etc.solidLine(context),
+                                        const Gap(20),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Frame.myText(
+                                              text: '구분',
+                                              fontSize: 1.4,
+                                            ),
+                                            Frame.myText(
+                                                text: '결과',
+                                                fontSize: 1.4,
+                                                fontWeight: FontWeight.w600),
+                                          ],
+                                        ),
+                                        const Gap(10),
+                                        Etc.solidLine(context),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          child: SizedBox(
+                                            height:
+                                                _lifeLogDataList.length * 70,
+                                            child: ListView.separated(
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              itemCount:
+                                                  _lifeLogDataList.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return buildLifeLogDataListItem(
+                                                  _lifeLogDataList[index]
+                                                      .dataDesc,
+                                                  _lifeLogDataList[index].value,
+                                                );
+                                              },
+                                              separatorBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return const HorizontalDottedLine(
+                                                    mWidth: 200);
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        Etc.solidLine(context),
+                                        const Gap(10),
+                                        Visibility(
+                                          visible: widget.healthReportType ==
+                                                  HealthReportType.brains
+                                              ? true
+                                              : false,
+                                          child: Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 20),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Frame.myText(
+                                                    text:
+                                                        '• 자율 신경건강도 지수: 수치가 클수록 건강함을 의미합니다.(평균) 5.16~6.69',
+                                                    softWrap: true,
+                                                    maxLinesCount: 2,
+                                                    color: Colors.grey,
+                                                    fontSize: 0.9),
+                                                const Gap(5),
+                                                Frame.myText(
+                                                    text:
+                                                        '• 두뇌 활동 정도: 중간 범위가 건강한 상태입니다.(정상범위) 11.7~19Hz',
+                                                    softWrap: true,
+                                                    maxLinesCount: 2,
+                                                    color: Colors.grey,
+                                                    fontSize: 0.9),
+                                                const Gap(5),
+                                                Frame.myText(
+                                                    text:
+                                                        '• 두뇌 스트레스: 낮을수록 건강한 상태 입니다.',
+                                                    softWrap: true,
+                                                    maxLinesCount: 2,
+                                                    color: Colors.grey,
+                                                    fontSize: 0.9)
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        const Gap(20),
+                                      ],
+                                    ),
+                                  ),
+                      ],
+                    );
                   },
                 ),
               ),
@@ -223,7 +233,10 @@ class _ReportBottomSheetViewState extends State<ReportBottomSheetView> {
 
    /// 소변 결과 리스트
    Widget buildUrineResultList() {
-     return Container(
+     return
+       _viewModel.lifeLogDataList.isEmpty
+       ? _buildReportResultEmptyView()
+       : Container(
        padding: const  EdgeInsets.all(10.0),
        child: SizedBox(
          height: 700,
@@ -240,7 +253,6 @@ class _ReportBottomSheetViewState extends State<ReportBottomSheetView> {
        ),
      );
    }
-
 
   /// 상단 바 widget
   _buildTopBar() {
@@ -287,6 +299,5 @@ class _ReportBottomSheetViewState extends State<ReportBottomSheetView> {
        ),
      );
    }
-
 }
 

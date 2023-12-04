@@ -28,66 +28,69 @@ class HealthCheckUpResultWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: Container(
-        height: 200,
-        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-        decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
-          border: Border.all(color: Colors.greenAccent, width: 2),
         ),
-        child: comprehensiveOpinionText == ''
-            ? _buildCheckUpEmptyView()
-            :
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Frame.myText(
-                    text: '건강 검진 종합 소견',
-                    fontSize: 1.2,
-                    fontWeight: FontWeight.w600),
-                ///최근 검진 날짜
-                Visibility(
-                  visible: issuedDate == '' ? false : true,
+        child: Container(
+          height: 200,
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            border: Border.all(color: Colors.greenAccent, width: 2),
+          ),
+          child: comprehensiveOpinionText == ''
+              ? _buildCheckUpEmptyView()
+              :
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Frame.myText(
+                      text: '건강 검진 종합 소견',
+                      fontSize: 1.2,
+                      fontWeight: FontWeight.w600),
+                  ///최근 검진 날짜
+                  Visibility(
+                    visible: issuedDate == '' ? false : true,
+                    child: Frame.myText(
+                      text: '최근 검진일\n$issuedDate',
+                      maxLinesCount: 2,
+                      fontSize: 0.9,
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                height: 45,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.green,
+                ),
+                child: Center(
                   child: Frame.myText(
-                    text: '최근 검진일\n$issuedDate',
-                    maxLinesCount: 2,
-                    fontSize: 0.9,
-                  ),
-                )
-              ],
-            ),
-            Container(
-              height: 45,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.green,
+                      text: comprehensiveOpinionText,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 1.3),
+                ),
               ),
-              child: Center(
+              SizedBox(
+                width: double.infinity,
                 child: Frame.myText(
-                    text: comprehensiveOpinionText,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 1.3),
+                    text: '• $lifestyleManagementText',
+                    maxLinesCount: 4,
+                    fontSize: 0.95,
+                    softWrap: true),
               ),
-            ),
-            SizedBox(
-              width: double.infinity,
-              child: Frame.myText(
-                  text: '• $lifestyleManagementText',
-                  maxLinesCount: 4,
-                  fontSize: 0.95,
-                  softWrap: true),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

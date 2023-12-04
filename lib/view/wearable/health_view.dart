@@ -1,6 +1,4 @@
 
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
@@ -9,13 +7,10 @@ import 'package:ghealth_app/view/wearable/health_viewmodel.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/models/chart_data.dart';
-import '../../data/models/chart_health_data.dart';
 import '../../data/models/picker_data.dart';
 import '../../main.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
-import '../../widgets/bar_chart.dart';
 import '../../widgets/custom_picker.dart';
 import '../../widgets/frame.dart';
 import '../../widgets/health_circular_chart.dart';
@@ -35,27 +30,12 @@ class HealthView extends StatefulWidget {
 class _HealthViewState extends State<HealthView> {
   late HealthViewModel _viewModel;
 
-  /// Chat data class
-  late ChartHealthData? chartHealthData;
+
 
   /// 건강데이터 메인화면 로드시 한번만 전송하게 된다.
   bool isRunOnce = true;
 
-  /// chart ui elements Map<String, dynamic> list
-  List<Map<String, dynamic>> chartWidgetElements = [
-    {
-      'image'     : 'images/sleeping.png',
-      'headText'  : '수면 패턴',
-      'chartType' : 'sleep',
-      'color'     : sleepChartColor
-    },
-    {
-      'image'     : 'images/footstep.png',
-      'headText'  : '걸음 수',
-      'chartType' : 'step',
-      'color'     : stepChartColor
-    }
-  ];
+
   String targetSleep = Authorization().targetSleep;
   String targetStep = Authorization().targetStep;
 
@@ -72,12 +52,17 @@ class _HealthViewState extends State<HealthView> {
       body: FutureBuilder(
         future: HealthService().fetchToDayData(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-
           if (snapshot.hasError) {
             if(snapshot.error.toString().contains('NotGranted')){
-              return Frame.showMessageHealthErrorScreen('건강 데이터 접근 또는\n계정이 승인되지 않았습니다.', () => {});
+              return Frame.showMessageHealthErrorScreen('건강 데이터 접근 또는\n계정이 승인되지 않았습니다.', () =>
+                HealthService().requestPermission().then((required){
+                  if(required) setState(() {});
+                }));
             } else if(snapshot.error.toString().contains('permissionsError')){
-              return Frame.showMessageHealthErrorScreen('건강 데이터(걸음, 수면, 심박)\n 접근을 허용해주세요.', () => {});
+              return Frame.showMessageHealthErrorScreen('건강 데이터(걸음, 수면, 심박)\n 접근을 허용해주세요.', () =>
+                  HealthService().requestPermission().then((required){
+                    if(required) setState(() {});
+                  }));
             } else {
               return Frame.buildFutureBuilderHasError(
                   snapshot.error.toString(), () => {});
@@ -87,12 +72,6 @@ class _HealthViewState extends State<HealthView> {
           else if(snapshot.connectionState == ConnectionState.waiting) {
             return Frame.buildFutureBuildProgressIndicator();
           }
-          // else if (snapshot.connectionState == ConnectionState.done) {
-          //   chartHealthData = snapshot.data;
-          //
-          //   chartHealthData?.initStepChartData(); // 걸음수 차트 데이터 초기화
-          //   chartHealthData?.initSleepChartData(); // 수면시간 차트 데이터 초기화
-          // }
             return  SingleChildScrollView(
               child: Column(
                 children: [
@@ -120,9 +99,7 @@ class _HealthViewState extends State<HealthView> {
                 ],
               ),
             );
-
         },
-
       ),
     );
   }
@@ -171,7 +148,7 @@ class _HealthViewState extends State<HealthView> {
     pref.setString(key,data);
   }
 
-  /// 최근 심박수 표시 박스
+  /// 최근 심박수 표시 박스 위젯
   Widget buildHartRateBox(){
     return Padding(
       padding: const EdgeInsets.all(10.0),
@@ -209,12 +186,12 @@ class _HealthViewState extends State<HealthView> {
                       Frame.myText(
                         text: HealthService().heartRate.toInt().toString(),
                         fontSize: 1.8,
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w500,
                       ),
                       Frame.myText(
                         text: 'BPM',
                         fontSize: 1.6,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                         color: Colors.redAccent,
                       )
                     ],
@@ -226,14 +203,18 @@ class _HealthViewState extends State<HealthView> {
                     children: [
                       Frame.myText(
                           text:'측정 일시',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 1.1
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey,
+                          fontSize: 1.0
                       ),
                       Frame.myText(
                         text: HealthService().heartRateDate == null
                             ? '-'
                             : DateFormat('yyyy-MM-dd\nHH:mm').format(HealthService().heartRateDate!),
                         softWrap: true,
+                        align: TextAlign.start,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 1.1,
                         maxLinesCount: 2
                       ),
                     ],
@@ -266,52 +247,10 @@ class _HealthViewState extends State<HealthView> {
     );
   }
 
-
-
-
-  /// 차트 widget
-  Widget buildChart(int index, List<ChartData> chartData) {
-    return Container(
-        height: 380,
-        child: Card(
-            elevation: 3,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children:
-              [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, top: 20),
-                  child: Row(
-                    children:
-                    [
-                      Image.asset(chartWidgetElements[index]['image']!, height: 25, width: 25),
-                      const Gap(10),
-                      Frame.myText(text: chartWidgetElements[index]['headText']!, fontSize: 1.3, fontWeight: FontWeight.w500, color: Colors.grey.shade600),
-                    ],
-                  ),
-                ),
-
-                SizedBox(
-                    height: 300,
-                    child: Padding(
-                        padding: const EdgeInsets.only(left: 8, right: 8, bottom: 10),
-                        child: BarChart().buildColumnSeriesChart(
-                            chartData: chartData,
-                            chartColor: chartWidgetElements[index]['color']!,
-                            chartType: chartWidgetElements[index]['chartType']!))
-                ),
-              ],
-            )
-        )
-    );
-  }
-
-  /// 앱 상단 메시지 표시
-  buildAppTopMessage() {
+  /// 앱 상단 메시지 표시 위젯
+ Widget buildAppTopMessage() {
     return Padding(
-      padding: const EdgeInsets.only(top: 40, left: 20),
+      padding: const EdgeInsets.only(top: 30, left: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -342,57 +281,4 @@ class _HealthViewState extends State<HealthView> {
 }
 
 
-// Expanded(
-//   child: FutureBuilder(
-//     /// The steps and sleep time are called through Health().
-//     future: Health().fetchData(context),
-//     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-//
-//       if(snapshot.hasError){
-//         return Center(
-//             child: Text(snapshot.error.toString().replaceFirst('Exception: ', ''),
-//                 textScaleFactor: 1.1, style: const TextStyle(color: Colors.black)));
-//       }
-//
-//       if (!snapshot.hasData) {
-//         return const Center(
-//             child: SizedBox(height: 40.0, width: 40.0,
-//                 child: CircularProgressIndicator(strokeWidth: 5)));
-//       }
-//
-//       if (snapshot.connectionState == ConnectionState.done) {
-//         chartHealthData = snapshot.data;
-//
-//         chartHealthData?.initStepChartData();  // 걸음수 차트 데이터 초기화
-//         chartHealthData?.initSleepChartData(); // 수면시간 차트 데이터 초기화
-//
-//         if(isRunOnce){
-//           isRunOnce = false;
-//           //_insertHealthData();
-//         }
-//       }
-//
-//       return chartHealthData == null ? buildEmptyView('건강 데이터가 없습니다.') :
-//
-//       SingleChildScrollView(
-//         child: Container(
-//           padding: const EdgeInsets.all(15),
-//           child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children:
-//               [
-//
-//                 /// 수면 차트
-//                 buildChart(0, chartHealthData!.chartSleepData),
-//
-//                 const Gap(10),
-//
-//                 /// 걸음 수 차트
-//                 buildChart(1, chartHealthData!.chartStepData),
-//               ]
-//           ),
-//         ),
-//       );
-//     },
-//   ),
-// ),
+

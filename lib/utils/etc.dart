@@ -28,6 +28,44 @@ class Etc{
             ));
     }
 
+  /// BG White 스낵바
+  static commonSnackBar(String content, BuildContext context, {int seconds = 3}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: seconds),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          content: Container(
+            padding: const EdgeInsets.all(8.0),
+            height: 55,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.check_circle, size: 30),
+                const Gap(20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Frame.myText(
+                          text: content,
+                          fontSize: 1.1,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ));
+  }
+
   ///성공 스낵바
   static successSnackBar(String content, BuildContext context, {int seconds = 3}) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -67,6 +105,45 @@ class Etc{
         ));
   }
 
+
+  ///실패 스낵바
+  static failureSnackBar(String content, BuildContext context, {int seconds = 3}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: seconds),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          content: Container(
+            padding: const EdgeInsets.all(8.0),
+            height: 55,
+            decoration: BoxDecoration(
+              color: Colors.orange.shade500,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.error, size: 30, color: Colors.white),
+                const Gap(20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Frame.myText(
+                          text: content,
+                          fontSize: 1.1,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600
+                      ),
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ));
+  }
   static var snackBarWidget = SnackBar(
     content: SizedBox(
       height: 30,
@@ -271,10 +348,10 @@ class Etc{
   /// 가로 라인 줄
   static solidLineWhite(BuildContext context){
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 1.0,
+        height: 0.5,
         color: Colors.white,
       ),
     );
@@ -435,18 +512,14 @@ class Etc{
         case BloodDataType.hemoglobin:
           if(Authorization().gender == 'M'){
             if(13.0 <= value && 16.5 >= value){
-              logger.i('=> $value');
               return goodColor;
             } else {
-              logger.i('=>${Authorization().gender} $value');
               return badColor;
             }
           } else { // 여자
             if (12.0 <= value && 15.5 >= value) {
-              logger.i('=> $value');
               return goodColor;
             } else {
-              logger.i('=>${Authorization().gender} $value');
               return badColor;
             }
           }

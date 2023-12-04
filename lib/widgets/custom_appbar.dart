@@ -30,7 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             if(Authorization().token.isEmpty){
               CustomDialog.showLoginDialog(
                 title: '로그인',
-                content: '인증이 필요합니다.\n 로그인화면으로 이동하시겠습니까?',
+                content: '인증이 필요합니다.\n 로그인화면으로 이동합니다.',
                 mainContext: context
               )
             } else {

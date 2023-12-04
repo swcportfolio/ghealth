@@ -18,57 +18,60 @@ class MedicationInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey.shade100,
-      elevation: 5,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      child: SizedBox(
-        height: medicationInfoList == null || medicationInfoList?.length == 0
-            ? 220 : 300,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Frame.myText(
-                      text: '처방이력',
-                      fontSize: 1.2,
-                      fontWeight: FontWeight.w600
-                  ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      child: Card(
+        color: Colors.grey.shade100,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: SizedBox(
+          height: medicationInfoList == null || medicationInfoList?.length == 0
+              ? 220 : 300,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Frame.myText(
+                        text: '처방이력',
+                        fontSize: 1.2,
+                        fontWeight: FontWeight.w600
+                    ),
 
-                  /// 더보기 버튼
-                  Visibility(
-                    visible: medicationInfoList == null || medicationInfoList?.length == 0
-                        ? false : true,
-                    child: InkWell(
-                      onTap: ()=> Frame.doPagePush(context, const MedicationInfoDetailView()),
-                      child: const Icon(Icons.arrow_forward_ios,
-                          color: Colors.black, size: 20),
-                    ),
-                  )
-                ],
-              ),
-              const Gap(20),
-              medicationInfoList == null || medicationInfoList?.length == 0
-                  ? _buildMedicEmptyView()
-                  : Expanded(
-                      child: ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        itemCount: medicationInfoList!.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return PrescriptionListItem(
-                              medicationInfoData: medicationInfoList![index]);
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const HorizontalDottedLine(mWidth: 200);
-                        },
+                    /// 더보기 버튼
+                    Visibility(
+                      visible: medicationInfoList == null || medicationInfoList?.length == 0
+                          ? false : true,
+                      child: InkWell(
+                        onTap: ()=> Frame.doPagePush(context, const MedicationInfoDetailView()),
+                        child: const Icon(Icons.arrow_forward_ios,
+                            color: Colors.black, size: 20),
                       ),
-                    ),
-            ],
+                    )
+                  ],
+                ),
+                const Gap(20),
+                medicationInfoList == null || medicationInfoList?.length == 0
+                    ? _buildMedicEmptyView()
+                    : Expanded(
+                        child: ListView.separated(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: medicationInfoList!.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return PrescriptionListItem(
+                                medicationInfoData: medicationInfoList![index]);
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const HorizontalDottedLine(mWidth: 200);
+                          },
+                        ),
+                      ),
+              ],
+            ),
           ),
         ),
       ),

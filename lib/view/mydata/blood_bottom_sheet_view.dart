@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/models/blood_series_chart_data.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
 import '../../widgets/chart/blood_series_chart.dart';
@@ -31,7 +32,7 @@ class BloodBottomSheetView extends StatefulWidget {
 
 class _BloodBottomSheetViewState extends State<BloodBottomSheetView> {
   late BloodBottomSheetViewModel _viewModel;
-
+  late List<BloodSeriesChartData> _defaultDataList;
   @override
   void initState() {
     // TODO: implement initState
@@ -63,18 +64,20 @@ class _BloodBottomSheetViewState extends State<BloodBottomSheetView> {
             Expanded(
               child: SingleChildScrollView(
                 child: FutureBuilder(
-                  // [screeningsDataType], [bloodDataType] 무조건 한개는 null이면 안된다.
                   future: _viewModel.handeBlood(widget.bloodDataType),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.hasError) {
                       return Frame.buildFutureBuilderHasError(snapshot.data, () => {});
                     }
-                    else if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Frame.buildFutureBuildProgressIndicator();
+                    if (!snapshot.hasData) {
+                      return SizedBox(
+                          height: 250,
+                          child: Frame.buildFutureBuildProgressIndicator());
                     }
-                    else {
-                      return buildBloodChartBox(); // 피검사 데이터 타입
+                    if(snapshot.connectionState == ConnectionState.done) {
+                      _defaultDataList = List.of(snapshot.data);
                     }
+                    return buildBloodChartBox(); // 피검사 데이터 타입
                   },
                 ),
               ),
@@ -198,6 +201,35 @@ class _BloodBottomSheetViewState extends State<BloodBottomSheetView> {
           ),
         ),
       ],
+    );
+  }
+
+  /// EmptyView 화면을 보여준다.
+  _buildResultEmptyView(){
+    return SizedBox(
+      height: 300,
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset('images/empty_search_image.png', height: 80, width: 80),
+          const Gap(15),
+          Container(
+            padding: const EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0)
+            ),
+            child: Frame.myText(
+                text: '측정된 데이터가 없습니다.',
+                maxLinesCount: 2,
+                softWrap: true,
+                fontSize: 1.1,
+                fontWeight: FontWeight.w500
+            ),
+          )
+        ],
+      ),
     );
   }
 }

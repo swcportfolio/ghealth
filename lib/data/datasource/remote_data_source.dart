@@ -6,12 +6,9 @@ import 'package:ghealth_app/data/models/send_message_response.dart';
 import 'package:ghealth_app/data/models/summary_response.dart';
 import 'package:ghealth_app/data/models/user_response.dart';
 
-import '../../main.dart';
 import '../../utils/custom_log_interceptor.dart';
-import '../models/health_blood_response.dart';
 import '../models/health_report_response.dart';
 import '../models/mediacation_info_response.dart';
-import '../models/medication_Info_data.dart';
 import '../models/reservation_dayoff_response.dart';
 import '../models/reservation_default_response.dart';
 import '../models/reservation_history_response.dart';
@@ -58,7 +55,7 @@ class RemoteDataSource {
       DefaultResponse defaultResponse = DefaultResponse.fromJson(response.data);
 
       return defaultResponse;
-    } on DioException catch (dioError){
+    } on DioException {
       rethrow;
     } catch (error) {
       // 에러 처리
@@ -77,7 +74,7 @@ class RemoteDataSource {
       SendMessageResponse sendMessageResponse = SendMessageResponse.fromJson(response.data);
 
       return sendMessageResponse;
-    } on DioException catch (dioError){
+    } on DioException {
       rethrow;
     } catch (error) {
       // 에러 처리
@@ -96,7 +93,7 @@ class RemoteDataSource {
       LoginResponse loginResponse = LoginResponse.fromJson(response.data);
 
       return loginResponse;
-    } on DioException catch (dioError){
+    } on DioException {
       rethrow;
     } catch (error) {
       // 에러 처리
@@ -134,7 +131,7 @@ class RemoteDataSource {
                     = HealthInstrumentationResponse.fromJson(response.data);
 
       return healthInstrumentationResponse;
-    } on DioException catch (dioError){
+    } on DioException {
       rethrow;
     } catch (error) {
       // 에러 처리
@@ -153,7 +150,7 @@ class RemoteDataSource {
                     = HealthInstrumentationResponse.fromJson(response.data);
 
       return healthInstrumentationResponse;
-    } on DioException catch (dioError){
+    } on DioException {
       rethrow;
     } catch (error) {
       // 에러 처리

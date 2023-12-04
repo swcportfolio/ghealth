@@ -30,7 +30,9 @@ class BloodTestResultListItem extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
-              color: Etc.calculateBloodStatusColor(
+              color: bloodValue == '-'
+                  ? Colors.grey.shade300
+                  : Etc.calculateBloodStatusColor(
                   bloodDataType, double.parse(bloodValue),
                   badColor: Colors.red, goodColor: Colors.grey.shade300),
               width: 1.5)),

@@ -15,6 +15,8 @@ import '../../utils/validation.dart';
 
 class LoginViewModel extends ChangeNotifier {
   late BuildContext context;
+  LoginViewModel(this.context);
+
   final _postRepository = PostRepository();
 
   /// 휴대폰번호 입력 필드 컨트롤러
@@ -66,7 +68,7 @@ class LoginViewModel extends ChangeNotifier {
 
       if (response.status.code == '200') {
         // 성공시 처리
-        Etc.showSnackBar('인증번호가 발송되었습니다.', context);
+        Etc.commonSnackBar('인증번호가 발송되었습니다.', context);
         logger.d('[handleSendMessage] => 인증번호 메시지 발송!');
 
         _resetTimer(); // 타이머 초기화
@@ -75,19 +77,23 @@ class LoginViewModel extends ChangeNotifier {
         notifyListeners();
       } else {
         // 실패 시 처리
-        Etc.showSnackBar('인증번호 발송되지 않았습니다.', context);
-        logger.d('=> 발송 실패! ${response.status.message}');
+        if(response.status.message.contains('3분이내')){
+          Etc.failureSnackBar('3분이 지난 후 다시 시도해주세요.', context);
+        } else {
+          Etc.failureSnackBar('인증번호 발송 실패, 다시 시도해주세요.', context);
+        }
+        logger.e('=> 발송 실패! ${response.status.message}');
       }
     } on DioException catch (dioError) {
       // 예외 처리
       endSendMessageProgress();
       logger.e('=> dioError: $dioError');
-      Etc.showSnackBar('인증번호 발송되지 않았습니다.', context);
+      Etc.failureSnackBar('인증번호 발송 실패, 다시 시도해주세요.', context);
 
     } catch (error) {
       endSendMessageProgress();
       logger.e('=> error: $error');
-      Etc.showSnackBar('인증번호 발송되지 않았습니다.', context);
+      Etc.failureSnackBar('인증번호 발송 실패, 다시 시도해주세요.', context);
     }
   }
 
@@ -96,6 +102,9 @@ class LoginViewModel extends ChangeNotifier {
     ///@임시
     if(_phoneController.text == '01077778888'){
       _certificationController.text = '12345';
+    }
+    if (!Validation.isValidTelNumber(_phoneController, context)) {
+      return;
     }
     if (!Validation.isValidCertificationCode(certificationController, context)) {
       return;

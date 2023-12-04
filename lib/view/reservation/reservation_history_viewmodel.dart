@@ -4,6 +4,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
+import 'package:ghealth_app/utils/my_exception.dart';
 
 import '../../data/models/reservation_data.dart';
 import '../../data/models/reservation_history_response.dart';
@@ -44,9 +45,7 @@ class ReservationHistoryViewModel extends ChangeNotifier {
          _reservationDataList = List.from(_reservationDataList)
            ..addAll(response.data);
 
-         if(response.data.length == 0){
-           Etc.showSnackBar('더 이상 방문내역이 없습니다.', context);
-         } else {
+         if(response.data.length != 0){
            _scrollController.jumpTo(_scrollController.offset+1);
          }
        }
@@ -54,7 +53,7 @@ class ReservationHistoryViewModel extends ChangeNotifier {
      }
    } on DioException catch (dioError){
      logger.e('=> $dioError');
-     throw Exception(dioError);
+     throw MyException.myDioException(dioError.type);
    } catch (error){
      logger.e('=> $error');
      throw Exception(error);

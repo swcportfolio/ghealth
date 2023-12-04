@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/utils/colors.dart';
 import 'package:ghealth_app/utils/nocheck_certificate_http.dart';
@@ -14,6 +15,11 @@ import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import 'data/models/attendance_data.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
+
 
 var logger = Logger(
     printer: PrettyPrinter(
@@ -29,6 +35,10 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized(); // 플랫폼 채널의 위젯 바인딩을 보장해야한다.
   HttpOverrides.global = NoCheckCertificateHttpOverrides(); // 생성된 HttpOverrides 객체 등록
+
+  ///경로 추가 이후: [flutter packages pub run build_runner build]
+  await Hive.initFlutter();
+  initHive();
 
   await Permission.activityRecognition.request(); // 수면시간, 걷음 수 데이터 접근 퍼미션
   //await Permission.location.request();
@@ -55,9 +65,6 @@ Future<void> main() async {
       MultiProvider(
         providers: [
           ChangeNotifierProvider(
-              create: (BuildContext context) => LoginViewModel()
-          ),
-          ChangeNotifierProvider(
               create: (BuildContext context) => ReservationTime()
           ),
 
@@ -70,19 +77,28 @@ Future<void> main() async {
   ));
 }
 
+Future<void> initHive() async {
+  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDir.path);
+  Hive.registerAdapter(AttendanceDataAdapter()); // 추가
+}
+
 class MyApp extends StatelessWidget {
-  final themeData = ThemeData();
   MyApp({super.key});
-  // /// 앱 화면 세로 위쪽 방향으로 고정
-  // SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  final themeData = ThemeData();
 
   @override
   Widget build(BuildContext context) {
+    /// 앱 화면 세로 위쪽 방향으로 고정
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
     return MaterialApp(
       title: 'GHealth',
       debugShowCheckedModeBanner: false,
       theme:Theme.of(context).copyWith(
         colorScheme: themeData.colorScheme.copyWith(primary: mainColor),
+
       ),
 
       initialRoute:'home_frame_view',

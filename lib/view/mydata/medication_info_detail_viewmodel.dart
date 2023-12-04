@@ -47,9 +47,7 @@ class MedicationInfoDetailViewModel extends ChangeNotifier {
          _medicationInfoDataList = List.from(_medicationInfoDataList)
            ..addAll(response.data);
 
-         if(response.data.length == 0){
-           Etc.showSnackBar('더 이상 처방이력이 없습니다.', context);
-         } else {
+         if(response.data.length != 0){
            _scrollController.jumpTo(_scrollController.offset+1);
          }
        }

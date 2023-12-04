@@ -58,8 +58,10 @@ class Gallery3DMenuCard extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
+          Etc.solidLineWhite(context),
 
-           Padding(
+
+          Padding(
              padding: const EdgeInsets.fromLTRB(20,0,20,15),
              child: Row(
                mainAxisAlignment: MainAxisAlignment.start,

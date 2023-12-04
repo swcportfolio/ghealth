@@ -44,7 +44,6 @@ class _PointManagementViewState extends State<PointManagementView> {
           children: [
             buildCurrentPointBox(),
             buildPointHistory()
-
           ],
         ),
       ),

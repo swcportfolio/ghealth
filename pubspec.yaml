@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: '>=2.17.6 <4.0.0'
@@ -45,8 +45,6 @@ dependencies:
   flutter_gallery_3d: ^1.1.1
   permission_handler: ^11.0.1
   syncfusion_flutter_charts: ^20.4.54
-  image_cropper: ^5.0.0
-  image_picker: ^1.0.4
   table_calendar: ^3.0.8
   youtube_player_flutter: ^8.1.2
   gap: ^3.0.1
@@ -55,6 +53,11 @@ dependencies:
   url_launcher: ^6.2.1
   dio: ^5.3.3
   flutter_native_splash: ^2.3.6
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.6
+  google_fonts: ^6.1.0
   #flutter_localization: 0.1.7
 
 
@@ -158,17 +161,26 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
+#  fonts:
+#    - family: Pretendard
+#    - fonts:
+#        - asset: fonts/Pretendard-Thin.tt
+#          weight: 100
+#        - asset: fonts/Pretendard-ExtraLight.ttf
+#          weight: 200
+#        - asset: fonts/Pretendard-Light.ttf
+#          weight: 300
+#        - asset: fonts/Pretendard-Regular.ttf
+#          weight: 400
+#        - asset: fonts/Pretendard-Medium.ttf
+#          weight: 500
+#        - asset: fonts/Pretendard-SemiBold.ttf
+#          weight: 600
+#        - asset: assets/fonts/Pretendard-Bold.ttf
+#          weight: 700
+#        - asset: assets/fonts/Pretendard-ExtraBold.ttf
+#          weight: 800
+#        - asset: assets/fonts/Pretendard-Black.ttf
+#          weight: 900
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

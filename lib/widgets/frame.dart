@@ -3,6 +3,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io' show Platform;
 
@@ -67,6 +68,7 @@ class Frame{
      style: TextStyle(
          color: color,
          fontWeight: fontWeight,
+        fontFamily: 'Pretendard'
      ),
      textAlign: align
      ,

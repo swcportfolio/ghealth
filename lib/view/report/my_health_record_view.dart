@@ -32,10 +32,10 @@ class _MyHealthRecordViewState extends State<MyHealthRecordView> {
             children: [
               /// 페이지 안내 메시지 Top
               MyHealthTopPhraseWidget(label: '라이프로그',),
-              Gap(15),
+              //Gap(15),
 
               /// 건강 포인트
-              HealthPointBoxWidget(),
+              //HealthPointBoxWidget(),
               Gap(30),
 
               HealthCheckUpRecordBodyWidget(),

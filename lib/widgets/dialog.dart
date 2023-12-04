@@ -187,7 +187,7 @@ class CustomDialog{
                                 Navigator.pop(context),
                                 Frame.doPagePush(context, const LoginView()),
                               } ,
-                              child: Frame.myText(text: '이동', color: Colors.white),
+                              child: Frame.myText(text: '로그인', color: Colors.white),
                           ),
                         ),
                       ),
@@ -302,7 +302,7 @@ class CustomDialog{
 
                     // 예약일
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      padding: const EdgeInsets.fromLTRB(30, 0, 20, 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -332,7 +332,7 @@ class CustomDialog{
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      padding: const EdgeInsets.fromLTRB(30, 0, 20, 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -662,7 +662,7 @@ class CustomDialog{
             onTap: ()=> Navigator.pop(context),
             child: Container(
               height: 45,
-              margin: const EdgeInsets.fromLTRB(15, 30, 15, 10),
+              margin: const EdgeInsets.fromLTRB(15, 30, 15, 20),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.0),
                   color: mainColor
@@ -734,7 +734,7 @@ class CustomDialog{
             onTap: ()=> Navigator.pop(context),
             child: Container(
               height: 45,
-              margin: const EdgeInsets.fromLTRB(15, 30, 15, 10),
+              margin: const EdgeInsets.fromLTRB(15, 30, 15, 20),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.0),
                   color: mainColor
@@ -848,7 +848,7 @@ class CustomDialog{
             onTap: ()=> Navigator.pop(context),
             child: Container(
               height: 45,
-              margin: const EdgeInsets.fromLTRB(15, 30, 15, 10),
+              margin: const EdgeInsets.fromLTRB(15, 30, 15, 20),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30.0),
                   color: mainColor

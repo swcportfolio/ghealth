@@ -17,22 +17,22 @@ class ReportBottomSheetViewModel extends ChangeNotifier {
 
   List<LifeLogData> get lifeLogDataList => _lifeLogDataList;
 
-  Future<void> handleHealthReport(HealthReportType dataType) async {
+  Future<List<LifeLogData>> handleHealthReport(HealthReportType dataType) async {
     try{
       HealthReportResponse response =
               await _postRepository.getHealthReportLifeLogDio(dataType.id);
 
       if(response.status.code == '200'){
         _lifeLogDataList = List.of(response.data);
-        notifyListeners();
+        return _lifeLogDataList;
       }
       else {
-        // 200이 아닐경우
-        notifyListeners();
+        return _lifeLogDataList;
       }
     } on DioException catch (dioError){
       logger.e('=> $dioError');
       MyException.myDioException(dioError.type);
     }
+    return _lifeLogDataList;
   }
 }
