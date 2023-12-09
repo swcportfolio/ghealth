@@ -4,12 +4,12 @@ import 'package:ghealth_app/data/models/health_instrumentation_response.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/etc.dart';
 
-import '../../data/models/column_series_chart_data.dart';
-import '../../data/models/default_series_chart_data.dart';
-import '../../data/models/health_screening_data.dart';
-import '../../main.dart';
-import '../../utils/constants.dart';
-import '../../utils/my_exception.dart';
+import '../../../data/models/column_series_chart_data.dart';
+import '../../../data/models/default_series_chart_data.dart';
+import '../../../data/models/health_screening_data.dart';
+import '../../../main.dart';
+import '../../../utils/constants.dart';
+import '../../../utils/my_exception.dart';
 
 
 class MyDataBottomSheetViewModel extends ChangeNotifier {
@@ -118,7 +118,7 @@ class MyDataBottomSheetViewModel extends ChangeNotifier {
             .sublist(0, 5).reversed.toList());
 
       } else {
-        _columnDataList = List.of(_columnDataList);
+        _columnDataList = List.of(tempDataList);
       }
     }
 
@@ -142,11 +142,9 @@ class MyDataBottomSheetViewModel extends ChangeNotifier {
       if(tempDataList.length > 5){
        _defaultDataList = List.of(tempDataList.reversed.toList()
             .sublist(0, 5).reversed.toList());
-
       } else {
-        _defaultDataList = List.of(_defaultDataList);
+        _defaultDataList = List.of(tempDataList);
       }
-
     }
   }
 }

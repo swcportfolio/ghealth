@@ -3,6 +3,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/models/default_series_chart_data.dart';
 import '../../utils/colors.dart';
+import '../../utils/etc.dart';
 
 class DefaultSeriesChart extends StatelessWidget {
   const DefaultSeriesChart(
@@ -43,7 +44,7 @@ class DefaultSeriesChart extends StatelessWidget {
           yValueMapper: (DefaultSeriesChartData data, _) => data.y1,
           dataLabelMapper: (DefaultSeriesChartData data, _) => data.y1.toString(),
           color: mainColor,
-          width: 0.3, // 기본 폭
+          width: Etc.calculateChartWidthRatio(chartData.length), // 그래프 바 폭
           dataLabelSettings:  const DataLabelSettings(
               labelAlignment: ChartDataLabelAlignment.outer,
               isVisible: true,

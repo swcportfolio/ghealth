@@ -20,7 +20,7 @@ class SummaryResponse {
 
 
 class SummaryData {
-  final MyDataPredictData? mydataPredict;
+  final MyDataAIPredictData? mydataPredict;
   final List<HealthScreeningData>? healthScreeningList;
   final List<MedicationInfoData>? medicationInfoList;
 
@@ -31,7 +31,7 @@ class SummaryData {
 
   factory SummaryData.fromJson(Map<String, dynamic> json) {
     return SummaryData(
-        mydataPredict: MyDataPredictData.fromJson(json['mydataPredict']),
+        mydataPredict: MyDataAIPredictData.fromJson(json['mydataPredict']),
         healthScreeningList: HealthScreeningData.jsonList(json['healthScreeningList']),
         medicationInfoList: MedicationInfoData.jsonList(json['medicationInfoList'])
     );

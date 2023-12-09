@@ -8,6 +8,7 @@ import 'package:ghealth_app/data/models/reservation_default_response.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/view/home/home_frame_view.dart';
+import 'package:ghealth_app/view/login/login_view.dart';
 import 'package:ghealth_app/view/setting/version_view.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 import 'package:ghealth_app/widgets/dialog.dart';
@@ -28,6 +29,15 @@ class _SettingViewState extends State<SettingView> {
 
   @override
   Widget build(BuildContext context) {
+
+    /// AccessToken 확인
+    Authorization().checkAuthToken().then((result) {
+      if(!result){
+        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        Frame.doPagePush(context, const LoginView());
+      }
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(title: '설정', isIconBtn: false),

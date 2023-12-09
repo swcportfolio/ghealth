@@ -5,6 +5,7 @@ import 'package:ghealth_app/data/models/health_instrumentation_response.dart';
 import 'package:ghealth_app/data/models/send_message_response.dart';
 import 'package:ghealth_app/data/models/summary_response.dart';
 import 'package:ghealth_app/data/models/user_response.dart';
+import 'package:intl/intl.dart';
 
 import '../../utils/custom_log_interceptor.dart';
 import '../models/health_report_response.dart';
@@ -263,7 +264,7 @@ class RemoteDataSource {
     try {
       // Dio를 사용하여 API 호출
       Response response = await _createPrivateDio().get(possibleReservationApiUrl,
-          queryParameters: {'serviceType': 'lifelog', 'reservationDate': '${date.year}-${date.month}-${date.day}'});
+          queryParameters: {'serviceType': 'lifelog', 'reservationDate': DateFormat('yyyy-MM-dd').format(date)});
 
       // API 응답을 모델로 변환
       ReservationPossibleResponse reservationPossibleResponse

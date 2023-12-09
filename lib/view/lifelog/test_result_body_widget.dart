@@ -1,20 +1,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:ghealth_app/view/report/report_bottom_sheet_view.dart';
 
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
 import '../../widgets/frame.dart';
+import 'lifelog_bottom_sheet_view.dart';
 
-class HealthCheckUpRecordBodyWidget extends StatefulWidget {
-  const HealthCheckUpRecordBodyWidget({super.key});
+class TestResultsBodyWidget extends StatefulWidget {
+  const TestResultsBodyWidget({super.key});
 
   @override
-  State<HealthCheckUpRecordBodyWidget> createState() => _HealthCheckUpRecordBodyWidgetState();
+  State<TestResultsBodyWidget> createState() => _TestResultsBodyWidgetState();
 }
 
-class _HealthCheckUpRecordBodyWidgetState extends State<HealthCheckUpRecordBodyWidget> {
+class _TestResultsBodyWidgetState extends State<TestResultsBodyWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -91,7 +91,7 @@ class _HealthCheckUpRecordBodyWidgetState extends State<HealthCheckUpRecordBodyW
                 context: context,
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) {
-                  return ReportBottomSheetView(healthReportType: type);
+                  return LifeLogBottomSheetView(healthReportType: type);
                 });
           },
           child: Container(

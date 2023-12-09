@@ -40,7 +40,10 @@ class Gallery3DMenuCard extends StatelessWidget {
 
                 InkWell(
                     onTap: ()=> {
-                      CustomDialog.showGallery3dDialog(mainContext: context, mHeight: gallery3dData.dialogHeight, type: gallery3dData.galleryType)
+                      CustomDialog.showGallery3dDialog(
+                          mainContext: context,
+                          mHeight: gallery3dData.dialogHeight,
+                          type: gallery3dData.galleryType)
                     },
                     child: const Icon(Icons.info, color: Colors.white))
               ],

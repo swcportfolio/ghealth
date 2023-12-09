@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/gallery3d_data.dart';
-import 'package:ghealth_app/view/join/login_view.dart';
-import 'package:ghealth_app/widgets/girdview/gridview_builder.dart';
-import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
+import 'package:ghealth_app/view/login/login_view.dart';
 import '../utils/colors.dart';
-import '../utils/etc.dart';
 import 'frame.dart';
 
 
@@ -522,11 +519,26 @@ class CustomDialog{
                     ),
                   ),
                   const Gap(5),
-                  Frame.myText(
-                      text: '예약을 취소하시겠습니까?',
-                      align: TextAlign.center,
-                      fontSize: 0.9
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Frame.myText(
+                          text: '예약을 ',
+                          fontSize: 0.9,
+                      ),
+                      Frame.myText(
+                          text: '취소',
+                          fontSize: 0.9,
+                          color: mainColor,
+                          fontWeight: FontWeight.w600
+                      ),
+                      Frame.myText(
+                          text: '하시겠습니까?',
+                          fontSize: 0.9
+                      ),
+                    ],
                   ),
+
                   const Gap(15),
                   // 예약하기
                   InkWell(

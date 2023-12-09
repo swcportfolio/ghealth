@@ -9,7 +9,7 @@ import '../../main.dart';
 import '../../utils/constants.dart';
 
 
-class ReportBottomSheetViewModel extends ChangeNotifier {
+class LifeLogBottomSheetViewModel extends ChangeNotifier {
   final _postRepository = PostRepository();
 
   /// 라이프로그 건강검진 결과 데이터 리스트
@@ -17,7 +17,8 @@ class ReportBottomSheetViewModel extends ChangeNotifier {
 
   List<LifeLogData> get lifeLogDataList => _lifeLogDataList;
 
-  Future<List<LifeLogData>> handleHealthReport(HealthReportType dataType) async {
+  /// 라이프로그 건겅검진 결과 데이터 조회
+  Future<List<LifeLogData>> handleLifeLogResult(HealthReportType dataType) async {
     try{
       HealthReportResponse response =
               await _postRepository.getHealthReportLifeLogDio(dataType.id);

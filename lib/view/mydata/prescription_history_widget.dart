@@ -11,8 +11,8 @@ import '../../widgets/horizontal_dashed_line.dart';
 import '../../widgets/list_item/prescription_list_item.dart';
 
 /// 처방 이력 - 투약정보 위젯
-class MedicationInfoWidget extends StatelessWidget {
-  const MedicationInfoWidget({super.key, required this.medicationInfoList});
+class PrescriptionHistoryWidget extends StatelessWidget {
+  const PrescriptionHistoryWidget({super.key, required this.medicationInfoList});
 
   final  List<MedicationInfoData>? medicationInfoList;
 
@@ -48,9 +48,24 @@ class MedicationInfoWidget extends StatelessWidget {
                           ? false : true,
                       child: InkWell(
                         onTap: ()=> Frame.doPagePush(context, const MedicationInfoDetailView()),
-                        child: const Icon(Icons.arrow_forward_ios,
-                            color: Colors.black, size: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Frame.myText(
+                                text: '자세히',
+                                maxLinesCount: 2,
+                                fontSize: 0.9,
+                                fontWeight: FontWeight.w500,
+                                softWrap: true),
+                            const Gap(5),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 1),
+                              child: Icon(Icons.arrow_forward_ios, size: 12),
+                            )
+                          ],
+                        ),
                       ),
+
                     )
                   ],
                 ),

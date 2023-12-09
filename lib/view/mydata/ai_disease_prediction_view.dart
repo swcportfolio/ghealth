@@ -6,7 +6,7 @@ import 'package:ghealth_app/widgets/frame.dart';
 import 'package:vertical_percent_indicator/vertical_percent_indicator.dart';
 
 
-/// AI 질환 예측 화면
+/// AI 질환 예측 화면, 미사용
 class AiDiseasePredictionView extends StatefulWidget {
   const AiDiseasePredictionView({super.key});
 
@@ -114,7 +114,7 @@ class _AiDiseasePredictionViewState extends State<AiDiseasePredictionView> {
           percent: percent,
           height: 130,
           width: 18,
-          color: [indicatorColor,indicatorColor],
+          color: [indicatorColor, indicatorColor],
           footer: footerText,
           footerStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         ),

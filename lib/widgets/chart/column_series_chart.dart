@@ -5,6 +5,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/models/column_series_chart_data.dart';
 import '../../utils/constants.dart';
+import '../../utils/etc.dart';
 
 class ColumnSeriesChart extends StatelessWidget {
   const ColumnSeriesChart({super.key, required this.chartData, required this.dataType});
@@ -44,7 +45,7 @@ class ColumnSeriesChart extends StatelessWidget {
           yValueMapper: (ColumnSeriesChartData data, _) => data.y1,
           dataLabelMapper: (ColumnSeriesChartData data, _) => data.y1.toString(),
           color: Colors.orangeAccent,
-          width: 0.5, // 기본 폭
+          width: Etc.calculateChartWidthRatio(chartData.length), // 그래프 바 폭
           dataLabelSettings:  const DataLabelSettings(
               labelAlignment: ChartDataLabelAlignment.outer,
               isVisible: true,
@@ -59,7 +60,7 @@ class ColumnSeriesChart extends StatelessWidget {
           xValueMapper: (ColumnSeriesChartData data, _) => data.x,
           yValueMapper: (ColumnSeriesChartData data, _) => data.y2,
           dataLabelMapper: (ColumnSeriesChartData data, _) => data.y2.toString(),
-          width: 0.5, // 기본 폭
+          width: Etc.calculateChartWidthRatio(chartData.length), // 그래프 바 폭
           color: Colors.lightBlue,
           dataLabelSettings:  const DataLabelSettings(
               labelAlignment: ChartDataLabelAlignment.outer,

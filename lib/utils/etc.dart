@@ -210,7 +210,7 @@ class Etc{
     DateTime date = DateTime.parse(dateString);
 
     // 원하는 형식으로 날짜 포맷
-    String formattedDate = DateFormat('yy.MM').format(date);
+    String formattedDate = DateFormat('yyyy.MM').format(date);
 
     return formattedDate;
   }
@@ -500,10 +500,11 @@ class Etc{
   ///MetrologyInspection 계측 검사 결과 불필요한 String 자르기
   static String removeAfterSpace(String input) {
     // 문자열에서 첫 번째 띄워쓰기의 인덱스를 찾습니다.
-    int spaceIndex = input.indexOf(' ');
+    String replaceText = input.replaceAll('(', ' ');
+    int spaceIndex = replaceText.indexOf(' ');
 
     // 띄워쓰기 이후의 부분을 제거하고 결과를 반환합니다.
-    return spaceIndex != -1 ? input.substring(0, spaceIndex) : input;
+    return spaceIndex != -1 ? input.substring(0, spaceIndex) : replaceText;
   }
 
   static Color calculateBloodStatusColor(BloodDataType type, double value,
@@ -710,6 +711,21 @@ class Etc{
       }
   }
 
+  /// 차트 x축 갯수에 따른 bar차트 폭 비율 리턴
+  static double calculateChartWidthRatio(int length) {
+    switch (length) {
+      case 1:
+        return 0.2;
+      case 2:
+        return 0.2;
+      case 3:
+        return 0.25;
+      case 4:
+        return 0.3;
+      default:
+        return 0.35;
+    }
+  }
 }
 
 class NoSpaceInputFormatter extends TextInputFormatter {

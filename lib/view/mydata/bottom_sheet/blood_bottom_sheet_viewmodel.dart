@@ -4,12 +4,11 @@ import 'package:ghealth_app/data/models/health_instrumentation_response.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/etc.dart';
 
-import '../../data/models/blood_series_chart_data.dart';
-import '../../data/models/health_screening_data.dart';
-import '../../main.dart';
-import '../../utils/colors.dart';
-import '../../utils/constants.dart';
-import '../../utils/my_exception.dart';
+import '../../../data/models/blood_series_chart_data.dart';
+import '../../../main.dart';
+import '../../../utils/colors.dart';
+import '../../../utils/constants.dart';
+import '../../../utils/my_exception.dart';
 
 
 class BloodBottomSheetViewModel extends ChangeNotifier {
@@ -25,7 +24,6 @@ class BloodBottomSheetViewModel extends ChangeNotifier {
       await _postRepository.getHealthBloodDio(bloodDataType.label);
 
       if(response.status.code == '200'){
-        // 데이터 변환
         List<BloodSeriesChartData> tempDataList = response.data.map((data) {
           List<String> values = (data.dataValue).split(' ');
           double y1 = double.parse(values[0]);
@@ -38,12 +36,15 @@ class BloodBottomSheetViewModel extends ChangeNotifier {
           );
         }).toList();
 
+        /// 혈액 검사 데이터가 6개 이상일떄
+        /// if.최대 5개까지 if.최근 검사 데이터
+        ///
+        /// 1~5개까지 그대로 Return
         if(tempDataList.length>5){
           _defaultDataList = List.of(tempDataList.reversed.toList()
               .sublist(0, 5).reversed.toList());
-
         } else {
-          _defaultDataList = List.of(_defaultDataList);
+          _defaultDataList = List.of(tempDataList);
         }
         return _defaultDataList;
       }
@@ -58,8 +59,4 @@ class BloodBottomSheetViewModel extends ChangeNotifier {
       throw Exception(error);
     }
   }
-
-  void convertDataAndPopulateList(List<HealthScreeningData> dataList, ScreeningsDataType dataType) {
-
-    }
 }

@@ -4,14 +4,14 @@ import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 import 'package:provider/provider.dart';
 
-import '../../data/models/column_series_chart_data.dart';
-import '../../data/models/default_series_chart_data.dart';
-import '../../data/models/health_screening_data.dart';
-import '../../utils/colors.dart';
-import '../../utils/constants.dart';
-import '../../widgets/chart/column_series_chart.dart';
-import '../../widgets/chart/default_series_chart.dart';
-import '../../widgets/frame.dart';
+import '../../../data/models/column_series_chart_data.dart';
+import '../../../data/models/default_series_chart_data.dart';
+import '../../../data/models/health_screening_data.dart';
+import '../../../utils/colors.dart';
+import '../../../utils/constants.dart';
+import '../../../widgets/chart/column_series_chart.dart';
+import '../../../widgets/chart/default_series_chart.dart';
+import '../../../widgets/frame.dart';
 import 'mydata_bottom_sheet_viewmodel.dart';
 
 /// 마이데이터 건강 검진 결과를 표시합니다.

@@ -3,9 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:ghealth_app/utils/colors.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
-/// 건강검진 결과 안내
-class HealthCheckUpResultWidget extends StatelessWidget {
-  const HealthCheckUpResultWidget(
+/// 건강검진 종합 소견
+class HealthCheckUpComprehensiveWidget extends StatelessWidget {
+  const HealthCheckUpComprehensiveWidget(
       {super.key,
       required this.comprehensiveOpinionText,
       required this.lifestyleManagementText,
@@ -36,8 +36,7 @@ class HealthCheckUpResultWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Container(
-          height: 200,
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
             border: Border.all(color: Colors.greenAccent, width: 2),
@@ -68,7 +67,8 @@ class HealthCheckUpResultWidget extends StatelessWidget {
                 ],
               ),
               Container(
-                height: 45,
+                padding: const EdgeInsets.all(12.0),
+                margin: const EdgeInsets.symmetric(vertical: 10.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   color: Colors.green,
@@ -77,6 +77,8 @@ class HealthCheckUpResultWidget extends StatelessWidget {
                   child: Frame.myText(
                       text: comprehensiveOpinionText,
                       color: Colors.white,
+                      softWrap: true,
+                      maxLinesCount: 7,
                       fontWeight: FontWeight.w600,
                       fontSize: 1.3),
                 ),

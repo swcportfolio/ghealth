@@ -4,10 +4,12 @@ import 'package:gap/gap.dart';
 import '../../data/models/mydata_predict_data.dart';
 import '../../widgets/frame.dart';
 
-class AiDiseasePredictionResults extends StatelessWidget {
-  const AiDiseasePredictionResults({super.key, required this.mydataPredict});
+/// 마이데이터 AI질환 예측 결과 Widget
+class AiDiseasePredictionResultWidget extends StatelessWidget {
+  const AiDiseasePredictionResultWidget({super.key, required this.mydataPredict});
 
-  final MyDataPredictData? mydataPredict;
+  /// AI질환 예측결과 데이터 객체
+  final MyDataAIPredictData? mydataPredict;
 
   @override
   Widget build(BuildContext context) {
@@ -45,17 +47,20 @@ class AiDiseasePredictionResults extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   buildPredictionItem('관절',
+                      mydataPredict!.bone == '-'? Colors.grey :
                       mydataPredict!.bone == '0' || mydataPredict!.bone == '' || mydataPredict!.bone == '-'
                           ? Colors.greenAccent
                           : Colors.redAccent),
                   const Gap(10),
                   buildPredictionItem('당뇨병',
-                      mydataPredict!.diabetes == '0' || mydataPredict!.diabetes == '' || mydataPredict!.bone == '-'
+                      mydataPredict!.diabetes == '-'? Colors.grey :
+                      mydataPredict!.diabetes == '0' || mydataPredict!.diabetes == '' || mydataPredict!.diabetes == '-'
                           ? Colors.greenAccent
                           : Colors.redAccent),
                   const Gap(10),
                   buildPredictionItem('눈건강',
-                      mydataPredict!.eye == '0' ||  mydataPredict!.eye == '' || mydataPredict!.bone == '-'
+                      mydataPredict!.eye == '-'? Colors.grey :
+                      mydataPredict!.eye == '0' ||  mydataPredict!.eye == '' || mydataPredict!.eye == '-'
                           ? Colors.greenAccent
                           : Colors.redAccent),
                 ],
@@ -65,12 +70,14 @@ class AiDiseasePredictionResults extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   buildPredictionItem('고혈압',
-                      mydataPredict!.highpress == '0' || mydataPredict!.highpress == '' || mydataPredict!.bone == '-'
+                      mydataPredict!.highpress == '-'? Colors.grey :
+                      mydataPredict!.highpress == '0' || mydataPredict!.highpress == '' || mydataPredict!.highpress == '-'
                           ? Colors.greenAccent
                           : Colors.redAccent),
                   const Gap(10),
                   buildPredictionItem('면역',
-                      mydataPredict!.immune == '0' ||  mydataPredict!.immune == '' || mydataPredict!.bone == '-'
+                      mydataPredict!.immune == '-'? Colors.grey :
+                      mydataPredict!.immune == '0' ||  mydataPredict!.immune == '' || mydataPredict!.immune == '-'
                           ? Colors.greenAccent
                           : Colors.redAccent),
                 ],

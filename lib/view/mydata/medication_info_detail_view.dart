@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/models/authorization.dart';
 import '../../main.dart';
 import '../../utils/colors.dart';
+import '../../utils/etc.dart';
 import '../../widgets/frame.dart';
 import '../../widgets/horizontal_dashed_line.dart';
 import '../../widgets/list_item/prescription_list_item.dart';
+import '../login/login_view.dart';
 import 'medication_info_detail_viewmodel.dart';
 
 /// 처방이력- 투약정보 더보기
@@ -30,6 +33,15 @@ class _MedicationInfoDetailViewState extends State<MedicationInfoDetailView> {
 
   @override
   Widget build(BuildContext context) {
+
+    /// AccessToken 확인
+    Authorization().checkAuthToken().then((result) {
+      if(!result){
+        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        Frame.doPagePush(context, const LoginView());
+      }
+    });
+
     return Scaffold(
       backgroundColor: metrologyInspectionBgColor,
       appBar: const CustomAppBar(

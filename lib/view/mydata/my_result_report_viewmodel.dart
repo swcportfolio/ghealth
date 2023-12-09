@@ -1,12 +1,10 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:ghealth_app/data/models/authorization.dart';
+
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/utils/my_exception.dart';
-import 'package:ghealth_app/view/join/login_view.dart';
-import 'package:ghealth_app/widgets/frame.dart';
 
 import '../../data/models/blood_test.dart';
 import '../../data/models/medication_Info_data.dart';
@@ -15,17 +13,26 @@ import '../../data/models/mydata_predict_data.dart';
 import '../../data/models/summary_response.dart';
 import '../../main.dart';
 
-class MyHealthReportViewModel extends ChangeNotifier {
-  MyHealthReportViewModel(this.context);
+class MyDataMainViewModel extends ChangeNotifier {
+  MyDataMainViewModel(this.context);
   late BuildContext context;
 
   final _postRepository = PostRepository();
+
+  /// 계측 검사 결과 객체
+  /// 시력, 청력, 혈압, 허리둘레, 체질량지수 등등
   final _metrologyInspection = MetrologyInspection();
+
+  /// 혈액검사 결과 객체
   final _bloodTest = BloodTest();
 
+  /// 마이데이터(나의 건강정보 요약)
   late SummaryData? _summaryData;
-  late  MyDataPredictData? _mydataPredict;
 
+  /// AI질환 예측 검사 결과 데이터
+  late  MyDataAIPredictData? _mydataPredict;
+
+  /// 약 처방 리스트
   late List<MedicationInfoData>? _medicationInfoList = [];
 
   /// 건강검진 결과 안내
@@ -39,17 +46,18 @@ class MyHealthReportViewModel extends ChangeNotifier {
   /// [healthScreeningList]중에 [dataName]이 "종합소견_생활습관관리"의
   /// dataValue 값
   ///
-  /// ex) dataValue": "위험음주상태입니다. 절주 또는 금주가 필요합니다.신체활동량이 부족합니다. 운동을 생활화하십시오."
+  /// ex) dataValue": "위험음주상태입니다. 절주 또는 금주가 필요합니다.신체활동량이 부족, 운동을 생활화하십시오."
   String _lifestyleManagementText = '';
 
-  /// 검진날짜
+  /// mydata 검진날짜
   late String _issuedDate = '';
 
   SummaryData? get summaryData => _summaryData;
-  MetrologyInspection get metrologyInspection => _metrologyInspection;
   BloodTest get bloodTest => _bloodTest;
+  MetrologyInspection get metrologyInspection => _metrologyInspection;
+  MyDataAIPredictData? get mydataPredict => _mydataPredict;
   List<MedicationInfoData>? get medicationInfoList => _medicationInfoList;
-  MyDataPredictData? get mydataPredict => _mydataPredict;
+
 
   /// 건강검진 결과 안내 propertys
   String get comprehensiveOpinionText => _comprehensiveOpinionText;
@@ -57,6 +65,7 @@ class MyHealthReportViewModel extends ChangeNotifier {
   String get issuedDate => _issuedDate;
 
 
+  /// 마이데이터 전체 데이터 조회
   Future<SummaryData?> handleHealthSummary() async {
     try{
       SummaryResponse response = await _postRepository.getHealthSummaryDio();
@@ -78,7 +87,7 @@ class MyHealthReportViewModel extends ChangeNotifier {
   }
 
 
-  /// 위젯별 데이터 파싱
+  /// [_summaryData] 위젯별 데이터 파싱
   dataParsingByWidget() {
     parsingHealthScreeningList();
     parsingMetrologyInspection();
@@ -92,8 +101,8 @@ class MyHealthReportViewModel extends ChangeNotifier {
   }
 
 
-  /// 마이데이터 건강 검진 결과 안내가 어떻게 없이 오는 정확하게 알아야
-  /// Empty 처리를 할 수 있다.
+  /// 마이데이터 건강검진 종합소견 데이터 파싱
+  /// "종합소견_판정", "종합소견_생활습관관리"에 해당되는 [dataName] 추출
   parsingHealthScreeningList() {
     if(_summaryData?.healthScreeningList != null) {
       for(var value in _summaryData!.healthScreeningList!){
@@ -108,12 +117,19 @@ class MyHealthReportViewModel extends ChangeNotifier {
     }
   }
 
+
+  /// [_summaryData]의 건강 검진 목록에서 계측 검사 데이터를 파싱하는 역할을 합니다.
+  /// 건강 검진 목록이 null이 아니라면, [_metrologyInspection] 객체를 사용하여
+  /// 데이터를 파싱하고 추가적인 사용을 위해 저장합니다.
   void parsingMetrologyInspection(){
     if(_summaryData?.healthScreeningList != null){
       _metrologyInspection.parseFromHealthScreeningList(_summaryData!.healthScreeningList!);
     }
   }
 
+
+  /// [_summaryData]의 건강 검진 목록에서 혈액 검사 데이터를 파싱하는 역할을 합니다.
+  /// 만약 건강 검진 목록이 null이 아니라면, [_bloodTest] 객체를 사용하여 데이터를 파싱하고 추가적인 사용을 위해 저장합니다.
   void parsingBloodTest(){
     if(_summaryData?.healthScreeningList != null){
       _bloodTest.parseFromHealthScreeningList(_summaryData!.healthScreeningList!);

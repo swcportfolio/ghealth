@@ -16,7 +16,8 @@ class VersionView extends StatelessWidget {
       body: Center(
         child: Frame.myText(
           text: '현재 앱 버전 ${Constants.appVersion}',
-          fontSize: 1.3
+          fontSize: 1.3,
+          color: Colors.grey
         ),
       ),
     );

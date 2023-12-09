@@ -2,11 +2,17 @@ import '../../utils/etc.dart';
 import 'health_screening_data.dart';
 
 class MetrologyInspection {
-  String _vision = '-';
+  String _visionOld = '-';
+  String _visionRight = '-';
+  String _visionLeft = '-';
+
+  String _hearingAbilityOld = '-';
+  String _hearingAbilityRight = '-';
+  String _hearingAbilityLeft = '-';
+
   String _bloodPressure= '-';
   String _weight= '-';
   String _height= '-';
-  String _hearingAbility = '-';
   String _waistCircumference = '-';
   String _bodyMassIndex = '-';
   String _issuedDate = '-';
@@ -14,8 +20,23 @@ class MetrologyInspection {
   String? get issuedDate => _issuedDate;
   set issuedDate(String? value) => _issuedDate = value!;
 
-  String? get vision => _vision;
-  set vision(String? value) => _vision = Etc.removeAfterSpace(value!);
+  String? get visionOld => _visionOld;
+  set visionOld(String? value) => _visionOld = Etc.removeAfterSpace(value!);
+
+  String? get visionRight => _visionRight;
+  set visionRight(String? value) => _visionRight = Etc.removeAfterSpace(value!);
+
+  String? get visionLeft => _visionLeft;
+  set visionLeft(String? value) => _visionLeft = Etc.removeAfterSpace(value!);
+
+  String? get hearingAbilityOld => _hearingAbilityOld;
+  set hearingAbilityOld(String? value) => _hearingAbilityOld = Etc.removeAfterSpace(value!);
+
+  String? get hearingAbilityRight => _hearingAbilityRight;
+  set hearingAbilityRight(String? value) => _hearingAbilityRight = Etc.removeAfterSpace(value!);
+
+  String? get hearingAbilityLeft => _hearingAbilityLeft;
+  set hearingAbilityLeft(String? value) => _hearingAbilityLeft = Etc.removeAfterSpace(value!);
 
   String? get bloodPressure => _bloodPressure;
   set bloodPressure(String? value) => _bloodPressure = Etc.removeAfterSpace(value!);
@@ -25,9 +46,6 @@ class MetrologyInspection {
 
   String? get height => _height;
   set height(String? value) => _height = Etc.removeAfterSpace(value!);
-
-  String? get hearingAbility => _hearingAbility;
-  set hearingAbility(String? value) => _hearingAbility = Etc.removeAfterSpace(value!);
 
   String? get waistCircumference => _waistCircumference;
   set waistCircumference(String? value) => _waistCircumference = Etc.removeAfterSpace(value!);
@@ -42,9 +60,27 @@ class MetrologyInspection {
 
       switch (dataName) {
         case '계측검사_시력':
-          vision = dataValue;
+          visionOld = dataValue;
           issuedDate = Etc.defaultDateFormat(value.issuedDate);
           break;
+        case '계측검사_시력_우':
+          visionRight = dataValue;
+          issuedDate = Etc.defaultDateFormat(value.issuedDate);
+          break;
+        case '계측검사_시력_좌':
+          visionLeft = dataValue;
+          issuedDate = Etc.defaultDateFormat(value.issuedDate);
+          break;
+        case '계측검사_청력':
+          hearingAbilityOld = dataValue;
+          break;
+        case '계측검사_청력_우':
+          hearingAbilityRight = dataValue;
+          break;
+        case '계측검사_청력_좌':
+          hearingAbilityLeft = dataValue;
+          break;
+
         case '계측검사_혈압':
           bloodPressure = dataValue;
           break;
@@ -53,9 +89,6 @@ class MetrologyInspection {
           break;
         case '계측검사_키':
           height = dataValue;
-          break;
-        case '계측검사_청력':
-          hearingAbility = dataValue;
           break;
         case '계측검사_허리둘레':
           waistCircumference = dataValue;
@@ -70,8 +103,4 @@ class MetrologyInspection {
     }
   }
 
-  @override
-  String toString() {
-    return 'MetrologyInspection{_vision: $_vision, _bloodPressure: $_bloodPressure, _weight: $_weight, _height: $_height, _hearingAbility: $_hearingAbility, _waistCircumference: $_waistCircumference, _bodyMassIndex: $_bodyMassIndex}';
-  }
 }

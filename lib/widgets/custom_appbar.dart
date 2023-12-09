@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
-import 'package:ghealth_app/view/point/point_management_view.dart';
 import 'package:ghealth_app/view/setting/setting_view.dart';
 import 'package:ghealth_app/widgets/dialog.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
-import '../view/setting/my_info_view.dart';
 
 /// 커스텀된 AppBar를 나타내는 위젯 클래스.
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/services/health_service.dart';
-import 'package:ghealth_app/view/wearable/health_viewmodel.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,42 +10,51 @@ import '../../data/models/picker_data.dart';
 import '../../main.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
+import '../../utils/etc.dart';
 import '../../widgets/custom_picker.dart';
 import '../../widgets/frame.dart';
 import '../../widgets/health_circular_chart.dart';
+import '../login/login_view.dart';
 
 enum HealthDataType  {
   sleep,
   step,
 }
 
-class HealthView extends StatefulWidget {
-  const HealthView({super.key});
+class WearableMainView extends StatefulWidget {
+  const WearableMainView({super.key});
 
   @override
-  State<HealthView> createState() => _HealthViewState();
+  State<WearableMainView> createState() => _WearableMainViewState();
 }
 
-class _HealthViewState extends State<HealthView> {
-  late HealthViewModel _viewModel;
+class _WearableMainViewState extends State<WearableMainView> {
 
+  /// 목표 수면
+  late String targetSleep;
 
-
-  /// 건강데이터 메인화면 로드시 한번만 전송하게 된다.
-  bool isRunOnce = true;
-
-
-  String targetSleep = Authorization().targetSleep;
-  String targetStep = Authorization().targetStep;
+  /// 목표 걸음
+  late String targetStep;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _viewModel = HealthViewModel(context);
+
+    targetSleep = Authorization().targetSleep;
+    targetStep = Authorization().targetStep;
   }
+
   @override
   Widget build(BuildContext context) {
+
+    /// AccessToken 확인
+    Authorization().checkAuthToken().then((result) {
+      if(!result){
+        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        Frame.doPagePush(context, const LoginView());
+      }
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: FutureBuilder(
@@ -75,7 +83,7 @@ class _HealthViewState extends State<HealthView> {
             return  SingleChildScrollView(
               child: Column(
                 children: [
-                  buildAppTopMessage(),
+                  buildTopPhraseWidget(),
 
                   /// 수면 시간 진행 위젯
                    HealthCircularChart(
@@ -141,11 +149,6 @@ class _HealthViewState extends State<HealthView> {
       }
       logger.i(getPickerData.toString());
     });
-  }
-
-  void setStringData(String key , String data) async{
-    var pref = await SharedPreferences.getInstance();
-    pref.setString(key,data);
   }
 
   /// 최근 심박수 표시 박스 위젯
@@ -248,7 +251,7 @@ class _HealthViewState extends State<HealthView> {
   }
 
   /// 앱 상단 메시지 표시 위젯
- Widget buildAppTopMessage() {
+  Widget buildTopPhraseWidget() {
     return Padding(
       padding: const EdgeInsets.only(top: 30, left: 20),
       child: Column(
@@ -257,7 +260,7 @@ class _HealthViewState extends State<HealthView> {
           Row(
             children: [
               Frame.myText(
-                  text: '홍길동님의 ',
+                  text: '${Authorization().userName}님의 ',
                   fontSize: 1.7,
                   fontWeight: FontWeight.bold
               ),
@@ -277,6 +280,12 @@ class _HealthViewState extends State<HealthView> {
         ],
       ),
     );
+  }
+
+  /// SharedPreferences local data save
+  void setStringData(String key , String data) async{
+    var pref = await SharedPreferences.getInstance();
+    pref.setString(key,data);
   }
 }
 

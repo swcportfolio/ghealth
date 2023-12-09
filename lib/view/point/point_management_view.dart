@@ -4,8 +4,11 @@ import 'package:ghealth_app/data/models/point_hisstory.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
+import '../../data/models/authorization.dart';
 import '../../utils/colors.dart';
+import '../../utils/etc.dart';
 import '../../widgets/horizontal_dashed_line.dart';
+import '../login/login_view.dart';
 
 /// 포인트 관리 화면
 class PointManagementView extends StatefulWidget {
@@ -31,6 +34,15 @@ class _PointManagementViewState extends State<PointManagementView> {
 
   @override
   Widget build(BuildContext context) {
+
+    /// AccessToken 확인
+    Authorization().checkAuthToken().then((result) {
+      if(!result){
+        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        Frame.doPagePush(context, const LoginView());
+      }
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: const CustomAppBar(

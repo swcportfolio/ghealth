@@ -5,8 +5,9 @@ import '../../data/models/metrology_inspection.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
 import '../../widgets/frame.dart';
-import 'mydata_bottom_sheet_view.dart';
+import 'bottom_sheet/mydata_bottom_sheet_view.dart';
 
+/// 계측 검사 위젯
 class MetrologyInspectionWidget extends StatefulWidget {
   const MetrologyInspectionWidget(
       {super.key, required this.metrologyInspection});
@@ -73,7 +74,12 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
 
           /// 각 항목 Positioned Container
           buildMeasurementResultPositionedItem(
-              40, 80, null, null, '${widget.metrologyInspection.vision}',
+              40, 80, null, null,
+              '${widget.metrologyInspection.visionOld == '-'
+                  ? (widget.metrologyInspection.visionLeft == '-'
+                    ? '-'
+                    : '${widget.metrologyInspection.visionLeft}/${widget.metrologyInspection.visionRight}')
+                  : widget.metrologyInspection.visionOld}',
               '시력(좌/우)',
               ScreeningsDataType.vision
           ),
@@ -94,7 +100,11 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
           ),
           buildMeasurementResultPositionedItem(
               null, 83, 50, null,
-              '${widget.metrologyInspection.hearingAbility}',
+                  '${widget.metrologyInspection.hearingAbilityOld == '-'
+                  ? (widget.metrologyInspection.hearingAbilityLeft == '-'
+                  ? '-'
+                  : '${widget.metrologyInspection.hearingAbilityLeft}/${widget.metrologyInspection.hearingAbilityRight}')
+                  : widget.metrologyInspection.hearingAbilityOld}',
               '청력(좌/우)',
               ScreeningsDataType.hearingAbility
           ),

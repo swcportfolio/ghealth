@@ -15,14 +15,18 @@ class AttendanceChecker {
     attendanceBox = await Hive.openBox<AttendanceData>('attendance_data');
 
     final now = DateTime.now();
-    final nowDate = DateTime(now.year, now.month, now.day);
+    final nowDate = DateTime(now.year, now.month, (now.day));
 
     final specificDateAttendance = attendanceBox.values
         .where((attendance) => attendance.date.isAtSameMomentAs(nowDate))
         .toList();
 
+    // final attendanceDay = AttendanceData(date: nowDate);
+    // attendanceBox.add(attendanceDay);
+
     if (specificDateAttendance.isNotEmpty) {
       logger.i('=> 출석이 완료 되었습니다.');
+      logger.i('=> 마지막 출석 날짜: ${specificDateAttendance[0].date}');
     } else {
       logger.i('=> 금일 날짜에 출석되어 있지 않습니다.');
 
@@ -73,7 +77,7 @@ class AttendanceChecker {
     logger.i('=>$startDate / $endDate');
     List<DateTime> dates = [];
     // start부터 end까지의 날짜를 추가
-    for (DateTime date = startDate.add(const Duration(days: 1)) ; date.isBefore(endDate) ; date = date.add(const Duration(days: 1))) {
+    for (DateTime date = startDate.add(const Duration(days: 1)) ; date.isBefore(endDate) || date.isAtSameMomentAs(endDate); date = date.add(const Duration(days: 1))) {
       dates.add(date);
     }
 

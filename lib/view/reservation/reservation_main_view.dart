@@ -3,30 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/view/reservation/reservation_history_view.dart';
-import 'package:ghealth_app/view/reservation/reservation_view_model.dart';
+import 'package:ghealth_app/view/reservation/reservation_viewmodel.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../data/models/authorization.dart';
 import '../../utils/colors.dart';
 import '../../widgets/dialog.dart';
+import '../login/login_view.dart';
 
 /// 예약 화면
-/// TODO: 예약 취소 버튼 활성화에 대한 예약상태값을 알아야된다.
-/// TODO: 예약이 완료 되면 화면 초기화를 해야된다.
-class ReservationView extends StatefulWidget {
-  const ReservationView({super.key});
+class ReservationMainView extends StatefulWidget {
+  const ReservationMainView({super.key});
 
   @override
-  State<ReservationView> createState() => _ReservationViewState();
+  State<ReservationMainView> createState() => _ReservationMainViewState();
 }
 
-class _ReservationViewState extends State<ReservationView> {
+class _ReservationMainViewState extends State<ReservationMainView> {
   late ReservationViewModel _viewModel;
 
-  late List<bool> isSelected;
-  int? selectedIndex = 0;
   late Size size;
 
   @override
@@ -34,10 +32,20 @@ class _ReservationViewState extends State<ReservationView> {
     super.initState();
     _viewModel = ReservationViewModel(context);
   }
+
   @override
   Widget build(BuildContext context) {
-    //_reservationTime = Provider.of<ReservationTime>(context, listen: false);
+
+    /// AccessToken 확인
+    Authorization().checkAuthToken().then((result) {
+      if(!result){
+        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        Frame.doPagePush(context, const LoginView());
+      }
+    });
+
     size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -48,13 +56,13 @@ class _ReservationViewState extends State<ReservationView> {
           physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children:
+            [
               buildTitle(),
 
               buildMyCurrentReservation(),
 
               buildCalendar(context),
-              const Gap(30),
 
               buildSelectTime(),
 
@@ -83,7 +91,7 @@ class _ReservationViewState extends State<ReservationView> {
   Widget buildMyCurrentReservation(){
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20.0),
       decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('images/reservation_background_image.png'),
@@ -91,7 +99,7 @@ class _ReservationViewState extends State<ReservationView> {
         ),
       ),
       child: Column(
-        children: <Widget>[
+        children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -279,7 +287,7 @@ class _ReservationViewState extends State<ReservationView> {
   /// 예약 달력 위젯
   Widget buildCalendar(BuildContext context){
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 30, 20, 0),
+      margin: const EdgeInsets.fromLTRB(20, 30, 20, 30),
       child: Column(
         children: [
           Row(
@@ -432,6 +440,7 @@ class _ReservationViewState extends State<ReservationView> {
   }
 
   /// 예약 버튼 위젯
+  ///
   Widget buildReservationBtn(){
     return Consumer<ReservationViewModel>(
       builder: (BuildContext context, value, Widget? child) {

@@ -4,11 +4,9 @@ import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/view/reservation/reservation_history_viewmodel.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 import 'package:ghealth_app/widgets/frame.dart';
-import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/models/reservation_data.dart';
-import '../../utils/colors.dart';
 import '../../widgets/dialog.dart';
 
 
@@ -49,18 +47,14 @@ class _ReservationHistoryViewState extends State<ReservationHistoryView> {
                   child: value.reservationDataList.isEmpty
                       ? buildEmptyReservation()
                       :
-                  ListView.separated(
+                  ListView.builder(
                     controller: value.scrollController,
                     physics: const BouncingScrollPhysics(),
                     itemCount: value.reservationDataList.length,
                     itemBuilder: (BuildContext context, int index)
                     {
                       return ReservedCardItem(
-                          reservationData: value.reservationDataList[index]);
-                    },
-                    separatorBuilder: (BuildContext context, int index)
-                    {
-                      return const HorizontalDottedLine(mWidth: double.infinity);
+                          reservationData: value.reservationDataList[index], value: value,);
                     },
                   ),
                 );
@@ -95,129 +89,145 @@ class _ReservationHistoryViewState extends State<ReservationHistoryView> {
 
 /// 예약내역 리스트 아이템
 class ReservedCardItem extends StatelessWidget {
-  const ReservedCardItem({super.key, required this.reservationData});
+  const ReservedCardItem({
+    super.key,
+    required this.reservationData,
+    required this.value
+  });
+
   final ReservationData reservationData;
+  final ReservationHistoryViewModel value;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 140,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Column(
-          mainAxisAlignment:
-          MainAxisAlignment.start,
-          children: [
-            /// 타이틀, 예약 취소 버튼
-            Row(
-              mainAxisAlignment:
-              MainAxisAlignment.spaceBetween,
+      padding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+            image: AssetImage('images/reservation_background_image.png'),
+            fit: BoxFit.fill
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment:
+        MainAxisAlignment.start,
+        children: [
+          /// 타이틀, 예약 취소 버튼
+          Row(
+            children: [
+              const Gap(5),
+
+              Frame.myText(
+                text: '나의 예약 현황',
+                fontSize: 1.4,
+                fontWeight: FontWeight.w500,
+              ),
+            ],
+          ),
+          const Gap(15),
+          Etc.solidLine(context),
+
+          /// 예약 날짜, 시간
+          /// 예약장소
+          Padding(
+            padding: const EdgeInsets.only(left:10, top:15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Frame.myText(
-                  text: '건강관리소 방문 예약',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 1.5,
-                  color: mainColor,
+                    text: '방문 장소',
+                    fontSize: 1.1
                 ),
-                Visibility(
-                  visible: Etc.possibleToCancel(reservationData.reservationStatus!),
-                  child: Frame.myText(
-                    text: '예약 취소',
-                    fontSize: 1.0,
-                    color: Colors.redAccent,
-                  ),
+                const Gap(10),
+                Frame.myText(
+                  text: '동구라이프로그 건강관리소',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 1.1,
                 ),
               ],
             ),
-            const Gap(15),
+          ),
 
-            /// 예약 날짜, 시간
-            Padding(
-              padding:
-              const EdgeInsets.only(bottom: 10),
+          /// 예약 날짜, 시간
+          Padding(
+            padding: const EdgeInsets.only(left:10, top:10, bottom: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Frame.myText(
+                    text: '예약 일시',
+                    fontSize: 1.1
+                ),
+                const Gap(10),
+                Frame.myText(
+                  text: '${reservationData.reservationDate} / '
+                      '${reservationData.reservationTime}',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 1.1,
+                ),
+              ],
+            ),
+          ),
+
+          /// 예약 상태
+          Padding(
+            padding: const EdgeInsets.only(left:10, bottom: 0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Frame.myText(
+                    text: '예약 상태',
+                    fontSize: 1.1
+                ),
+                const Gap(10),
+
+                Frame.myText(
+                  text: '${reservationData.reservationStatus}',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 1.1,
+                ),
+              ],
+            ),
+          ),
+          const Gap(15),
+
+          Etc.solidLine(context),
+
+          Visibility(
+            visible: Etc.possibleToCancel(reservationData.reservationStatus!),
+            child: InkWell(
+              onTap: () => {
+                CustomDialog.showCancelReservationDialog(
+                    mainContext: context,
+                    reservationDate: reservationData.reservationDate!,
+                    reservationTime: reservationData.reservationTime!,
+                    cancelReservationFunction: () =>
+                        value.handleCancelReservation(int.parse(
+                            reservationData.reservationIdx.toString()))
+                )
+              },
               child: Row(
-                mainAxisAlignment:
-                MainAxisAlignment.start,
-                crossAxisAlignment:
-                CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Icon(
-                      Icons.access_time_outlined,
-                      color: mainColor),
-                  const Gap(10),
-                  Frame.myText(
-                    text:
-                    '${reservationData.reservationDate} / '
-                        '${reservationData.reservationTime}',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 1.1,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: Frame.myText(
+                      text: '예약 취소',
+                      fontSize: 0.9,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
             ),
-
-            /// 예약 상태
-            Padding(
-              padding:
-              const EdgeInsets.only(bottom: 20),
-              child: Row(
-                mainAxisAlignment:
-                MainAxisAlignment.start,
-                crossAxisAlignment:
-                CrossAxisAlignment.center,
-                children: [
-                  const Icon(
-                      Icons.edit_calendar_outlined,
-                      color: mainColor),
-                  const Gap(10),
-                  Row(
-                    children: [
-                      Frame.myText(
-                        text: '예약 상태: ',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 1.1,
-                      ),
-                      Frame.myText(
-                        text: '${reservationData.reservationStatus}',
-                        fontWeight: FontWeight.w600,
-                        fontSize: 1.1,
-                        color: Colors.redAccent,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            // Padding(
-            //   padding: const EdgeInsets.only(top: 20, bottom: 10),
-            //   child: reservationStatusBtn('예약 취소', const Color(0xFFececec), context),
-            // )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
-
-
-  Widget reservationStatusBtn(String text, Color bgColor, BuildContext context){
-    return InkWell(
-      onTap: ()=>{},
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 7),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all( width: 1.5, color: Colors.grey)
-
-        ),
-        child: Frame.myText(
-          text: text,
-          fontSize: 1.1,
-          color: Colors.grey.shade700
-        ),
-      ),
-    );
-  }
-
 }
 

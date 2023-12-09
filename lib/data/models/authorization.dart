@@ -1,10 +1,16 @@
 
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:ghealth_app/data/models/reservation_default_response.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
+import '../../services/attendance_checker.dart';
+import '../../services/health_service.dart';
+import '../../widgets/dialog.dart';
 
 /// Attributes to store user authorization information
 class Authorization{
@@ -42,14 +48,15 @@ class Authorization{
     gender = newGender;
   }
 
-  // Authorization의 단일 인스턴스를 제공하기 위한 팩토리 메서드
+  /// Authorization의 단일 인스턴스를 제공하기 위한 팩토리 메서드
   Authorization.internal() {
     init();
   }
-  // 권한 값을 초기화하는 메서드
+
+  /// 권한 값을 초기화하는 메서드
   clean()=> init();
 
-  // 권한 값을 초기화하는 메서드
+  /// 권한 값을 초기화하는 메서드
   init() {
     userID = '';
     userName = '';
@@ -58,6 +65,7 @@ class Authorization{
     targetSleep = '0';
     targetStep = '0';
   }
+
 
   /// 로컬 데이터 저장
   void setStringData() async {
@@ -70,12 +78,15 @@ class Authorization{
     pref.setString('targetStep',targetStep);
   }
 
+  /// SharedPreferences clear
   void clearSetStringData() async {
     var pref = await SharedPreferences.getInstance();
     pref.clear();
   }
 
+
   /// Authorization 토큰 유효성 체크
+  /// 서버에서 발급된 토큰은 30일간 유효하다.
   Future<bool> checkAuthToken() async {
    try{
      DefaultResponse response = await PostRepository().checkAuthDio();
@@ -90,5 +101,24 @@ class Authorization{
      logger.e('=> CheckAuthorizationToken: $dioError');
      return false;
    }
+  }
+
+
+  /// 로그인 상태일때, HealthService 퍼미션 수락시
+  /// 로컬에 저장된 출석데이터를 이용하여 수집된 건강데이터를 전송한다.
+  Future<void> fetchDataIfLoggedIn(BuildContext context) async {
+    if (Authorization().token.isNotEmpty) {
+      bool permissionRequired = await HealthService().requestPermission();
+
+      if (permissionRequired) {
+        AttendanceChecker().checkAttendance(); // 출석 기능
+      } else {
+        CustomDialog.showMyDialog(
+          title: '헬스데이터',
+          content: '권한및 데이터 접근 퍼미션이\n 미 허용되었습니다.',
+          mainContext: context,
+        );
+      }
+    }
   }
 }

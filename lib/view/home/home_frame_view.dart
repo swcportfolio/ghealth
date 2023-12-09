@@ -1,21 +1,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
-import 'package:ghealth_app/services/attendance_checker.dart';
 import 'package:ghealth_app/view/home/home_view.dart';
+import 'package:ghealth_app/view/lifelog/lifelog_main_view.dart';
+import 'package:ghealth_app/view/wearable/wearable_main_view.dart';
 import 'package:ghealth_app/widgets/dialog.dart';
-import 'package:hive/hive.dart';
 
-import '../../data/models/attendance_data.dart';
 import '../../main.dart';
-import '../../services/health_service.dart';
 import '../../utils/colors.dart';
+import '../../utils/etc.dart';
 import '../../widgets/custom_appbar.dart';
-import '../mydata/my_health_report_view.dart';
-import '../report/my_health_record_view.dart';
-import '../reservation/reservation_view.dart';
-import '../wearable/health_view.dart';
+import '../../widgets/frame.dart';
+import '../login/login_view.dart';
+import '../mydata/mydata_main_view.dart';
+import '../reservation/reservation_main_view.dart';
 
+/// 홈 프레임 화면
+/// AppBar, Bottom Navigation, 출석 확인 으로 구성되어 있다.
 class HomeFrameView extends StatefulWidget {
   const HomeFrameView({super.key});
 
@@ -23,48 +24,57 @@ class HomeFrameView extends StatefulWidget {
   State<HomeFrameView> createState() => _HomeFramePageState();
 }
 
-class _HomeFramePageState extends State<HomeFrameView> {
-  /// 앱 출석 및 Health 데이터 전송을 위한 클래스
-  final attendanceChecker = AttendanceChecker();
+class _HomeFramePageState extends State<HomeFrameView> with WidgetsBindingObserver {
 
-  /// BottomNavigationBar selected location
+  /// BottomNavigationBar의 선택된 항목 인덱스
   int _selectedIndex = 0;
 
+  /// BottomNavigationBar 아이템 구성
   final List<Widget> _widgetOptions = <Widget>[
     const HomeView(),
-    const ReservationView(),
-    const MyHealthRecordView(),
-    const MyHealthReportView(),
-    const HealthView(),
+    const ReservationMainView(),
+    const LifeLogMainView(),
+    const MyDataMainView(),
+    const WearableMainView(),
   ];
+
   @override
   void initState() {
     super.initState();
-    //checkAttendance();
+    WidgetsBinding.instance.addObserver(this);
 
-    //로그인 상태일경우에만 Health 데이터를 가져온다.
-    if (Authorization().token.isNotEmpty) {
-      HealthService().requestPermission().then((required) {
-        if (required) {
-          attendanceChecker.checkAttendance();
-        } else {
-          CustomDialog.showMyDialog(
-            title: '헬스데이터',
-            content: '권한및 데이터 접근 퍼미션이\n 미 허용되었습니다.',
-            mainContext: context,
-          );
-        }
-      });
+    Authorization().fetchDataIfLoggedIn(context); // 출석 체크
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    /// 앱이 백그라운드에 있다가 다시 재개되었을때(하루, 이틀)
+    /// 이상 기간이 지나고 앱을 실행했을때 출석기능을 활성화하기위한 로직
+    ///
+    /// AccessToken 유효기간 체크
+    if(state == AppLifecycleState.resumed) {
+      /// 로그인 상태일경우에만 Health 데이터를 가져온다.
+      Authorization().fetchDataIfLoggedIn(context);
+
+      /// AccessToken 확인
+      if(Authorization().token.isNotEmpty){
+        Authorization().checkAuthToken().then((result) {
+          if(!result){
+            Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+            Frame.doPagePush(context, const LoginView());
+          }
+        });
+      }
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(
-          title: 'GHealth',
-        isIconBtn: true
-      ),
+      appBar: const CustomAppBar(title: 'GHealth', isIconBtn: true),
 
       body: _widgetOptions.elementAt(_selectedIndex),
 
@@ -124,10 +134,12 @@ class _HomeFramePageState extends State<HomeFrameView> {
         child: Image.asset(imagePath, height: iconHeight, width: iconWidth),
       ),
       label: label,
-
     );
   }
 
+  /// Handles item selection in the bottom navigation bar.
+  /// 홈화면을 제외한 나머지 기능들은 로그인이 필요하므로 token empty
+  /// check를 한다.
   void _onItemTapped(int index) {
     if(index > 0 && Authorization().token.isEmpty){
       logger.i('=> 로그인이 필요합니다.');

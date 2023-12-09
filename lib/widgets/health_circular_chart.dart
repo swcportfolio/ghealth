@@ -4,7 +4,7 @@ import 'package:ghealth_app/view/wearable/wearable_week_chart_view.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../utils/colors.dart';
-import '../view/wearable/health_view.dart';
+import '../view/wearable/wearable_main_view.dart';
 import 'frame.dart';
 
 class HealthCircularChart extends StatelessWidget {
@@ -99,7 +99,7 @@ class HealthCircularChart extends StatelessWidget {
                                 fontWeight: FontWeight.w600,
                                   color: type == HealthDataType.sleep
                                       ? mainColor
-                                      : Colors.orangeAccent
+                                      : defaultBlack
                               ),
 
                               Container(
@@ -133,7 +133,7 @@ class HealthCircularChart extends StatelessWidget {
                           pointColorMapper: (ChartData2 data, _) =>
                               type == HealthDataType.sleep
                                   ? mainColor
-                                  : Colors.orangeAccent,
+                                  : stepChartColor,
                           xValueMapper: (ChartData2 data, _) => data.x,
                           yValueMapper: (ChartData2 data, _) => data.y)
                     ]),

@@ -1,6 +1,6 @@
 
 /// 나의 건강검진 기록
-class MyDataPredictData {
+class MyDataAIPredictData {
   /// 관절건강 예측값(0:정상, 1:비정상)
   final String? bone;
 
@@ -16,16 +16,16 @@ class MyDataPredictData {
   /// 면역  예측값(0:정상, 1:비정상)
   final String? immune;
 
-  MyDataPredictData(
+  MyDataAIPredictData(
       {this.bone,
        this.diabetes,
        this.eye,
        this.highpress,
        this.immune});
 
-  factory MyDataPredictData.fromJson(Map<String, dynamic>? json) {
+  factory MyDataAIPredictData.fromJson(Map<String, dynamic>? json) {
     if(json == null){
-      return MyDataPredictData(
+      return MyDataAIPredictData(
         bone:  '-',
         diabetes:  '-',
         eye:  '-',
@@ -33,7 +33,7 @@ class MyDataPredictData {
         immune:  '-',
       );
     } else {
-      return MyDataPredictData(
+      return MyDataAIPredictData(
       bone: json['bone'] ?? '-',
       diabetes: json['diabetes'] ?? '-',
       eye: json['eye'] ?? '-',

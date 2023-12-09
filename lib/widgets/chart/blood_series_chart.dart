@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
+import 'package:ghealth_app/utils/etc.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/models/blood_series_chart_data.dart';
@@ -78,7 +79,7 @@ class BloodSeriesChart extends StatelessWidget {
           yValueMapper: (BloodSeriesChartData data, _) => data.y1,
           dataLabelMapper: (BloodSeriesChartData data, _) => data.y1.toString(),
           pointColorMapper: (BloodSeriesChartData data, _) => data.barColor,
-          width: 0.3, // 기본 폭
+          width: Etc.calculateChartWidthRatio(chartData.length), // 기본 폭
           dataLabelSettings:  const DataLabelSettings(
               labelAlignment: ChartDataLabelAlignment.outer,
               isVisible: true,

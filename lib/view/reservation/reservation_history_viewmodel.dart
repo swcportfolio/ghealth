@@ -7,9 +7,11 @@ import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/my_exception.dart';
 
 import '../../data/models/reservation_data.dart';
+import '../../data/models/reservation_default_response.dart';
 import '../../data/models/reservation_history_response.dart';
 import '../../main.dart';
 import '../../utils/etc.dart';
+import '../../widgets/dialog.dart';
 import '../indicator_page.dart';
 
 class ReservationHistoryViewModel extends ChangeNotifier {
@@ -59,6 +61,38 @@ class ReservationHistoryViewModel extends ChangeNotifier {
      throw Exception(error);
    }
  }
+
+  /// 예약 취소
+  Future<void> handleCancelReservation(int reservationIdx) async {
+    try {
+      DefaultResponse response = await _postRepository.cancelReservationDio({
+        "serviceType": "lifelog",
+        "reservationIdx": reservationIdx
+      });
+
+      if(response.status.code == '200'){
+        Etc.successSnackBar('예약이 취소 되었습니다.', context);
+        _reservationDataList.clear();
+        handleReservationHistory();
+        notifyListeners();
+      } else {
+        CustomDialog.showMyDialog(
+          title: '예약',
+          content: '건강관리소 예약 취소가\n정상적으로 처리되지 못했습니다.',
+          mainContext: context,
+        );
+      }
+
+    } on DioException catch (dioError) {
+      logger.i('=> $dioError');
+      //throw Exception(dioError);
+      CustomDialog.showMyDialog(
+        title: '예약',
+        content: '방문 예약 취소가\n정상적으로 처리되지 못했습니다.',
+        mainContext: context,
+      );
+    }
+  }
 
   addScrollControllerListener() {
     _scrollController.addListener(() {

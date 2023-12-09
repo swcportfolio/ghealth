@@ -116,7 +116,7 @@ class HealthService {
           logger.i('최근 심박동 데이터 dateFrom: ${latestHeartRateData.dateFrom.toString()}');
           logger.i('최근 심박동 데이터 dateTo: ${latestHeartRateData.dateTo.toString()}');
         } else {
-          logger.e('심박동 데이터 없음');
+          logger.i('심박동 데이터 없음');
         }
 
         // 총 수면 시간 계산

@@ -5,12 +5,16 @@ import 'package:gap/gap.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
+import '../../data/models/authorization.dart';
 import '../../data/models/gallery3d_data.dart';
 import '../../utils/colors.dart';
 import '../../widgets/list_item/service_list_item.dart';
 import '../../widgets/menu_card.dart';
+import '../login/login_view.dart';
 
-
+/// 홈화면
+/// 동구라이프로그 건강관리소 신청, 광주광역시 스트레스 샤워실 신청,
+/// G-Health 기업 실증 신청, 지원 서비스 더 알아보기 기능 포함
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
