@@ -1,6 +1,6 @@
 # ghealth_app
 
-A new Flutter project.
+ver2 GHealth_App project.
 
 ## Getting Started
 
