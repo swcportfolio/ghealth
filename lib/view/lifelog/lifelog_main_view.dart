@@ -6,6 +6,7 @@ import '../../data/models/authorization.dart';
 import '../../utils/colors.dart';
 import '../../utils/etc.dart';
 import '../login/login_view.dart';
+import 'health_point_box_widget.dart';
 
 
 /// 라이프로그 메인 화면

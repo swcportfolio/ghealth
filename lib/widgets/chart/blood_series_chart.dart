@@ -5,6 +5,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/models/blood_series_chart_data.dart';
 import '../../utils/constants.dart';
+import '../../utils/enum/blood_type.dart';
 
 class BloodSeriesChart extends StatelessWidget {
   const BloodSeriesChart(

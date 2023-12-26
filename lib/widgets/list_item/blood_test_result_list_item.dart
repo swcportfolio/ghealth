@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:ghealth_app/utils/etc.dart';
 
 import '../../utils/constants.dart';
+import '../../utils/enum/blood_type.dart';
 import '../../view/mydata/bottom_sheet/blood_bottom_sheet_view.dart';
 import '../frame.dart';
 

@@ -16,10 +16,7 @@ class LoginTextEditingController{
     };
     return toMap;
   }
-
 }
-
-
 
 /// 회원가입 editingController class
 class SignEdit{

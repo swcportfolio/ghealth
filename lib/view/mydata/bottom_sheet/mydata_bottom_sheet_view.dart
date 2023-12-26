@@ -9,6 +9,7 @@ import '../../../data/models/default_series_chart_data.dart';
 import '../../../data/models/health_screening_data.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/enum/mydata_measurement_type.dart';
 import '../../../widgets/chart/column_series_chart.dart';
 import '../../../widgets/chart/default_series_chart.dart';
 import '../../../widgets/frame.dart';
@@ -21,7 +22,7 @@ class MyDataBottomSheetView extends StatefulWidget {
       {super.key, required this.screeningsDataType});
 
   /// 마이데이터으 계측 검사에 해당되는 데이터 타입 enum class
-  final ScreeningsDataType screeningsDataType;
+  final MyDataMeasurementType screeningsDataType;
 
   @override
   State<MyDataBottomSheetView> createState() => _MyDataBottomSheetViewState();
@@ -76,30 +77,30 @@ class _MyDataBottomSheetViewState extends State<MyDataBottomSheetView> {
                     );
                   }
                     if (snapshot.connectionState == ConnectionState.done) {
-                      if (widget.screeningsDataType == ScreeningsDataType.vision ||
-                          widget.screeningsDataType == ScreeningsDataType.bloodPressure) {
+                      if (widget.screeningsDataType == MyDataMeasurementType.vision ||
+                          widget.screeningsDataType == MyDataMeasurementType.bloodPressure) {
                         _columnDataList = List.of(snapshot.data);
                       }
-                      if (widget.screeningsDataType == ScreeningsDataType.weight ||
-                          widget.screeningsDataType == ScreeningsDataType.height ||
-                          widget.screeningsDataType == ScreeningsDataType.waistCircumference ||
-                          widget.screeningsDataType == ScreeningsDataType.bodyMassIndex) {
+                      if (widget.screeningsDataType == MyDataMeasurementType.weight ||
+                          widget.screeningsDataType == MyDataMeasurementType.height ||
+                          widget.screeningsDataType == MyDataMeasurementType.waistCircumference ||
+                          widget.screeningsDataType == MyDataMeasurementType.bodyMassIndex) {
                         _defaultDataList = List.of(snapshot.data);
                       }
-                      if (widget.screeningsDataType == ScreeningsDataType.hearingAbility) {
+                      if (widget.screeningsDataType == MyDataMeasurementType.hearingAbility) {
                         _hearingAbilityList = List.of(snapshot.data);
                       }
                     }
                     switch (widget.screeningsDataType) {
-                      case ScreeningsDataType.vision:
-                      case ScreeningsDataType.bloodPressure:
+                      case MyDataMeasurementType.vision:
+                      case MyDataMeasurementType.bloodPressure:
                         return buildMyHealthChartBox(true);
-                      case ScreeningsDataType.weight:
-                      case ScreeningsDataType.height:
-                      case ScreeningsDataType.waistCircumference:
-                      case ScreeningsDataType.bodyMassIndex:
+                      case MyDataMeasurementType.weight:
+                      case MyDataMeasurementType.height:
+                      case MyDataMeasurementType.waistCircumference:
+                      case MyDataMeasurementType.bodyMassIndex:
                         return buildMyHealthChartBox(false);
-                      case ScreeningsDataType.hearingAbility:
+                      case MyDataMeasurementType.hearingAbility:
                         return buildOnlyHearingAbilityResult();
                     }
                   },

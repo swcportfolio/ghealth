@@ -54,7 +54,7 @@ class Authorization{
   }
 
   /// 권한 값을 초기화하는 메서드
-  clean()=> init();
+  clean() => init();
 
   /// 권한 값을 초기화하는 메서드
   init() {

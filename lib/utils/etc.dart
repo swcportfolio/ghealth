@@ -9,6 +9,7 @@ import '../widgets/frame.dart';
 import 'colors.dart';
 import '../main.dart';
 import 'constants.dart';
+import 'enum/blood_type.dart';
 
 
 class Etc{

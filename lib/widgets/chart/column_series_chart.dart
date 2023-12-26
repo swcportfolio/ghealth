@@ -5,12 +5,13 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/models/column_series_chart_data.dart';
 import '../../utils/constants.dart';
+import '../../utils/enum/mydata_measurement_type.dart';
 import '../../utils/etc.dart';
 
 class ColumnSeriesChart extends StatelessWidget {
   const ColumnSeriesChart({super.key, required this.chartData, required this.dataType});
   final List<ColumnSeriesChartData> chartData;
-  final ScreeningsDataType dataType;
+  final MyDataMeasurementType dataType;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class ColumnSeriesChart extends StatelessWidget {
         // Renders column chart
         ColumnSeries<ColumnSeriesChartData, String>(
           legendIconType: LegendIconType.seriesType,
-          legendItemText: ScreeningsDataType.vision== dataType
+          legendItemText: MyDataMeasurementType.vision== dataType
               ? '좌'
               : '최고 혈압',
           dataSource: chartData,
@@ -53,7 +54,7 @@ class ColumnSeriesChart extends StatelessWidget {
         ),
         ColumnSeries<ColumnSeriesChartData, String>(
           legendIconType: LegendIconType.seriesType,
-          legendItemText: ScreeningsDataType.vision== dataType
+          legendItemText: MyDataMeasurementType.vision== dataType
               ? '우'
               : '최저 혈압',
           dataSource: chartData,

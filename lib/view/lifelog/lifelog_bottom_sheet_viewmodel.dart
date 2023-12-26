@@ -7,6 +7,7 @@ import '../../data/models/health_report_response.dart';
 import '../../data/models/lifelog_data.dart';
 import '../../main.dart';
 import '../../utils/constants.dart';
+import '../../utils/enum/lifelog_data_type.dart';
 
 
 class LifeLogBottomSheetViewModel extends ChangeNotifier {
@@ -18,7 +19,7 @@ class LifeLogBottomSheetViewModel extends ChangeNotifier {
   List<LifeLogData> get lifeLogDataList => _lifeLogDataList;
 
   /// 라이프로그 건겅검진 결과 데이터 조회
-  Future<List<LifeLogData>> handleLifeLogResult(HealthReportType dataType) async {
+  Future<List<LifeLogData>> handleLifeLogResult(LifeLogDataType dataType) async {
     try{
       HealthReportResponse response =
               await _postRepository.getHealthReportLifeLogDio(dataType.id);

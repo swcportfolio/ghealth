@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../../../data/models/blood_series_chart_data.dart';
 import '../../../utils/colors.dart';
-import '../../../utils/constants.dart';
+import '../../../utils/enum/blood_type.dart';
 import '../../../widgets/chart/blood_series_chart.dart';
 import '../../../widgets/frame.dart';
 import 'blood_bottom_sheet_viewmodel.dart';

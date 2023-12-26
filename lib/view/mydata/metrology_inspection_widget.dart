@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import '../../data/models/metrology_inspection.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
+import '../../utils/enum/mydata_measurement_type.dart';
 import '../../widgets/frame.dart';
 import 'bottom_sheet/mydata_bottom_sheet_view.dart';
 
@@ -81,22 +82,22 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
                     : '${widget.metrologyInspection.visionLeft}/${widget.metrologyInspection.visionRight}')
                   : widget.metrologyInspection.visionOld}',
               '시력(좌/우)',
-              ScreeningsDataType.vision
+              MyDataMeasurementType.vision
           ),
           buildMeasurementResultPositionedItem(
               20, 200, null, null, '${widget.metrologyInspection.bloodPressure}',
               '혈압',
-              ScreeningsDataType.bloodPressure
+              MyDataMeasurementType.bloodPressure
           ),
           buildMeasurementResultPositionedItem(
               30, 360, null, null, '${widget.metrologyInspection.weight}',
               '몸무게',
-              ScreeningsDataType.weight
+              MyDataMeasurementType.weight
           ),
           buildMeasurementResultPositionedItem(
               35, 460, null, null, '${widget.metrologyInspection.height}',
               '키',
-              ScreeningsDataType.height
+              MyDataMeasurementType.height
           ),
           buildMeasurementResultPositionedItem(
               null, 83, 50, null,
@@ -106,19 +107,19 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
                   : '${widget.metrologyInspection.hearingAbilityLeft}/${widget.metrologyInspection.hearingAbilityRight}')
                   : widget.metrologyInspection.hearingAbilityOld}',
               '청력(좌/우)',
-              ScreeningsDataType.hearingAbility
+              MyDataMeasurementType.hearingAbility
           ),
           buildMeasurementResultPositionedItem(
               null, 205, 40, null,
               '${widget.metrologyInspection.waistCircumference}',
               '허리둘레',
-              ScreeningsDataType.waistCircumference
+              MyDataMeasurementType.waistCircumference
           ),
           buildMeasurementResultPositionedItem(
               null, 335, 25, null,
               '${widget.metrologyInspection.bodyMassIndex}',
               '체질량지수',
-              ScreeningsDataType.bodyMassIndex
+              MyDataMeasurementType.bodyMassIndex
           ),
         ],
       ),
@@ -130,7 +131,7 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
       double? left, double? top, double? right, double? bottom,
       String resultText,
       String resultLabel,
-      ScreeningsDataType dataType,
+      MyDataMeasurementType dataType,
       ) {
     return Positioned(
       top: top,

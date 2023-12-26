@@ -6,6 +6,7 @@ import 'package:ghealth_app/widgets/custom_appbar.dart';
 import '../../data/models/blood_test.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
+import '../../utils/enum/blood_type.dart';
 import '../../utils/etc.dart';
 import '../../widgets/frame.dart';
 import '../../widgets/list_item/blood_test_result_list_item.dart';

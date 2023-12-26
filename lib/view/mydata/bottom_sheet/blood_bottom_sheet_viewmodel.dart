@@ -8,6 +8,7 @@ import '../../../data/models/blood_series_chart_data.dart';
 import '../../../main.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/enum/blood_type.dart';
 import '../../../utils/my_exception.dart';
 
 

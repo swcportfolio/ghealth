@@ -21,9 +21,7 @@ const textFieldBorderColor = Color(0xFFE5E5E5);
 const textFieldBorderColor2 = Color(0xffededef);
 const Color switchBackgroundColor = Color(0xfffbd0d0);
 
-
 const Color darkThemeColor = Color(0xFF202023);
-
 
 // 인증번호 버튼
 const sendTextColor = Color(0xff6387ff);

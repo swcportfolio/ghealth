@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:ghealth_app/utils/enum/lifelog_data_type.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,7 @@ import 'lifelog_bottom_sheet_viewmodel.dart';
 class LifeLogBottomSheetView extends StatefulWidget {
   const LifeLogBottomSheetView({super.key, required this.healthReportType});
 
-  final HealthReportType healthReportType;
+  final LifeLogDataType healthReportType;
 
   @override
   State<LifeLogBottomSheetView> createState() => _LifeLogBottomSheetViewState();
@@ -94,7 +95,7 @@ class _LifeLogBottomSheetViewState extends State<LifeLogBottomSheetView> {
                         ),
                         const Gap(20),
 
-                        widget.healthReportType == HealthReportType.pee
+                        widget.healthReportType == LifeLogDataType.pee
                             ? buildUrineResultList()
                             : _lifeLogDataList.isEmpty
                             ? buildReportResultEmptyView()
@@ -144,7 +145,7 @@ class _LifeLogBottomSheetViewState extends State<LifeLogBottomSheetView> {
                                         Etc.solidLine(context),
                                         const Gap(10),
                                         Visibility(
-                                          visible: widget.healthReportType == HealthReportType.brains
+                                          visible: widget.healthReportType == LifeLogDataType.brains
                                               ? true
                                               : false,
                                           child: Container(
@@ -253,7 +254,7 @@ class _LifeLogBottomSheetViewState extends State<LifeLogBottomSheetView> {
           Etc.solidLine(context),
           const Gap(10),
           Visibility(
-            visible: widget.healthReportType == HealthReportType.brains
+            visible: widget.healthReportType == LifeLogDataType.brains
                 ? true
                 : false,
             child: Container(

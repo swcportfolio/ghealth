@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import '../../data/models/blood_test.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
+import '../../utils/enum/blood_type.dart';
 import '../../widgets/frame.dart';
 import '../../widgets/list_item/blood_test_result_list_item.dart';
 import 'blood_test_detail_view.dart';

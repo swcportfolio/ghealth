@@ -52,6 +52,8 @@ class _HomeFramePageState extends State<HomeFrameView> with WidgetsBindingObserv
 
     /// 앱이 백그라운드에 있다가 다시 재개되었을때(하루, 이틀)
     /// 이상 기간이 지나고 앱을 실행했을때 출석기능을 활성화하기위한 로직
+    // TODO: 이슈: 퍼미션 거절되었을때 라이프사이클 때문에 resumed 로직이 수행되어 무한으로 [fetchDataIfLoggedIn]가 실행된다.
+    ///
     ///
     /// AccessToken 유효기간 체크
     if(state == AppLifecycleState.resumed) {

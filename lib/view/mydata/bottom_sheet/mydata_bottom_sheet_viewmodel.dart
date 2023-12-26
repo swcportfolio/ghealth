@@ -9,6 +9,7 @@ import '../../../data/models/default_series_chart_data.dart';
 import '../../../data/models/health_screening_data.dart';
 import '../../../main.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/enum/mydata_measurement_type.dart';
 import '../../../utils/my_exception.dart';
 
 
@@ -24,17 +25,17 @@ class MyDataBottomSheetViewModel extends ChangeNotifier {
   List<DefaultSeriesChartData> get defaultDataList => _defaultDataList;
   List<HealthScreeningData> get hearingAbilityList => _hearingAbilityList;
 
-  Future<dynamic> handleInstrumentation(ScreeningsDataType screeningsDataType) async {
+  Future<dynamic> handleInstrumentation(MyDataMeasurementType screeningsDataType) async {
     try{
       HealthInstrumentationResponse response =
         await _postRepository.getHealthInstrumentationDio(screeningsDataType.label);
 
       if(response.status.code == '200'){
         convertDataAndPopulateList(response.data, screeningsDataType);
-        if(screeningsDataType == ScreeningsDataType.hearingAbility){
+        if(screeningsDataType == MyDataMeasurementType.hearingAbility){
           return _hearingAbilityList;
-        } else  if(screeningsDataType == ScreeningsDataType.vision
-            || screeningsDataType == ScreeningsDataType.bloodPressure){
+        } else  if(screeningsDataType == MyDataMeasurementType.vision
+            || screeningsDataType == MyDataMeasurementType.bloodPressure){
           return _columnDataList;
         } else {
           return _defaultDataList;
@@ -96,9 +97,9 @@ class MyDataBottomSheetViewModel extends ChangeNotifier {
   /// [DefaultSeriesChartData] 객체를 생성하고 [defaultDataList]에 추가합니다.
   ///
   /// 이 메소드를 호출하기 전에는 적절한 [dataType] 값이 전달되어야 합니다.
-  void convertDataAndPopulateList(List<HealthScreeningData> dataList, ScreeningsDataType dataType) {
-    if (dataType == ScreeningsDataType.vision ||
-        dataType == ScreeningsDataType.bloodPressure) {
+  void convertDataAndPopulateList(List<HealthScreeningData> dataList, MyDataMeasurementType dataType) {
+    if (dataType == MyDataMeasurementType.vision ||
+        dataType == MyDataMeasurementType.bloodPressure) {
       /// 시력 또는 혈압 데이터 변환
       List<ColumnSeriesChartData> tempDataList = dataList.map((data) {
         List<String> values = (data.dataValue).split('/');
@@ -122,7 +123,7 @@ class MyDataBottomSheetViewModel extends ChangeNotifier {
       }
     }
 
-    else if (dataType == ScreeningsDataType.hearingAbility) {
+    else if (dataType == MyDataMeasurementType.hearingAbility) {
       /// 청력 데이터 변환
       _hearingAbilityList = List.of(dataList);
     }

@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
+import '../../utils/enum/lifelog_data_type.dart';
 import '../../widgets/frame.dart';
 import 'lifelog_bottom_sheet_view.dart';
 
@@ -57,18 +58,18 @@ class _TestResultsBodyWidgetState extends State<TestResultsBodyWidget> {
                 ),
               ),
 
-              buildPositionedBox(50, 60, null, '시력 측정기', HealthReportType.eye),
-              buildPositionedBox(10, 150, null, '혈압 측정기', HealthReportType.bloodPressure),
-              buildPositionedBox(10, 200, null, '혈당 측정', HealthReportType.bloodSugar),
-              buildPositionedBox(10, 360, null, '키 몸무게 측정기', HealthReportType.heightWeight),
-              buildPositionedBox(30, 410, null, '체성분 분석기', HealthReportType.bodyComposition),
+              buildPositionedBox(50, 60, null, '시력 측정기', LifeLogDataType.eye),
+              buildPositionedBox(10, 150, null, '혈압 측정기', LifeLogDataType.bloodPressure),
+              buildPositionedBox(10, 200, null, '혈당 측정', LifeLogDataType.bloodSugar),
+              buildPositionedBox(10, 360, null, '키 몸무게 측정기', LifeLogDataType.heightWeight),
+              buildPositionedBox(30, 410, null, '체성분 분석기', LifeLogDataType.bodyComposition),
 
-              buildPositionedBox(null, 80, 20, '두뇌건강 측정기', HealthReportType.brains),
-              buildPositionedBox(null, 130, 20, '치매선별 검사기', HealthReportType.dementia),
+              buildPositionedBox(null, 80, 20, '두뇌건강 측정기', LifeLogDataType.brains),
+              buildPositionedBox(null, 130, 20, '치매선별 검사기', LifeLogDataType.dementia),
 
-              buildPositionedBox(null, 180, 20, '뇌파측정기', HealthReportType.brainWaves),
-              buildPositionedBox(null, 300, 20, '소변 검사기', HealthReportType.pee),
-              buildPositionedBox(null, 480, 20, '초음파 골밀도 측정기', HealthReportType.boneDensity),
+              buildPositionedBox(null, 180, 20, '뇌파측정기', LifeLogDataType.brainWaves),
+              buildPositionedBox(null, 300, 20, '소변 검사기', LifeLogDataType.pee),
+              buildPositionedBox(null, 480, 20, '초음파 골밀도 측정기', LifeLogDataType.boneDensity),
             ],
           )
         ],
@@ -78,7 +79,7 @@ class _TestResultsBodyWidgetState extends State<TestResultsBodyWidget> {
 
   Positioned buildPositionedBox(
       double? left, double? top, double? right,
-      String label, HealthReportType type) {
+      String label, LifeLogDataType type) {
     return Positioned(
         left: left,
         top: top,
