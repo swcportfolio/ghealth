@@ -20,17 +20,20 @@ class SummaryResponse {
 
 
 class SummaryData {
+  final List<dynamic> issuedDateList;
   final MyDataAIPredictData? mydataPredict;
   final List<HealthScreeningData>? healthScreeningList;
   final List<MedicationInfoData>? medicationInfoList;
 
-  SummaryData(
-      {required this.mydataPredict,
+  SummaryData({
+      required this.issuedDateList,
+      required this.mydataPredict,
       required this.healthScreeningList,
       required this.medicationInfoList});
 
   factory SummaryData.fromJson(Map<String, dynamic> json) {
     return SummaryData(
+        issuedDateList: json['issuedDateList'].toList(),
         mydataPredict: MyDataAIPredictData.fromJson(json['mydataPredict']),
         healthScreeningList: HealthScreeningData.jsonList(json['healthScreeningList']),
         medicationInfoList: MedicationInfoData.jsonList(json['medicationInfoList'])

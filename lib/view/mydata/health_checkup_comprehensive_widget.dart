@@ -9,7 +9,8 @@ class HealthCheckUpComprehensiveWidget extends StatelessWidget {
       {super.key,
       required this.comprehensiveOpinionText,
       required this.lifestyleManagementText,
-      required this.issuedDate});
+      //required this.issuedDate
+      });
 
   /// [healthScreeningList]중에 [dataName]이 "종합소견_판정" 의
   /// dataValue 값
@@ -24,7 +25,7 @@ class HealthCheckUpComprehensiveWidget extends StatelessWidget {
   final String lifestyleManagementText;
 
   /// 최근 검진일
-  final String? issuedDate;
+  //final String? issuedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -55,20 +56,20 @@ class HealthCheckUpComprehensiveWidget extends StatelessWidget {
                       text: '건강 검진 종합 소견',
                       fontSize: 1.2,
                       fontWeight: FontWeight.w600),
-                  ///최근 검진 날짜
-                  Visibility(
-                    visible: issuedDate == '' ? false : true,
-                    child: Frame.myText(
-                      text: '최근 검진일\n$issuedDate',
-                      maxLinesCount: 2,
-                      fontSize: 0.9,
-                    ),
-                  )
+                  // /// 최근 검진 날짜
+                  // Visibility(
+                  //   visible: issuedDate == '' ? false : true,
+                  //   child: Frame.myText(
+                  //     text: '최근 검진일\n$issuedDate',
+                  //     maxLinesCount: 2,
+                  //     fontSize: 0.9,
+                  //   ),
+                  // )
                 ],
               ),
               Container(
                 padding: const EdgeInsets.all(12.0),
-                margin: const EdgeInsets.symmetric(vertical: 10.0),
+                margin: const EdgeInsets.symmetric(vertical: 15.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   color: Colors.green,

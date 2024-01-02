@@ -2,6 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/data/models/health_instrumentation_response.dart';
+import 'package:ghealth_app/data/models/medication_detail_response.dart';
 import 'package:ghealth_app/data/models/send_message_response.dart';
 import 'package:ghealth_app/data/models/summary_response.dart';
 import 'package:ghealth_app/data/models/user_response.dart';
@@ -104,10 +105,11 @@ class RemoteDataSource {
 
 
   /// 내 건강정보 보고서
-  Future<SummaryResponse> getHealthSummaryDio() async {
+  Future<SummaryResponse> getHealthSummaryDio(String? selectedDateTime) async {
     try {
       // Dio를 사용하여 API 호출
-      Response response = await _createPrivateDio().get(healthSummaryApiUrl);
+      Response response = await _createPrivateDio().get(healthSummaryApiUrl,
+          queryParameters: {'issuedDate': selectedDateTime});
 
       //logger.f(response.data);
       // API 응답을 모델로 변환
@@ -355,6 +357,26 @@ class RemoteDataSource {
     }
   }
 
+
+  /// 투약정보 상세데이터 가져오기
+  Future<MedicationDetailResponse> getMedicationDetailDio(String medicationCode) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(getMedicationDetailApiUrl,
+          queryParameters: {'medicationCode': medicationCode});
+
+      // API 응답을 모델로 변환
+      MedicationDetailResponse medicationDetailResponse
+      = MedicationDetailResponse.fromJson(response.data);
+
+      return medicationDetailResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
 
   // final _firebaseInstance = FirebaseFirestore.instance;
 

@@ -727,6 +727,26 @@ class Etc{
         return 0.35;
     }
   }
+
+  /// 반응형으로 생각하면 현재 디바이스 스크린의 길이를 구하는 유틸 함수
+  static double getHeightByPercentOfScreen(double percent,  BuildContext context) {
+    return MediaQuery.of(context).size.height * percent / 100;
+  }
+
+  static String myDataFormatDate(String originalDateString) {
+    if (originalDateString.length == 8) {
+      // 연도, 월, 일로 나누기
+      String year = originalDateString.substring(0, 4);
+      String month = originalDateString.substring(4, 6);
+      String day = originalDateString.substring(6);
+
+      // "-" 추가
+      return '$year-$month-$day';
+    } else {
+      // 유효하지 않은 날짜 문자열 처리
+      return '0000-00-00';
+    }
+  }
 }
 
 class NoSpaceInputFormatter extends TextInputFormatter {

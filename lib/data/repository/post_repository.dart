@@ -1,6 +1,8 @@
 ///데이터 저장소라는 뜻으로 DataLayer인 DataSource에 접근
 ///
 
+import 'package:ghealth_app/data/models/medication_detail_response.dart';
+
 import '../datasource/local_data_source.dart';
 import '../datasource/remote_data_source.dart';
 
@@ -35,8 +37,8 @@ Future<LoginResponse> loginDio(Map<String, dynamic> data){
   return _remoteDataSource.loginDio(data);
 }
 
-Future<SummaryResponse> getHealthSummaryDio(){
-  return _remoteDataSource.getHealthSummaryDio();
+Future<SummaryResponse> getHealthSummaryDio(String? selectedDateTime){
+  return _remoteDataSource.getHealthSummaryDio(selectedDateTime);
 }
 
 Future<HealthInstrumentationResponse> getHealthInstrumentationDio(String dataType){
@@ -85,6 +87,10 @@ Future<DefaultResponse> logoutDio(){
 
 Future<DefaultResponse> saveHealthDataDio(String dataType, Map<String, dynamic>data){
   return _remoteDataSource.saveHealthDataDio(dataType, data);
+}
+
+Future<MedicationDetailResponse> getMedicationDetail(String medicationCode){
+  return _remoteDataSource.getMedicationDetailDio(medicationCode);
 }
 
 

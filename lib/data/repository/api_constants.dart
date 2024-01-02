@@ -51,3 +51,6 @@ const String logoutApiUrl = '$baseUrl/ws/private/user/logout';
 
 /// 헬스 수집 데이터 저장 URL
 const String saveHealthDataApiUrl = '$baseUrl/ws/private/wearable/';
+
+/// 투약정보 상세 URL
+const String getMedicationDetailApiUrl = '$baseUrl/ws/private/health/drug/info';

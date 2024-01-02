@@ -47,10 +47,10 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
                         fontWeight: FontWeight.w600),
 
                     /// 검진 날짜
-                    Frame.myText(
-                      text: '최근 검진일 : ${widget.metrologyInspection.issuedDate}',
-                      fontSize: 0.9,
-                    )
+                    // Frame.myText(
+                    //   text: '최근 검진일 : ${widget.metrologyInspection.issuedDate}',
+                    //   fontSize: 0.9,
+                    // )
                   ],
                 ),
 

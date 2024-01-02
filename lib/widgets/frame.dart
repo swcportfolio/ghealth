@@ -371,11 +371,10 @@ class Frame{
    return ExtendedImage.network(
      url,
      width: size,
-     height: size,
-     fit: BoxFit.fill,
-     cache: true,
-     shape: BoxShape.circle,
-     borderRadius: const BorderRadius.all(Radius.circular(30.0)),
+     //height: size,
+     fit: BoxFit.cover,
+     // shape: BoxShape.circle,
+     // borderRadius: BorderRadius.circular(20.0),
      loadStateChanged: (ExtendedImageState state) {
        switch (state.extendedImageLoadState) {
          case LoadState.loading:
@@ -388,9 +387,13 @@ class Frame{
            );
          case LoadState.failed:
            return GestureDetector(
-             child: Image.asset(
-               'images/profile_image.png',
-               fit: BoxFit.fill,
+             child: Column(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 const Icon(Icons.question_mark, color: mainColor),
+                 const Gap(10),
+                 Frame.myText(text:'사진을 불러오지 못했습니다.')
+               ],
              ),
              onTap: () {
                state.reLoadImage();

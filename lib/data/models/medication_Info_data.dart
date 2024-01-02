@@ -7,13 +7,20 @@ class MedicationInfoData {
   /// 제조명
   late String medicationName;
 
-  MedicationInfoData(
-      {required this.whenPrepared, required this.medicationName});
+  /// 약 코드
+  late String medicationCode;
+
+  MedicationInfoData({
+    required this.whenPrepared,
+    required this.medicationName,
+    required this.medicationCode,
+      });
 
   factory MedicationInfoData.fromJson(Map<String, dynamic> json) {
     return MedicationInfoData(
         whenPrepared: json['whenPrepared'] ?? '-',
-        medicationName: json['medicationName'] ?? '-');
+        medicationName: json['medicationName'] ?? '-',
+        medicationCode: json['medicationCode'] ?? '-');
   }
 
   static List<MedicationInfoData> jsonList(dynamic json) {

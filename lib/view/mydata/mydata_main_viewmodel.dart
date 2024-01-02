@@ -52,11 +52,16 @@ class MyDataMainViewModel extends ChangeNotifier {
   /// mydata 검진날짜
   late String _issuedDate = '';
 
+  late List<String> _issuedDateList = [];
+
+  String? selectedDateTime;
+
   SummaryData? get summaryData => _summaryData;
   BloodTest get bloodTest => _bloodTest;
   MetrologyInspection get metrologyInspection => _metrologyInspection;
   MyDataAIPredictData? get mydataPredict => _mydataPredict;
   List<MedicationInfoData>? get medicationInfoList => _medicationInfoList;
+  List<String> get issuedDateList => _issuedDateList;
 
 
   /// 건강검진 결과 안내 propertys
@@ -68,7 +73,7 @@ class MyDataMainViewModel extends ChangeNotifier {
   /// 마이데이터 전체 데이터 조회
   Future<SummaryData?> handleHealthSummary() async {
     try{
-      SummaryResponse response = await _postRepository.getHealthSummaryDio();
+      SummaryResponse response = await _postRepository.getHealthSummaryDio(selectedDateTime);
 
       if(response.status.code == '200' && response.data != null) {
         _summaryData = response.data;
@@ -76,9 +81,9 @@ class MyDataMainViewModel extends ChangeNotifier {
 
         return summaryData;
       } else {
+
         return null;
       }
-
     }  on DioException catch (dioError) {
       logger.e('=> $dioError');
       MyException.myDioException(dioError.type);
@@ -86,15 +91,24 @@ class MyDataMainViewModel extends ChangeNotifier {
     return null;
   }
 
+  onChangedDropdownButton(String selectedDateTime){
+    this.selectedDateTime = selectedDateTime.replaceAll('-','');
+    logger.i('수정된 selectedDateTime: ${this.selectedDateTime}');
+    handleHealthSummary();
+    notifyListeners();
+  }
+
 
   /// [_summaryData] 위젯별 데이터 파싱
   dataParsingByWidget() {
+
     parsingHealthScreeningList();
     parsingMetrologyInspection();
     parsingBloodTest();
     _mydataPredict = _summaryData?.mydataPredict;
 
     if(_summaryData?.medicationInfoList != null) {
+      _issuedDateList = List.of(_summaryData!.issuedDateList).cast<String>().toList();
       _medicationInfoList = _summaryData!.medicationInfoList;
     }
     notifyListeners(); // 상태 변경을 알립니다.

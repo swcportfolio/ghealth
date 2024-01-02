@@ -58,6 +58,7 @@ dependencies:
   hive_generator: ^2.0.1
   build_runner: ^2.4.6
   google_fonts: ^6.1.0
+  dropdown_button2: ^2.3.9
   #flutter_localization: 0.1.7
 
 

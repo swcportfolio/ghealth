@@ -24,7 +24,7 @@ class BloodTestResultWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Container(
-          height: 320,
+          height: 300,
           padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
           decoration: BoxDecoration(
             color: bloodResultBgColor,
@@ -85,15 +85,15 @@ class BloodTestResultWidget extends StatelessWidget {
                 ),
               ),
               /// 검진 날짜
-              Visibility(
-                visible: bloodTest.issuedDate == '-' || bloodTest.issuedDate == null
-                    ? false
-                    : true,
-                child: Frame.myText(
-                  text: '최근 검진일 : ${bloodTest.issuedDate}',
-                  fontSize: 0.9,
-                ),
-              )
+              // Visibility(
+              //   visible: bloodTest.issuedDate == '-' || bloodTest.issuedDate == null
+              //       ? false
+              //       : true,
+              //   child: Frame.myText(
+              //     text: '최근 검진일 : ${bloodTest.issuedDate}',
+              //     fontSize: 0.9,
+              //   ),
+              // )
             ],
           ),
         ),
