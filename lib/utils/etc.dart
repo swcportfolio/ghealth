@@ -409,6 +409,17 @@ class Etc{
     );
   }
 
+  static solidLineWearableBox(BuildContext context){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: 1.5,
+        color: Colors.grey[300],
+      ),
+    );
+  }
+
     
   /// 날짜 ' '기준으로 자르기
   static String  dateParsing(String value) {

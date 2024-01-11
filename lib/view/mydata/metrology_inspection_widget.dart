@@ -32,8 +32,10 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
             height: 610,
             padding: const EdgeInsets.all(20.0),
             decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(30.0)),
+                color: metrologyInspectionBgColor,
+                borderRadius: BorderRadius.circular(30),
+                border: Border.all(width: 2.0, color: Colors.grey.shade200)
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -68,7 +70,7 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
                 Frame.myText(
                     text: '클릭하시면 자세한 결과를 보실수 있습니다.',
                     color: Colors.grey.shade600,
-                    fontSize: 1.1),
+                    fontSize: 1.0),
               ],
             ),
           ),

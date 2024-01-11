@@ -370,11 +370,8 @@ class Frame{
   static buildExtendedImage(AnimationController controller, String  url, double size){
    return ExtendedImage.network(
      url,
-     width: size,
-     //height: size,
-     fit: BoxFit.cover,
-     // shape: BoxShape.circle,
-     // borderRadius: BorderRadius.circular(20.0),
+     fit: BoxFit.fill,
+     alignment: Alignment.center,
      loadStateChanged: (ExtendedImageState state) {
        switch (state.extendedImageLoadState) {
          case LoadState.loading:
@@ -382,8 +379,7 @@ class Frame{
          case LoadState.completed:
            return ExtendedRawImage(
              image: state.extendedImageInfo?.image,
-             width: 50,
-             height: 50,
+
            );
          case LoadState.failed:
            return GestureDetector(

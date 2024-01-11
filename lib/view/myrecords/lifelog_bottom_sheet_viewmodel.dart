@@ -6,11 +6,13 @@ import 'package:ghealth_app/utils/my_exception.dart';
 import '../../data/models/health_report_response.dart';
 import '../../data/models/lifelog_data.dart';
 import '../../main.dart';
-import '../../utils/constants.dart';
 import '../../utils/enum/lifelog_data_type.dart';
 
 
 class LifeLogBottomSheetViewModel extends ChangeNotifier {
+
+  late String selectedDate;
+  LifeLogBottomSheetViewModel(this.selectedDate);
   final _postRepository = PostRepository();
 
   /// 라이프로그 건강검진 결과 데이터 리스트
@@ -22,7 +24,7 @@ class LifeLogBottomSheetViewModel extends ChangeNotifier {
   Future<List<LifeLogData>> handleLifeLogResult(LifeLogDataType dataType) async {
     try{
       HealthReportResponse response =
-              await _postRepository.getHealthReportLifeLogDio(dataType.id);
+              await _postRepository.getHealthReportLifeLogDio(dataType.id, selectedDate);
 
       if(response.status.code == '200'){
         _lifeLogDataList = List.of(response.data);

@@ -54,3 +54,9 @@ const String saveHealthDataApiUrl = '$baseUrl/ws/private/wearable/';
 
 /// 투약정보 상세 URL
 const String getMedicationDetailApiUrl = '$baseUrl/ws/private/health/drug/info';
+
+/// 나의 일상 기록 건강관리소 방문 날짜 리스트 URL
+const String getRecordDateApiUrl = '$baseUrl/ws/private/lifelog/date';
+
+/// AI 건강예측 결과 데이터 가져오기 URL
+const String getAiHealthApiUrl = '$baseUrl/ws/private/ai/mydata/predict';

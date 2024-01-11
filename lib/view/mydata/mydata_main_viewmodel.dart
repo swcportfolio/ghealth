@@ -91,6 +91,7 @@ class MyDataMainViewModel extends ChangeNotifier {
     return null;
   }
 
+  /// DropdownButton 날짜 선택 onChanged
   onChangedDropdownButton(String selectedDateTime){
     this.selectedDateTime = selectedDateTime.replaceAll('-','');
     logger.i('수정된 selectedDateTime: ${this.selectedDateTime}');
@@ -101,7 +102,6 @@ class MyDataMainViewModel extends ChangeNotifier {
 
   /// [_summaryData] 위젯별 데이터 파싱
   dataParsingByWidget() {
-
     parsingHealthScreeningList();
     parsingMetrologyInspection();
     parsingBloodTest();

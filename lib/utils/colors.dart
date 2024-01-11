@@ -47,7 +47,7 @@ const serviceCircleBgColor = Color(0xFFf4f4f4);
 const bloodResultBgColor = Color(0xFFfcedee);
 
 // 걔측검사 결과 박스 background color
-const metrologyInspectionBgColor = Color(0xffeef1fb);
+const metrologyInspectionBgColor = Color(0xfff6f7ff);
 
 
 // 소변 검사 결과데이터 텍스트 컬러
@@ -57,4 +57,7 @@ const urineResultColor3 = Color(0xffe6b073);
 const urineResultColor4 = Color(0xffbb85da);
 const urineResultColor5 = Color(0xffd88d8d);
 const urineResultColor6 = Color(0xffffc0cb);
+
+
+const aiHealthBg = Color(0xffADC2FF);
 

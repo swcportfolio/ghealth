@@ -1,9 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
+import 'package:ghealth_app/view/aihealth/aihealth_main_view.dart';
 import 'package:ghealth_app/view/home/home_view.dart';
-import 'package:ghealth_app/view/lifelog/lifelog_main_view.dart';
-import 'package:ghealth_app/view/wearable/wearable_main_view.dart';
 import 'package:ghealth_app/widgets/dialog.dart';
 
 import '../../main.dart';
@@ -13,6 +12,7 @@ import '../../widgets/custom_appbar.dart';
 import '../../widgets/frame.dart';
 import '../login/login_view.dart';
 import '../mydata/mydata_main_view.dart';
+import '../myrecords/myrecord_main_view.dart';
 import '../reservation/reservation_main_view.dart';
 
 /// 홈 프레임 화면
@@ -33,9 +33,9 @@ class _HomeFramePageState extends State<HomeFrameView> with WidgetsBindingObserv
   final List<Widget> _widgetOptions = <Widget>[
     const HomeView(),
     const ReservationMainView(),
-    const LifeLogMainView(),
+    const AiHealthMainView(),
     const MyDataMainView(),
-    const WearableMainView(),
+    const MyRecordMainView(),
   ];
 
   @override
@@ -94,11 +94,11 @@ class _HomeFramePageState extends State<HomeFrameView> with WidgetsBindingObserv
           backgroundColor: Colors.white,
           showUnselectedLabels: true,
           items: <BottomNavigationBarItem>[
-            _buildNavigationBarItem('images/navigation_4.png', '홈으로', 25, 25, 0),
-            _buildNavigationBarItem('images/navigation_3.png', '예약', 25, 25, 1),
-            _buildNavigationBarItem('images/navigation_2.png', '라이프로그', 25, 25, 2),
-            _buildNavigationBarItem('images/my_data_icon.png', '나의 건강기록', 25, 25, 3),
-            _buildNavigationBarItem('images/navigation_1.png', '웨어러블', 25, 25, 4),
+            _buildNavigationBarItem('images/navigation_4.png', '홈으로\n', 25, 25, 0),
+            _buildNavigationBarItem('images/navigation_3.png', '예약\n', 25, 25, 1),
+            _buildNavigationBarItem('images/navigation_2.png', 'AI\n 건강예측', 25, 25, 2),
+            _buildNavigationBarItem('images/my_data_icon.png', '나의\n건강검진', 25, 25, 3),
+            _buildNavigationBarItem('images/navigation_1.png', '나의\n일상기록', 25, 25, 4),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: mainColor,
@@ -129,13 +129,26 @@ class _HomeFramePageState extends State<HomeFrameView> with WidgetsBindingObserv
       int itemIndex,
       ) {
     return BottomNavigationBarItem(
-      icon: ColorFiltered(
-        colorFilter: _selectedIndex == itemIndex
-            ? const ColorFilter.mode(mainColor, BlendMode.srcIn)
-            : const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
-        child: Image.asset(imagePath, height: iconHeight, width: iconWidth),
+      icon: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ColorFiltered(
+            colorFilter: _selectedIndex == itemIndex
+                ? const ColorFilter.mode(mainColor, BlendMode.srcIn)
+                : const ColorFilter.mode(Colors.grey, BlendMode.srcIn),
+            child: Image.asset(imagePath, height: iconHeight, width: iconWidth),
+          ),
+          Frame.myText(
+            text: label,
+            align: TextAlign.center,
+            color: _selectedIndex == itemIndex ? mainColor: Colors.grey,
+            fontSize: 0.8,
+            maxLinesCount: 2
+          )
+        ],
       ),
-      label: label,
+      label: '',
+
     );
   }
 

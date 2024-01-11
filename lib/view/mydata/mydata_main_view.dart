@@ -97,8 +97,8 @@ class _MyDataMainViewState extends State<MyDataMainView> {
                         const Gap(5),
 
                         /// AI 질환 예측 결과
-                        AiDiseasePredictionResultWidget(mydataPredict: _viewModel.mydataPredict),
-                        const Gap(5),
+                        // AiDiseasePredictionResultWidget(mydataPredict: _viewModel.mydataPredict),
+                        // const Gap(5),
 
                         /// 처방 이력
                         PrescriptionHistoryWidget(
@@ -117,14 +117,6 @@ class _MyDataMainViewState extends State<MyDataMainView> {
       ),
     );
   }
-
-  final List<String> items = [
-    '2023-12-20',
-    '2022-05-23',
-    '2021-05-23',
-    '2020-12-22',
-    '2019-01-25',
-  ];
   String? selectedValue;
 
   /// 마이데이터 (나의 건강기록) 상단 안내 메시지
@@ -158,27 +150,6 @@ class _MyDataMainViewState extends State<MyDataMainView> {
                               fontWeight: FontWeight.bold,
                               fontSize: 1.9
                           ),
-
-                          // InkWell(
-                          //   child: Container(
-                          //     padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-                          //     decoration: BoxDecoration(
-                          //       border: Border.all(color: Colors.grey.shade400, width: 1),
-                          //       borderRadius: const BorderRadius.all(Radius.circular(20))
-                          //     ),
-                          //     child: Row(
-                          //       children: [
-                          //         Frame.myText(
-                          //           text: '2023-01-01',
-                          //           fontSize: 0.9
-                          //         ),
-                          //         const Gap(5),
-                          //         const Icon(Icons.keyboard_arrow_down_rounded, color: Colors.grey)
-                          //       ],
-                          //     ),
-                          //   ),
-                          // )
-
                           DropdownButtonHideUnderline(
                             child: DropdownButton2<String>(
                               isExpanded: true,
@@ -199,10 +170,13 @@ class _MyDataMainViewState extends State<MyDataMainView> {
                               )).toList(),
                               value: selectedValue,
                               onChanged: (selectedValue) => {
-                                setState(() {
-                                  this.selectedValue = selectedValue;
-                                  value.onChangedDropdownButton(selectedValue!);
-                                })
+                                if(this.selectedValue != selectedValue){
+                                  setState(() {
+                                    this.selectedValue = selectedValue;
+                                    value.onChangedDropdownButton(selectedValue!);
+                                    Etc.successSnackBar('날짜가 변경되었습니다.', context, seconds: 2);
+                                  })
+                                }
                               },
                               alignment: AlignmentDirectional.center,
                               buttonStyleData: ButtonStyleData(
@@ -211,9 +185,7 @@ class _MyDataMainViewState extends State<MyDataMainView> {
                                 padding: const EdgeInsets.only(left: 14, right: 14),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(
-                                    color: Colors.black26,
-                                  ),
+                                  border: Border.all(color: Colors.black26),
                                   color: Colors.white,
                                 ),
                               ),

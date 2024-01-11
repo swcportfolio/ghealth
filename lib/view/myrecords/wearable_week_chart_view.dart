@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/services/health_service.dart';
-import 'package:ghealth_app/view/wearable/wearable_main_view.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 
 import '../../data/models/week_chart_data.dart';
@@ -11,6 +10,7 @@ import '../../utils/etc.dart';
 import '../../widgets/bar_chart.dart';
 import '../../widgets/frame.dart';
 import '../login/login_view.dart';
+import 'myrecord_main_view.dart';
 
 /// 일주일 기록된 걷기, 수면 데이터를 보여주는 View
 /// [HealthDataType]에 따라 걷기, 수면 오늘 기준 일주일 데이터를 보여준다.
@@ -18,6 +18,7 @@ class WearableWeekChartView extends StatefulWidget {
   const WearableWeekChartView({super.key, required this.type});
 
   final HealthDataType type;
+
   @override
   State<WearableWeekChartView> createState() => _WearableWeekChartViewState();
 }

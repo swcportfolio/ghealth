@@ -14,9 +14,14 @@ import 'lifelog_bottom_sheet_viewmodel.dart';
 
 /// 라이프로그 검사 결과 표시 화면 (BottomSheet)
 class LifeLogBottomSheetView extends StatefulWidget {
-  const LifeLogBottomSheetView({super.key, required this.healthReportType});
+  const LifeLogBottomSheetView({
+    super.key,
+    required this.healthReportType,
+    required this.selectedDate,
+  });
 
   final LifeLogDataType healthReportType;
+  final String selectedDate;
 
   @override
   State<LifeLogBottomSheetView> createState() => _LifeLogBottomSheetViewState();
@@ -32,7 +37,7 @@ class _LifeLogBottomSheetViewState extends State<LifeLogBottomSheetView> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _viewModel = LifeLogBottomSheetViewModel();
+    _viewModel = LifeLogBottomSheetViewModel(widget.selectedDate);
   }
 
   @override

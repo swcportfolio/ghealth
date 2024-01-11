@@ -1,5 +1,6 @@
 
 import 'package:dio/dio.dart';
+import 'package:ghealth_app/data/models/ai_health_response.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/data/models/health_instrumentation_response.dart';
 import 'package:ghealth_app/data/models/medication_detail_response.dart';
@@ -11,6 +12,7 @@ import 'package:intl/intl.dart';
 import '../../utils/custom_log_interceptor.dart';
 import '../models/health_report_response.dart';
 import '../models/mediacation_info_response.dart';
+import '../models/record_date_response.dart';
 import '../models/reservation_dayoff_response.dart';
 import '../models/reservation_default_response.dart';
 import '../models/reservation_history_response.dart';
@@ -182,11 +184,11 @@ class RemoteDataSource {
   }
 
   /// 라이프로그 건강검진 결과 조회
-  Future<HealthReportResponse> getHealthReportLifeLogDio(String deviceID) async {
+  Future<HealthReportResponse> getHealthReportLifeLogDio(String deviceID, String selectedDate) async {
     try {
       // Dio를 사용하여 API 호출
       Response response = await _createPrivateDio().get(healthLifeLogApiUrl,
-          queryParameters: {'deviceID': deviceID});
+          queryParameters: {'deviceID': deviceID, 'date': selectedDate});
 
       // API 응답을 모델로 변환
       HealthReportResponse healthReportResponse
@@ -370,6 +372,42 @@ class RemoteDataSource {
       = MedicationDetailResponse.fromJson(response.data);
 
       return medicationDetailResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 나의 일상기록 건강관리소 방문 날짜 리스트 가져오기s
+  Future<RecordDateResponse> getRecordDateDio() async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(getRecordDateApiUrl);
+
+      // API 응답을 모델로 변환
+      RecordDateResponse recordDateResponse = RecordDateResponse.fromJson(response.data);
+
+      return recordDateResponse;
+    } on DioException catch (dioError){
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// AI 건강 예측 데이터 가져오기
+  Future<AiHealthResponse> getAiHealthDataDio() async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPrivateDio().get(getAiHealthApiUrl);
+
+      // API 응답을 모델로 변환
+      AiHealthResponse aiHealthResponse = AiHealthResponse.fromJson(response.data);
+
+      return aiHealthResponse;
     } on DioException catch (dioError){
       rethrow;
     } catch (error) {

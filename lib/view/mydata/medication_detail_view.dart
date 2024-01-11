@@ -120,15 +120,15 @@ class _MedicationDetailViewState extends State<MedicationDetailView> with Ticker
   Widget buildImage() {
     return Container(
       height: 180,
-      width: double.infinity,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
           border: Border.all(width: 2.0, color: Colors.grey.shade200)),
-      padding: const EdgeInsets.all(15.0),
-      child: Frame.buildExtendedImage(
-          animationController,
-          '${_viewModel.medicationDetailData?.imageUrl}',
-      double.infinity),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20.0),
+        child: Frame.buildExtendedImage(
+            animationController,
+            '${_viewModel.medicationDetailData?.imageUrl}', double.infinity),
+      )
     );
   }
 
@@ -171,7 +171,38 @@ class _MedicationDetailViewState extends State<MedicationDetailView> with Ticker
     );
   }
 
-  Widget buildMedicineEtcInfoDefault(String title, String content){
+  Widget buildMedicineDetail() {
+    return Consumer<MedicationDetailViewModel>(
+      builder: (BuildContext context, value, Widget? child) {
+        return Column(
+          children: [
+            SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  buildChip('복약', MedicationInfoType.taking, value.isSelectedList[0]),
+                  buildChip('용법', MedicationInfoType.usage, value.isSelectedList[1]),
+                  buildChip('효능', MedicationInfoType.efficacy, value.isSelectedList[2]),
+                  buildChip('주의', MedicationInfoType.advise,value.isSelectedList[3]),
+                  buildChip('DUR', MedicationInfoType.dur, value.isSelectedList[4]),
+                  buildChip('기본', MedicationInfoType.basic, value.isSelectedList[5]),
+                ],
+              ),
+            ),
+
+            value.isSelectedList[5]
+                ? buildMedicationInfoBasicItem()
+                : buildMedicineInfoDefaultItem(value.medicationEtcTitle, value.medicationEtcContent),
+          ],
+          //buildSelectedChipView()
+        );
+      },
+    );
+  }
+
+  Widget buildMedicineInfoDefaultItem(String title, String content){
     return Container(
       padding: const EdgeInsets.all(20.0),
       decoration: BoxDecoration(
@@ -198,11 +229,15 @@ class _MedicationDetailViewState extends State<MedicationDetailView> with Ticker
                 ),
               ),
               const Gap(10),
-              Frame.myText(
-                  text: content,//,
-                  fontSize: 0.9,
-                  softWrap: true,
-                  maxLinesCount: 10),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Frame.myText(
+                    text: content,
+                    fontSize: 0.9,
+                    softWrap: true,
+                    maxLinesCount: 700
+                ),
+              ),
             ],
           )
         ],
@@ -210,34 +245,100 @@ class _MedicationDetailViewState extends State<MedicationDetailView> with Ticker
     );
   }
 
-  Widget buildMedicineDetail() {
+  buildMedicationInfoBasicItem(){
     return Consumer<MedicationDetailViewModel>(
       builder: (BuildContext context, value, Widget? child) {
-        return Column(
-          children: [
-            SizedBox(
-              height: 50,
-              width: double.infinity,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  buildChip('복약', MedicationInfoType.taking, value.isSelectedList[0]),
-                  buildChip('용법', MedicationInfoType.usage, value.isSelectedList[1]),
-                  buildChip('효능', MedicationInfoType.efficacy, value.isSelectedList[2]),
-                  buildChip('주의', MedicationInfoType.advise,value.isSelectedList[3]),
-                  buildChip('DUR', MedicationInfoType.dur, value.isSelectedList[4]),
-                  buildChip('기본', MedicationInfoType.basic, value.isSelectedList[5]),
-                ],
+        return  Container(
+          padding: const EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              color: const Color(0xfff4f4f4)
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.0),
+                    border: Border.all(color: Colors.grey.shade400, width: 1.5),
+                    color: Colors.white
+                ),
+                child: Frame.myText(
+                    text: value.medicationEtcTitle,
+                    fontWeight: FontWeight.w600
+                ),
               ),
-            ),
+              const Gap(10),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Frame.myText(
+                    text: value.medicationEtcContent,
+                    fontSize: 0.9,
+                    softWrap: true,
+                    maxLinesCount: 700
+                ),
+              ),
+              const Gap(20),
 
-            buildMedicineEtcInfoDefault(value.medicationEtcTitle, value.medicationEtcContent),
-          ],
-          //buildSelectedChipView()
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.0),
+                    border: Border.all(color: Colors.grey.shade400, width: 1.5),
+                    color: Colors.white
+                ),
+                child: Frame.myText(
+                    text: value.medicationIngredientTitle,
+                    fontWeight: FontWeight.w600
+                ),
+              ),
+              const Gap(10),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Frame.myText(
+                    text: value.medicationIngredientContent,
+                    fontSize: 0.9,
+                    softWrap: true,
+                    maxLinesCount: 700
+                ),
+              ),
+              const Gap(20),
+
+
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30.0),
+                    border: Border.all(color: Colors.grey.shade400, width: 1.5),
+                    color: Colors.white
+                ),
+                child: Frame.myText(
+                    text: value.medicationPropertiesTitle,
+                    fontWeight: FontWeight.w600
+                ),
+              ),
+              const Gap(10),
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Frame.myText(
+                    text: value.medicationPropertiesContent,
+                    fontSize: 0.9,
+                    softWrap: true,
+                    maxLinesCount: 700
+                ),
+              ),
+            ],
+          ),
         );
       },
     );
   }
+
+
 
   Widget buildChip(String label, MedicationInfoType type, isSelected) {
     return  GestureDetector(
@@ -246,7 +347,7 @@ class _MedicationDetailViewState extends State<MedicationDetailView> with Ticker
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Chip(
           labelPadding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0),
-          backgroundColor: isSelected ?  Color(0xffe5ecff): Colors.white,
+          backgroundColor: isSelected ? const Color(0xffe5ecff) : Colors.white,
           label: Frame.myText(
             text: label,
             fontSize: 0.9,
@@ -265,9 +366,5 @@ class _MedicationDetailViewState extends State<MedicationDetailView> with Ticker
         ),
       ),
     );
-  }
-
-  buildSelectedChipView() {
-    return Container();
   }
 }
