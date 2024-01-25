@@ -4,18 +4,16 @@ import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/services/health_service.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
-import '../../data/models/picker_data.dart';
-import '../../main.dart';
 import '../../utils/colors.dart';
-import '../../utils/constants.dart';
 import '../../utils/etc.dart';
-import '../../widgets/custom_picker.dart';
 import '../../widgets/frame.dart';
 import '../../widgets/health_circular_chart.dart';
+import '../aihealth/health_point_box_widget.dart';
 import '../login/login_view.dart';
 import 'health_center_record_view.dart';
+import 'myrecord_main_viewmodel.dart';
 
 enum HealthDataType  {
   sleep,
@@ -30,23 +28,18 @@ class MyRecordMainView extends StatefulWidget {
 }
 
 class _MyRecordMainViewState extends State<MyRecordMainView> {
-
-  /// 목표 수면
-  late String targetSleep;
-
-  /// 목표 걸음
-  late String targetStep;
+  late MyRecordMainViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-
-    targetSleep = Authorization().targetSleep;
-    targetStep = Authorization().targetStep;
+    _viewModel = MyRecordMainViewModel(
+        context, Authorization().targetSleep, Authorization().targetStep);
   }
 
   @override
   Widget build(BuildContext context) {
+    _viewModel.handleTotalPoint();
 
     /// AccessToken 확인
     Authorization().checkAuthToken().then((result) {
@@ -58,34 +51,40 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: FutureBuilder(
-        future: HealthService().fetchToDayData(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.hasError) {
-            if(snapshot.error.toString().contains('NotGranted')){
-              return Frame.showMessageHealthErrorScreen('건강 데이터 접근 또는\n계정이 승인되지 않았습니다.', () =>
-                HealthService().requestPermission().then((required){
-                  if(required) setState(() {});
-                }));
-            } else if(snapshot.error.toString().contains('permissionsError')){
-              return Frame.showMessageHealthErrorScreen('건강 데이터(걸음, 수면, 심박)\n 접근을 허용해주세요.', () =>
+      body: ChangeNotifierProvider(
+        create: (BuildContext context) => _viewModel,
+        child: FutureBuilder(
+          future: HealthService().fetchToDayData(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasError) {
+              if(snapshot.error.toString().contains('NotGranted')){
+                return Frame.showMessageHealthErrorScreen('건강 데이터 접근 또는\n계정이 승인되지 않았습니다.', () =>
                   HealthService().requestPermission().then((required){
                     if(required) setState(() {});
                   }));
-            } else {
-              return Frame.buildFutureBuilderHasError(
-                  snapshot.error.toString(), () => {});
+              } else if(snapshot.error.toString().contains('permissionsError')){
+                return Frame.showMessageHealthErrorScreen('건강 데이터(걸음, 수면, 심박)\n 접근을 허용해주세요.', () =>
+                    HealthService().requestPermission().then((required){
+                      if(required) setState(() {});
+                    }));
+              } else {
+                return Frame.buildFutureBuilderHasError(snapshot.error.toString(), () => {});
+              }
+            }
+            else if(snapshot.connectionState == ConnectionState.waiting) {
+              return Frame.buildFutureBuildProgressIndicator();
             }
 
-          }
-          else if(snapshot.connectionState == ConnectionState.waiting) {
-            return Frame.buildFutureBuildProgressIndicator();
-          }
-
-          return  SingleChildScrollView(
+            return SingleChildScrollView(
               child: Column(
                 children: [
                   buildTopPhraseWidget(),
+
+                  /// 포인트 위젯
+                  Consumer<MyRecordMainViewModel>(
+                      builder: (BuildContext context, value, Widget? child) {
+                    return HealthPointBoxWidget(totalPoint: value.totalPoint);
+                  }),
 
                   /// 라이프로그 검사 결과 자세히 보기 (전신 그림)
                   const HealthCenterRecordView(),
@@ -94,48 +93,42 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
                 ],
               ),
             );
-        },
+          },
+        ),
       ),
     );
   }
 
-  /// 달성률 계산
-  calculateAchievementRate(int value, int target){
-    if (target == 0 || value == 0) {
-     return 0.0;
-    }
-
-    if (value > target) {
-      return 100.0;
-    }
-
-    // 달성률 계산
-    double rate = (value / target) * 100;
-    return rate;
-  }
-
-  showCustomDialog(HealthDataType type){
-    CustomPicker().showBottomSheet(
-        PickerData(19, type == HealthDataType.sleep ? Constants.targetSleepList: Constants.targetStepsList, context,
-                (callbackData)=> onGetPickerData(callbackData)));
-  }
-
-  /// Number picker Function callback
-  /// @param callbackData : 반환 값
-  onGetPickerData(callbackData) {
-    setState(() {
-      int getPickerData = int.parse(callbackData.toString());
-      if(getPickerData<1000){ // 수면시간
-        targetSleep = getPickerData.toString();
-        Authorization().targetSleep = targetSleep;
-        setStringData('targetSleep', targetSleep);
-      } else { // 걸음수
-        targetStep = getPickerData.toString();
-        Authorization().targetStep = targetStep;
-        setStringData('targetStep', targetStep);
-      }
-      logger.i(getPickerData.toString());
-    });
+  /// 앱 상단 메시지 표시 위젯
+  Widget buildTopPhraseWidget() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 30, left: 20, bottom: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Frame.myText(
+                  text: '${Authorization().userName}님의 ',
+                  fontSize: 1.7,
+                  fontWeight: FontWeight.bold
+              ),
+              Frame.myText(
+                text: '일상 기록',
+                fontSize: 1.7,
+                fontWeight: FontWeight.bold,
+                color: mainColor,
+              )
+            ],
+          ),
+          const Gap(5),
+          Frame.myText(
+              text: '계측검사 • 수면 • 걸음 수 • 심박수에 대한\n정보를 제공합니다.',
+              maxLinesCount: 2
+          ),
+        ],
+      ),
+    );
   }
 
   /// 최근 심박수 표시 박스 위젯
@@ -210,64 +203,8 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
     );
   }
 
-  /// Health Empty View
-  Widget buildEmptyView(String text) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.question_mark, size: 40),
-          const Gap(20),
-          Frame.myText(
-              text: text,
-              fontSize: 1.3,
-              color: mainColor,
-              fontWeight: FontWeight.w600),
-        ],
-      ),
-    );
-  }
-
-  /// 앱 상단 메시지 표시 위젯
-  Widget buildTopPhraseWidget() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 30, left: 20, bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Frame.myText(
-                  text: '${Authorization().userName}님의 ',
-                  fontSize: 1.7,
-                  fontWeight: FontWeight.bold
-              ),
-              Frame.myText(
-                text: '일상 기록',
-                fontSize: 1.7,
-                fontWeight: FontWeight.bold,
-                color: mainColor,
-              )
-            ],
-          ),
-          const Gap(5),
-          Frame.myText(
-            text: '계측검사 • 수면 • 걸음 수 • 심박수에 대한\n정보를 제공합니다.',
-            maxLinesCount: 2
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// SharedPreferences local data save
-  void setStringData(String key , String data) async{
-    var pref = await SharedPreferences.getInstance();
-    pref.setString(key,data);
-  }
-
-  buildWearableCharts() {
+  /// 웨어러블(걷기, 수면) 차트 윗젯
+  Widget buildWearableCharts() {
     return Padding(
         padding: const EdgeInsets.all(10.0),
         child: Card(
@@ -277,55 +214,59 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20.0),
-                    border:
-                        Border.all(width: 2.0, color: Colors.grey.shade200)),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// 웨어러블 박스 상단 타이틀
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                      child: Frame.myText(
-                          text: '${Authorization().userName}님의 웨어러블',
-                          fontSize: 1.3,
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
+                    border: Border.all(width: 2.0, color: Colors.grey.shade200)),
+                child: Consumer<MyRecordMainViewModel>(
+                  builder: (BuildContext context, value, Widget? child) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// 웨어러블 박스 상단 타이틀
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                          child: Frame.myText(
+                              text: '${Authorization().userName}님의 웨어러블',
+                              fontSize: 1.3,
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
 
-                    /// 걸음 수 진행 위젯
-                    HealthCircularChart(
-                      mainValue: HealthService().dayStep.toString() ?? '0',
-                      targetValue: targetStep,
-                      type: HealthDataType.step,
-                      function: (type)=> showCustomDialog(type),
-                      chartData: [ChartData2('B', calculateAchievementRate(HealthService().dayStep ?? 0, int.parse(targetStep)))],
-                    ),
+                        /// 걸음 수 진행 위젯
+                        HealthCircularChart(
+                          mainValue: HealthService().dayStep.toString(),
+                          targetValue: value.targetStep,
+                          type: HealthDataType.step,
+                          function: (type)=> _viewModel.showCustomDialog(type),
+                          chartData: [ChartData2('B', Etc.calculateAchievementRate(HealthService().dayStep ?? 0, int.parse(value.targetStep)))],
+                        ),
 
-                    /// 실시간 걸음 랭킹
-                    buildRealTimeStepRanking(),
+                        /// 실시간 걸음 랭킹
+                        buildRealTimeStepRanking(),
 
-                    Etc.solidLineWearableBox(context),
+                        Etc.solidLineWearableBox(context),
 
-                    /// 수면 시간 진행 위젯
-                    HealthCircularChart(
-                      mainValue:'${(HealthService().toDayTotalSleep ?? 0) ~/ 60}시간',
-                      targetValue: targetSleep,
-                      type: HealthDataType.sleep,
-                      function: (type)=> showCustomDialog(type),
-                      chartData: [ChartData2('A', calculateAchievementRate((HealthService().toDayTotalSleep ?? 0) ~/ 60, int.parse(targetSleep)))],
-                    ),
+                        /// 수면 시간 진행 위젯
+                        HealthCircularChart(
+                          mainValue:'${(HealthService().toDayTotalSleep ?? 0) ~/ 60}시간',
+                          targetValue: value.targetSleep,
+                          type: HealthDataType.sleep,
+                          function: (type)=> _viewModel.showCustomDialog(type),
+                          chartData: [ChartData2('A', Etc.calculateAchievementRate((HealthService().toDayTotalSleep ?? 0) ~/ 60, int.parse(value.targetSleep)))],
+                        ),
 
-                    Etc.solidLineWearableBox(context),
+                        Etc.solidLineWearableBox(context),
 
-                    buildHartRateBox(),
-                  ],
+                        buildHartRateBox(),
+                      ],
+                    );
+                  },
                 )
             )
         )
     );
   }
 
-  buildRealTimeStepRanking(){
+  /// 신규 걷기 랭킹 위젯
+  Widget buildRealTimeStepRanking(){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -401,11 +342,13 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
     );
   }
 
+  /// 랭킹 차트 아이템 위젯
   Widget buildStepChartBarItem({
     required Color barColor,
     required String stepText,
     required String rankingText,
-    required double height}){
+    required double height})
+  {
     return Expanded(
       flex: 1,
       child: Container(

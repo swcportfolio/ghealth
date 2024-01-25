@@ -200,6 +200,19 @@ class Etc{
     return formattedDate;
   }
 
+  static pointDateFormat(String inputDateTimeString) {
+      if(inputDateTimeString == ''){
+        return '';
+      }
+      // 입력된 날짜와 시간 문자열을 DateTime 객체로 변환
+      DateTime inputDateTime = DateTime.parse(inputDateTimeString);
+
+      // 출력 형식을 지정
+      String outputFormat = 'yyyy-MM-dd';
+
+      return DateFormat(outputFormat).format(inputDateTime);
+  }
+
   static chartDateFormat(String dateInput) {
     if(dateInput == ''){
       return '';
@@ -757,6 +770,27 @@ class Etc{
       // 유효하지 않은 날짜 문자열 처리
       return '0000-00-00';
     }
+  }
+
+  /// 백단위로 ,(콤마) 생성
+  static String formatNumberWithCommas(int number) {
+    final format = NumberFormat("#,###");
+    return format.format(number);
+  }
+
+  /// 달성률 계산
+  static calculateAchievementRate(int value, int target){
+    if (target == 0 || value == 0) {
+      return 0.0;
+    }
+
+    if (value > target) {
+      return 100.0;
+    }
+
+    // 달성률 계산
+    double rate = (value / target) * 100;
+    return rate;
   }
 }
 

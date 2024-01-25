@@ -3,6 +3,7 @@
 
 import 'package:ghealth_app/data/models/ai_health_response.dart';
 import 'package:ghealth_app/data/models/medication_detail_response.dart';
+import 'package:ghealth_app/data/models/point_history_response.dart';
 
 import '../datasource/local_data_source.dart';
 import '../datasource/remote_data_source.dart';
@@ -21,6 +22,7 @@ import '../models/reservation_possible_response.dart';
 import '../models/reservation_recent_response.dart';
 import '../models/send_message_response.dart';
 import '../models/summary_response.dart';
+import '../models/total_point_response.dart';
 import '../models/user_response.dart';
 
 /// PostRepository (post_repository.dart)
@@ -104,6 +106,13 @@ Future<AiHealthResponse> getAiHealthDataDio(){
   return _remoteDataSource.getAiHealthDataDio();
 }
 
+Future<PointHistoryResponse> getPointHistoryListDio(int pageIdx){
+  return _remoteDataSource.getPointHistoryListDio(pageIdx);
+}
+
+Future<TotalPointResponse> getTotalPointDio(){
+  return _remoteDataSource.getTotalPointDio();
+}
 
   /// 로컬에 캐싱된 게시물 목록가져옴
 // Future<List<Post>> getCachedPosts() {

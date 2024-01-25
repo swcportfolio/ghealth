@@ -26,8 +26,8 @@ class _MedicationInfoDetailViewState extends State<MedicationInfoDetailView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
     _viewModel = MedicationInfoDetailViewModel(context, 1);
   }
 

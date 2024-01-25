@@ -60,3 +60,9 @@ const String getRecordDateApiUrl = '$baseUrl/ws/private/lifelog/date';
 
 /// AI 건강예측 결과 데이터 가져오기 URL
 const String getAiHealthApiUrl = '$baseUrl/ws/private/ai/mydata/predict';
+
+/// 포인트 히스토리 리스트 가져오기 URL
+const String getHistoryListApiUrl = '$baseUrl/ws/public/point/history';
+
+/// 총 포인트 가져오기 URL
+const String getTotalPointApiUrl = '$baseUrl/ws/public/point';

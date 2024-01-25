@@ -224,7 +224,7 @@ class _MedicationDetailViewState extends State<MedicationDetailView> with Ticker
                   color: Colors.white
                 ),
                 child: Frame.myText(
-                  text: title, //'',
+                  text: title,
                   fontWeight: FontWeight.w600
                 ),
               ),

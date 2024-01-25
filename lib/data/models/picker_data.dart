@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 
 /// picker data class
 class PickerData{
-
   dynamic indexInitialValue;       // 초기 값(위치)
   List<dynamic> itemList;          // inout Type: [int or String]
   BuildContext context;            // Widget position

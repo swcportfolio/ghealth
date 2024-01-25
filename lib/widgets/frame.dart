@@ -68,7 +68,7 @@ class Frame{
      style: TextStyle(
          color: color,
          fontWeight: fontWeight,
-        fontFamily: 'Pretendard'
+        fontFamily: 'pretendard'
      ),
      textAlign: align
      ,

@@ -4,11 +4,14 @@ import 'package:ghealth_app/data/models/ai_health_response.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/data/models/health_instrumentation_response.dart';
 import 'package:ghealth_app/data/models/medication_detail_response.dart';
+import 'package:ghealth_app/data/models/point_history_response.dart';
 import 'package:ghealth_app/data/models/send_message_response.dart';
 import 'package:ghealth_app/data/models/summary_response.dart';
+import 'package:ghealth_app/data/models/total_point_response.dart';
 import 'package:ghealth_app/data/models/user_response.dart';
 import 'package:intl/intl.dart';
 
+import '../../main.dart';
 import '../../utils/custom_log_interceptor.dart';
 import '../models/health_report_response.dart';
 import '../models/mediacation_info_response.dart';
@@ -416,7 +419,53 @@ class RemoteDataSource {
     }
   }
 
-  // final _firebaseInstance = FirebaseFirestore.instance;
+  /// 포인트 히스토리 리스트 가져오기
+  Future<PointHistoryResponse> getPointHistoryListDio(int pageIdx) async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPublicDio().get(getHistoryListApiUrl,
+      queryParameters: {
+        'userID': Authorization().userID,
+        'page': pageIdx,
+        'searchStartDate': '',
+        'searchEndDate': '',
+      });
+
+      // API 응답을 모델로 변환
+      PointHistoryResponse pointHistoryResponse = PointHistoryResponse.fromJson(response.data);
+
+      return pointHistoryResponse;
+    } on DioException catch (dioError) {
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+
+  /// 총 포인트 가져오기
+  Future<TotalPointResponse> getTotalPointDio() async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPublicDio().get(getTotalPointApiUrl,
+          queryParameters: {
+            'userID': Authorization().userID,
+          });
+
+      // API 응답을 모델로 변환
+      TotalPointResponse totalPointResponse = TotalPointResponse.fromJson(response.data);
+
+      return totalPointResponse;
+    } on DioException catch (dioError) {
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+// final _firebaseInstance = FirebaseFirestore.instance;
 
   // /// 앱 광고 알람 수신 업데이트
   // Future<void> updateAlarmAdvertisement(bool isAdvertisement) async {
