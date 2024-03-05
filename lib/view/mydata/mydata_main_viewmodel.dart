@@ -12,6 +12,7 @@ import '../../data/models/metrology_inspection.dart';
 import '../../data/models/mydata_predict_data.dart';
 import '../../data/models/summary_response.dart';
 import '../../main.dart';
+import '../../utils/text_formatter.dart';
 
 class MyDataMainViewModel extends ChangeNotifier {
   MyDataMainViewModel(this.context);
@@ -122,7 +123,7 @@ class MyDataMainViewModel extends ChangeNotifier {
       for(var value in _summaryData!.healthScreeningList!){
         if(value.dataName == '종합소견_판정'){ //종합소견_판정, 인지기능장애_결과
           _comprehensiveOpinionText = value.dataValue;
-          _issuedDate = Etc.defaultDateFormat(value.issuedDate);
+          _issuedDate = TextFormatter.defaultDateFormat(value.issuedDate);
         }
         if(value.dataName == '종합소견_생활습관관리'){ //종합소견_생활습관관리, 노인신체기능검사_결과
           _lifestyleManagementText = value.dataValue;

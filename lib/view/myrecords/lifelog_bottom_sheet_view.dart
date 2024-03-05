@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:ghealth_app/utils/enum/lifelog_data_type.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/enum/lifelog_data_type.dart';
 import '../../data/models/lifelog_data.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';

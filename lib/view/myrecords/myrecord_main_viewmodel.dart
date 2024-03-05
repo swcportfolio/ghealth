@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:ghealth_app/data/models/accumulate_point_response.dart';
 import 'package:ghealth_app/data/models/total_point_response.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,10 +13,12 @@ import '../../main.dart';
 import '../../utils/constants.dart';
 import '../../utils/my_exception.dart';
 import '../../widgets/custom_picker.dart';
+import '../../widgets/dialog.dart';
 import 'myrecord_main_view.dart';
 
 class MyRecordMainViewModel extends ChangeNotifier {
-  MyRecordMainViewModel(this.context, this.targetSleep, this.targetStep);
+
+  MyRecordMainViewModel(this.context, this.targetSleep, this.targetStep, this._isAttendance);
 
   late BuildContext context;
   final _postRepository = PostRepository();
@@ -29,7 +32,11 @@ class MyRecordMainViewModel extends ChangeNotifier {
   /// 목표 걸음
   late String targetStep;
 
+  /// 금일 출석 여부
+  late bool _isAttendance;
+
   String get totalPoint => _totalPoint;
+  bool get isAttendance => _isAttendance;
 
   Future<void> handleTotalPoint() async {
    try {
@@ -47,6 +54,38 @@ class MyRecordMainViewModel extends ChangeNotifier {
      logger.e('=> $dioError');
      MyException.myDioException(dioError.type);
    }
+  }
+
+
+  /// 출석 기능
+  Future<void> handleAttendance() async {
+    try {
+      AccumulatePointResponse response = await _postRepository.setAttendanceDio();
+      if(response.status.code == '200'){
+        // ignore: use_build_context_synchronously
+        CustomDialog.showMyDialog(
+          title: '출석 체크',
+          content: '출석체크가 완료 되었습니다.',
+          mainContext: context,
+        );
+        _isAttendance = true;
+        Authorization().isToDayAttendance = _isAttendance;
+        saveBooleanData('isToDayAttendance', _isAttendance);
+
+        notifyListeners();
+      }
+      else {
+        // ignore: use_build_context_synchronously
+        CustomDialog.showMyDialog(
+          title: '출석 체크',
+          content: '출석체크 정상적으로 이루워지지 않았습니다.\n다시 시도바랍니다.',
+          mainContext: context,
+        );
+      }
+    }  on DioException catch (dioError) {
+      logger.e('=> $dioError');
+      MyException.myDioException(dioError.type);
+    }
   }
 
   showCustomDialog(HealthDataType type){
@@ -72,9 +111,15 @@ class MyRecordMainViewModel extends ChangeNotifier {
       notifyListeners();
   }
 
-  /// SharedPreferences local data save
+  /// SharedPreferences local String data save
   void saveStringData(String key , String data) async{
     var pref = await SharedPreferences.getInstance();
     pref.setString(key,data);
+  }
+
+  /// SharedPreferences local boolean data save
+  void saveBooleanData(String key , bool data) async{
+    var pref = await SharedPreferences.getInstance();
+    pref.setBool(key,data);
   }
 }

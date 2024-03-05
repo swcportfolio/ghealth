@@ -4,6 +4,7 @@ import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/view/point/my_health_point_view.dart';
 
 import '../../utils/colors.dart';
+import '../../utils/text_formatter.dart';
 import '../../widgets/frame.dart';
 
 class HealthPointBoxWidget extends StatelessWidget {
@@ -69,8 +70,7 @@ class HealthPointBoxWidget extends StatelessWidget {
                           ),
                           const Gap(5),
                           Frame.myText(
-                            text:
-                                '${Etc.formatNumberWithCommas(int.parse(totalPoint))}P',
+                            text: '${TextFormatter.formatNumberWithCommas(int.parse(totalPoint))}P',
                             fontSize: 1.8,
                             fontWeight: FontWeight.w500,
                           ),

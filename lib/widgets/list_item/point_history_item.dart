@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 
 import '../../data/models/point_hisstory.dart';
 import '../../utils/etc.dart';
+import '../../utils/text_formatter.dart';
 import '../frame.dart';
 
 /// 포인트 적립, 사용 내역 리스트 아이템
@@ -36,7 +37,7 @@ class PointHistoryItem extends StatelessWidget {
               const Gap(5),
 
               Frame.myText(
-                  text: Etc.pointDateFormat(pointHistory.createDT),
+                  text: TextFormatter.defaultDateFormat(pointHistory.createDT),
                   fontSize: 1.1,
                   color: Colors.grey
               ),

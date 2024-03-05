@@ -8,10 +8,12 @@ import 'package:provider/provider.dart';
 
 import '../../utils/colors.dart';
 import '../../utils/etc.dart';
+import '../../utils/snackbar_utils.dart';
 import '../../widgets/frame.dart';
 import '../../widgets/health_circular_chart.dart';
 import '../aihealth/health_point_box_widget.dart';
 import '../login/login_view.dart';
+import 'attendance_button_widget.dart';
 import 'health_center_record_view.dart';
 import 'myrecord_main_viewmodel.dart';
 
@@ -34,7 +36,10 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
   void initState() {
     super.initState();
     _viewModel = MyRecordMainViewModel(
-        context, Authorization().targetSleep, Authorization().targetStep);
+        context,
+        Authorization().targetSleep,
+        Authorization().targetStep,
+        Authorization().isToDayAttendance);
   }
 
   @override
@@ -44,7 +49,8 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
     /// AccessToken 확인
     Authorization().checkAuthToken().then((result) {
       if(!result){
-        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        SnackBarUtils.showBGWhiteSnackBar(
+            '권한 만료, 재 로그인 필요합니다.', context);
         Frame.doPagePush(context, const LoginView());
       }
     });
@@ -86,8 +92,14 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
                     return HealthPointBoxWidget(totalPoint: value.totalPoint);
                   }),
 
+                  /// 출석 체크 버튼
+                  // Consumer<MyRecordMainViewModel>(
+                  //     builder: (BuildContext context, value, Widget? child) {
+                  //       return AttendanceButtonWidget(viewModel: value, isAttendance: value.isAttendance);
+                  //     }),
+
                   /// 라이프로그 검사 결과 자세히 보기 (전신 그림)
-                  const HealthCenterRecordView(),
+                   const HealthCenterRecordView(),
 
                   buildWearableCharts(),
                 ],

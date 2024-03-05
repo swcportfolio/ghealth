@@ -4,13 +4,14 @@ import 'package:ghealth_app/data/models/health_instrumentation_response.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/etc.dart';
 
+import '../../../data/enum/mydata_measurement_type.dart';
 import '../../../data/models/column_series_chart_data.dart';
 import '../../../data/models/default_series_chart_data.dart';
 import '../../../data/models/health_screening_data.dart';
 import '../../../main.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/enum/mydata_measurement_type.dart';
 import '../../../utils/my_exception.dart';
+import '../../../utils/text_formatter.dart';
 
 
 class MyDataBottomSheetViewModel extends ChangeNotifier {
@@ -108,7 +109,7 @@ class MyDataBottomSheetViewModel extends ChangeNotifier {
         double y2 = values.length > 1 ? double.parse(values[1].split(' ')[0]) : 0.0;
 
         return ColumnSeriesChartData(
-          x: Etc.chartDateFormat(data.issuedDate),
+          x: TextFormatter.seriesChartXAxisDateFormat(data.issuedDate),
           y1: y1,
           y2: y2,
         );
@@ -135,7 +136,7 @@ class MyDataBottomSheetViewModel extends ChangeNotifier {
         double y1 = double.parse(values[0]);
 
         return DefaultSeriesChartData(
-          x: Etc.chartDateFormat(data.issuedDate),
+          x: TextFormatter.seriesChartXAxisDateFormat(data.issuedDate),
           y1: y1,
         );
       }).toList();

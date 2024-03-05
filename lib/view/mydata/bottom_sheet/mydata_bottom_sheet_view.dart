@@ -4,12 +4,13 @@ import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/horizontal_dashed_line.dart';
 import 'package:provider/provider.dart';
 
+import '../../../data/enum/mydata_measurement_type.dart';
 import '../../../data/models/column_series_chart_data.dart';
 import '../../../data/models/default_series_chart_data.dart';
 import '../../../data/models/health_screening_data.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/enum/mydata_measurement_type.dart';
+import '../../../utils/text_formatter.dart';
 import '../../../widgets/chart/column_series_chart.dart';
 import '../../../widgets/chart/default_series_chart.dart';
 import '../../../widgets/frame.dart';
@@ -278,7 +279,7 @@ class _MyDataBottomSheetViewState extends State<MyDataBottomSheetView> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Frame.myText(
-                                text: Etc.defaultDateFormat(_hearingAbilityList[index].issuedDate),
+                                text: TextFormatter.defaultDateFormat(_hearingAbilityList[index].issuedDate),
                                 fontSize: 1.2,
                               ),
                               Frame.myText(

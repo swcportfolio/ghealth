@@ -21,6 +21,7 @@ class Authorization{
 
   late String targetSleep;
   late String targetStep;
+  late bool isToDayAttendance;// 당일 출석 여부
 
 
   @override
@@ -37,11 +38,12 @@ class Authorization{
   }
 
   // 사용자 권한 값을 설정하는 메서드
-  void setValues({required String newUserID,
-      required String newUserName,
-      required String newToken,
-      required String newGender,
-      }) {
+  void setValues({
+    required String newUserID,
+    required String newUserName,
+    required String newToken,
+    required String newGender,
+  }) {
     userID = newUserID;
     userName = newUserName;
     token = newToken;
@@ -64,6 +66,7 @@ class Authorization{
     gender = '';
     targetSleep = '0';
     targetStep = '0';
+    //isToDayAttendance = false;
   }
 
 

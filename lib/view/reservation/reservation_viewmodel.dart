@@ -10,11 +10,13 @@ import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/dialog.dart';
 import 'package:intl/intl.dart';
 
+import '../../data/enum/snackbar_status_type.dart';
 import '../../data/models/reservation_data.dart';
 import '../../data/models/reservation_dayoff_response.dart';
 import '../../data/models/reservation_default_response.dart';
 import '../../data/models/reservation_possible_response.dart';
 import '../../main.dart';
+import '../../utils/snackbar_utils.dart';
 
 class ReservationViewModel extends ChangeNotifier {
 
@@ -165,7 +167,11 @@ class ReservationViewModel extends ChangeNotifier {
           .saveReservationDio(toMap);
 
       if(response.status.code == '200'){
-        Etc.successSnackBar('예약이 완료 되었습니다.', context);
+        SnackBarUtils.showStatusSnackBar(
+          message: '예약이 완료 되었습니다.',
+          context: context,
+          statusType: SnackBarStatusType.success,
+        );
         initScreen();
       }
       else if(response.status.code == 'ERR_MS_6003'){
@@ -202,7 +208,11 @@ class ReservationViewModel extends ChangeNotifier {
          });
 
       if(response.status.code == '200'){
-        Etc.successSnackBar('예약이 취소 되었습니다.', context);
+        SnackBarUtils.showStatusSnackBar(
+            message: '예약이 취소 되었습니다.',
+            context: context,
+            statusType: SnackBarStatusType.success
+        );
         initScreen();
       } else {
         CustomDialog.showMyDialog(

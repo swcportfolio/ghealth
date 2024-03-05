@@ -11,6 +11,7 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../data/models/authorization.dart';
 import '../../utils/colors.dart';
+import '../../utils/snackbar_utils.dart';
 import '../../widgets/dialog.dart';
 import '../login/login_view.dart';
 
@@ -39,7 +40,8 @@ class _ReservationMainViewState extends State<ReservationMainView> {
     /// AccessToken 확인
     Authorization().checkAuthToken().then((result) {
       if(!result){
-        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        SnackBarUtils.showBGWhiteSnackBar(
+            '권한 만료, 재 로그인 필요합니다.', context);
         Frame.doPagePush(context, const LoginView());
       }
     });

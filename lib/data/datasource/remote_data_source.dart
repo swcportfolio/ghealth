@@ -1,10 +1,13 @@
 
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:ghealth_app/data/models/ai_health_response.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/data/models/health_instrumentation_response.dart';
 import 'package:ghealth_app/data/models/medication_detail_response.dart';
 import 'package:ghealth_app/data/models/point_history_response.dart';
+import 'package:ghealth_app/data/models/product_data_response.dart';
 import 'package:ghealth_app/data/models/send_message_response.dart';
 import 'package:ghealth_app/data/models/summary_response.dart';
 import 'package:ghealth_app/data/models/total_point_response.dart';
@@ -13,6 +16,7 @@ import 'package:intl/intl.dart';
 
 import '../../main.dart';
 import '../../utils/custom_log_interceptor.dart';
+import '../models/accumulate_point_response.dart';
 import '../models/health_report_response.dart';
 import '../models/mediacation_info_response.dart';
 import '../models/record_date_response.dart';
@@ -457,6 +461,49 @@ class RemoteDataSource {
       TotalPointResponse totalPointResponse = TotalPointResponse.fromJson(response.data);
 
       return totalPointResponse;
+    } on DioException catch (dioError) {
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+  /// 총 포인트 가져오기
+  Future<ProductDataResponse> getProductDio() async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPublicDio().post(getProductApiUrl,
+          data:{'userID':'U00000'});
+      logger.i(response.data);
+
+      // API 응답을 모델로 변환
+      ProductDataResponse productDataResponse
+      = ProductDataResponse.fromJsonList(jsonDecode(response.data));
+
+      return productDataResponse;
+    } on DioException catch (dioError) {
+      rethrow;
+    } catch (error) {
+      // 에러 처리
+      rethrow; // 에러를 다시 던져서 상위 레벨에서 처리하도록 함
+    }
+  }
+
+
+  /// 출석 체크
+  Future<AccumulatePointResponse> setAttendanceDio() async {
+    try {
+      // Dio를 사용하여 API 호출
+      Response response = await _createPublicDio().post(setAttendanceApiUrl,
+          data: {'policyID': 'P007', 'userID': Authorization().userID});
+      logger.i(response.data);
+
+      // API 응답을 모델로 변환
+      AccumulatePointResponse accumulatePointResponse
+      = AccumulatePointResponse.fromJson(response.data);
+
+      return accumulatePointResponse;
     } on DioException catch (dioError) {
       rethrow;
     } catch (error) {

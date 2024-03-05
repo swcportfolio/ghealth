@@ -3,9 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:provider/provider.dart';
 
+import '../../../data/enum/blood_type.dart';
 import '../../../data/models/blood_series_chart_data.dart';
 import '../../../utils/colors.dart';
-import '../../../utils/enum/blood_type.dart';
 import '../../../widgets/chart/blood_series_chart.dart';
 import '../../../widgets/frame.dart';
 import 'blood_bottom_sheet_viewmodel.dart';

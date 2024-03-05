@@ -3,9 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../data/enum/mydata_measurement_type.dart';
 import '../../data/models/column_series_chart_data.dart';
-import '../../utils/constants.dart';
-import '../../utils/enum/mydata_measurement_type.dart';
 import '../../utils/etc.dart';
 
 class ColumnSeriesChart extends StatelessWidget {

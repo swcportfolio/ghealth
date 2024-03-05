@@ -3,9 +3,8 @@ import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../data/enum/blood_type.dart';
 import '../../data/models/blood_series_chart_data.dart';
-import '../../utils/constants.dart';
-import '../../utils/enum/blood_type.dart';
 
 class BloodSeriesChart extends StatelessWidget {
   const BloodSeriesChart(

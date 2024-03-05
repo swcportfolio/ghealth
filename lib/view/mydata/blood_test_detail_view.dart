@@ -3,11 +3,12 @@ import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 
+import '../../data/enum/blood_type.dart';
 import '../../data/models/blood_test.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
-import '../../utils/enum/blood_type.dart';
 import '../../utils/etc.dart';
+import '../../utils/snackbar_utils.dart';
 import '../../widgets/frame.dart';
 import '../../widgets/list_item/blood_test_result_list_item.dart';
 import '../login/login_view.dart';
@@ -44,7 +45,8 @@ class _BloodTestDetailViewState extends State<BloodTestDetailView> {
     /// AccessToken 확인
     Authorization().checkAuthToken().then((result) {
       if(!result){
-        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        SnackBarUtils.showBGWhiteSnackBar(
+            '권한 만료, 재 로그인 필요합니다.', context);
         Frame.doPagePush(context, const LoginView());
       }
     });

@@ -8,6 +8,7 @@ import 'package:ghealth_app/widgets/dialog.dart';
 import '../../main.dart';
 import '../../utils/colors.dart';
 import '../../utils/etc.dart';
+import '../../utils/snackbar_utils.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/frame.dart';
 import '../login/login_view.dart';
@@ -64,7 +65,8 @@ class _HomeFramePageState extends State<HomeFrameView> with WidgetsBindingObserv
       if(Authorization().token.isNotEmpty){
         Authorization().checkAuthToken().then((result) {
           if(!result){
-            Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+            SnackBarUtils.showBGWhiteSnackBar(
+                '권한 만료, 재 로그인 필요합니다.', context);
             Frame.doPagePush(context, const LoginView());
           }
         });

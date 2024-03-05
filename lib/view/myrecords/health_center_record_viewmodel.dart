@@ -23,6 +23,7 @@ class HealthCenterRecordViewModel extends ChangeNotifier{
       RecordDateResponse response = await _postRepository.getRecordDateDio();
 
       if(response.status.code == '200') {
+        logger.d("나의 일상기록 계측검사 날짜데이터: ${response.data.length}");
         _recordDateList = List.of(response.data).cast<String>().toList();
 
         return _recordDateList;

@@ -8,9 +8,11 @@ import 'package:ghealth_app/view/home/home_frame_view.dart';
 import 'package:ghealth_app/widgets/dialog.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
+import '../../data/enum/snackbar_status_type.dart';
 import '../../data/models/send_message_response.dart';
 import '../../data/models/user_response.dart';
 import '../../main.dart';
+import '../../utils/snackbar_utils.dart';
 import '../../utils/validation.dart';
 
 class LoginViewModel extends ChangeNotifier {
@@ -68,7 +70,9 @@ class LoginViewModel extends ChangeNotifier {
 
       if (response.status.code == '200') {
         // 성공시 처리
-        Etc.commonSnackBar('인증번호가 발송되었습니다.', context);
+        SnackBarUtils.showBGWhiteSnackBar(
+            '인증번호가 발송되었습니다.', context, seconds: 3);
+
         logger.d('[handleSendMessage] => 인증번호 메시지 발송!');
 
         _resetTimer(); // 타이머 초기화
@@ -78,9 +82,17 @@ class LoginViewModel extends ChangeNotifier {
       } else {
         // 실패 시 처리
         if(response.status.message.contains('3분이내')){
-          Etc.failureSnackBar('3분이 지난 후 다시 시도해주세요.', context);
+          SnackBarUtils.showStatusSnackBar(
+              message: '3분이 지난 후 다시 시도해주세요.',
+              context: context,
+              statusType: SnackBarStatusType.failure
+          );
         } else {
-          Etc.failureSnackBar('인증번호 발송 실패, 다시 시도해주세요.', context);
+          SnackBarUtils.showStatusSnackBar(
+              message: '인증번호 발송 실패, 다시 시도해주세요.',
+              context: context,
+              statusType: SnackBarStatusType.failure
+          );
         }
         logger.e('=> 발송 실패! ${response.status.message}');
       }
@@ -88,12 +100,20 @@ class LoginViewModel extends ChangeNotifier {
       // 예외 처리
       endSendMessageProgress();
       logger.e('=> dioError: $dioError');
-      Etc.failureSnackBar('인증번호 발송 실패, 다시 시도해주세요.', context);
+      SnackBarUtils.showStatusSnackBar(
+          message: '인증번호 발송 실패, 다시 시도해주세요.',
+          context: context,
+          statusType: SnackBarStatusType.failure
+      );
 
     } catch (error) {
       endSendMessageProgress();
       logger.e('=> error: $error');
-      Etc.failureSnackBar('인증번호 발송 실패, 다시 시도해주세요.', context);
+      SnackBarUtils.showStatusSnackBar(
+          message: '인증번호 발송 실패, 다시 시도해주세요.',
+          context: context,
+          statusType: SnackBarStatusType.failure
+      );
     }
   }
 
@@ -129,8 +149,12 @@ class LoginViewModel extends ChangeNotifier {
         Authorization().setStringData();
         logger.i(Authorization().toString());
 
-        Etc.successSnackBar('로그인 완료!   ${response.data!.userName}님 반갑습니다.', context);
-       Frame.doPageAndRemoveUntil(context, const HomeFrameView()); //홈화면 전환
+        SnackBarUtils.showStatusSnackBar(
+            message: '로그인 완료!   ${response.data!.userName}님 반갑습니다.',
+            context: context,
+            statusType: SnackBarStatusType.success
+        );
+        Frame.doPageAndRemoveUntil(context, const HomeFrameView()); // 홈화면 전환
 
       } else if(response.status.code == 'ERR_LOGIN'){
 
@@ -151,18 +175,18 @@ class LoginViewModel extends ChangeNotifier {
           );
         } else {
           logger.e('=> response.data 로그인 그외 에러!');
-          Etc.showSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
+          SnackBarUtils.showDefaultSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
         }
       } else {
         logger.e('=> response.data 로그인 그외 에러!');
-        Etc.showSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
+        SnackBarUtils.showDefaultSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
       }
     } on DioException catch (dioError) {
       // 예외 처리
-      Etc.showSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
+      SnackBarUtils.showDefaultSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
       logger.e('=> dioError: ${dioError.toString()}');
     } catch (error) {
-      Etc.showSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
+      SnackBarUtils.showDefaultSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
       logger.e('=> dioError: ${error.toString()}');
     }
   }

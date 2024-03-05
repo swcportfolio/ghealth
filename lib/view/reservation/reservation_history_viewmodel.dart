@@ -6,11 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/my_exception.dart';
 
+import '../../data/enum/snackbar_status_type.dart';
 import '../../data/models/reservation_data.dart';
 import '../../data/models/reservation_default_response.dart';
 import '../../data/models/reservation_history_response.dart';
 import '../../main.dart';
 import '../../utils/etc.dart';
+import '../../utils/snackbar_utils.dart';
 import '../../widgets/dialog.dart';
 import '../indicator_page.dart';
 
@@ -71,7 +73,11 @@ class ReservationHistoryViewModel extends ChangeNotifier {
       });
 
       if(response.status.code == '200'){
-        Etc.successSnackBar('예약이 취소 되었습니다.', context);
+        SnackBarUtils.showStatusSnackBar(
+          message: '예약이 취소 되었습니다.',
+          context: context,
+          statusType: SnackBarStatusType.success,
+        );
         _reservationDataList.clear();
         handleReservationHistory();
         notifyListeners();

@@ -7,6 +7,7 @@ import 'package:ghealth_app/widgets/custom_appbar.dart';
 import '../../data/models/week_chart_data.dart';
 import '../../utils/colors.dart';
 import '../../utils/etc.dart';
+import '../../utils/snackbar_utils.dart';
 import '../../widgets/bar_chart.dart';
 import '../../widgets/frame.dart';
 import '../login/login_view.dart';
@@ -47,7 +48,8 @@ class _WearableWeekChartViewState extends State<WearableWeekChartView> {
     /// AccessToken 확인
     Authorization().checkAuthToken().then((result) {
       if(!result){
-        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        SnackBarUtils.showBGWhiteSnackBar(
+            '권한 만료, 재 로그인 필요합니다.', context);
         Frame.doPagePush(context, const LoginView());
       }
     });

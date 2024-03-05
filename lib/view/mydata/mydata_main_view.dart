@@ -8,7 +8,10 @@ import 'package:ghealth_app/view/mydata/prescription_history_widget.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/enum/snackbar_status_type.dart';
 import '../../utils/colors.dart';
+import '../../utils/snackbar_utils.dart';
+import '../../utils/text_formatter.dart';
 import '../login/login_view.dart';
 import 'ai_disease_prediction_results_widget.dart';
 import 'blood_test_result_widget.dart';
@@ -46,7 +49,8 @@ class _MyDataMainViewState extends State<MyDataMainView> {
     /// AccessToken 확인
     Authorization().checkAuthToken().then((result) {
       if(!result){
-        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        SnackBarUtils.showBGWhiteSnackBar(
+            '권한 만료, 재 로그인 필요합니다.', context);
         Frame.doPagePush(context, const LoginView());
       }
     });
@@ -156,14 +160,16 @@ class _MyDataMainViewState extends State<MyDataMainView> {
                               hint: Row(
                                 children: [
                                   Frame.myText(
-                                      text: Etc.myDataFormatDate(value.issuedDateList[0]),
+                                      text: value.issuedDateList[0] == null
+                                          ? '-'
+                                          : TextFormatter.myDataFormatDate(value.issuedDateList[0]),
                                       fontSize: 0.9),
                                 ],
                               ),
                               items: value.issuedDateList.map((String item) => DropdownMenuItem<String>(
-                                  value: Etc.myDataFormatDate(item),
+                                  value: TextFormatter.myDataFormatDate(item),
                                   child: Frame.myText(
-                                      text: Etc.myDataFormatDate(item),
+                                      text: TextFormatter.myDataFormatDate(item),
                                       fontSize: 0.9,
                                       overflow: TextOverflow.ellipsis
                                   )
@@ -174,7 +180,11 @@ class _MyDataMainViewState extends State<MyDataMainView> {
                                   setState(() {
                                     this.selectedValue = selectedValue;
                                     value.onChangedDropdownButton(selectedValue!);
-                                    Etc.successSnackBar('날짜가 변경되었습니다.', context, seconds: 2);
+                                    SnackBarUtils.showStatusSnackBar(
+                                        message: '날짜가 변경되었습니다.',
+                                        context: context,
+                                        statusType: SnackBarStatusType.success
+                                    );
                                   })
                                 }
                               },

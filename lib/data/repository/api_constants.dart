@@ -66,3 +66,9 @@ const String getHistoryListApiUrl = '$baseUrl/ws/public/point/history';
 
 /// 총 포인트 가져오기 URL
 const String getTotalPointApiUrl = '$baseUrl/ws/public/point';
+
+/// 추천 상품 가져오기 URL
+const String getProductApiUrl = 'http://192.168.0.136:8080/recommended';
+
+/// 출석 체크 URL
+const String setAttendanceApiUrl = '$baseUrl/ws/public/point/policy/set';

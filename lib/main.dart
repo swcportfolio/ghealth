@@ -50,6 +50,7 @@ Future<void> main() async {
   String? gender = pref.getString('gneder') ?? '';
   String? targetSleep = pref.getString('targetSleep') ?? '0';
   String? targetStep = pref.getString('targetStep') ?? '0';
+  bool? isToDayAttendance = pref.getBool('isToDayAttendance') ?? false;
 
   Authorization().setValues(
     newUserID: userID,
@@ -58,6 +59,7 @@ Future<void> main() async {
     newGender: gender,
   );
 
+  Authorization().isToDayAttendance = isToDayAttendance;
   Authorization().targetSleep = targetSleep;
   Authorization().targetStep = targetStep;
 

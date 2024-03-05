@@ -7,19 +7,19 @@ import 'my_health_point_viewmodel.dart';
 
 /// 포인트 적립, 차감 상세 조회 화면
 class PointSearchView extends StatefulWidget {
-  const PointSearchView({super.key});
+  const PointSearchView({super.key, required this.viewModel});
+  final MyHealthPointViewModel viewModel;
 
   @override
   State<PointSearchView> createState() => _PointSearchViewState();
 }
 
 class _PointSearchViewState extends State<PointSearchView> {
-  late MyHealthPointViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-    _viewModel = MyHealthPointViewModel(context, 1);
+
   }
 
   @override
@@ -29,7 +29,7 @@ class _PointSearchViewState extends State<PointSearchView> {
         '포인트 조회',
       ),
       body: ChangeNotifierProvider(
-        create: (BuildContext context) => _viewModel,
+        create: (BuildContext context) => widget.viewModel,
         child: Column(
           children: [
             Padding(
@@ -54,11 +54,11 @@ class _PointSearchViewState extends State<PointSearchView> {
             Expanded(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 30),
-                  child: PointHistoryListWidget(viewModel:_viewModel),
+                  child: PointHistoryListWidget(viewModel: widget.viewModel),
                 )
             ),
           ],
-        )
+        ),
       ),
     );
   }

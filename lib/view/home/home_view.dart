@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gallery_3d/gallery3d.dart';
 import 'package:gap/gap.dart';
+import 'package:ghealth_app/main.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
@@ -95,7 +96,10 @@ class _HomeViewState extends State<HomeView> {
             /// 소개글
             buildWelComeText(),
 
-            buildCarouselSlider(),
+            /// 동구, 광산구 예약버튼
+            buildLocalReservationButton(),
+
+            ///buildCarouselSlider(),
             ///buildGallery3D(),
 
             /// 방문 예약 내역
@@ -413,7 +417,111 @@ Widget buildGallery3D() {
     );
   }
 
+  /// 메인 홈 동구, 광산구 예약 버튼
+  buildLocalReservationButton() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        children: [
+          buildLocalResBtnWidget(
+            LocalType.gwangsangu,
+            mainColor,
+            mainDarkColor,
+          ),
+          const Gap(15),
+          buildLocalResBtnWidget(
+            LocalType.donggu,
+            greenColor,
+            greenDarkColor,
+          ),
+        ],
+      ),
+    );
+  }
 
+  buildLocalResBtnWidget(
+    LocalType type,
+    Color color,
+    Color btnColor,
+  ) {
+    return Expanded(
+      child: Container(
+        height: 330,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30.0),
+          color: color,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 7,
+              offset: const Offset(0, 3), // changes position of shadow
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Gap(30),
+                  Image.asset(type.imagePath),
+                  const Gap(20),
+                  Frame.myText(
+                    text: '${type.name}\n라이프로그\n건강관리소',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    maxLinesCount: 3,
+                    align: TextAlign.center,
+                    fontSize: 1.3,
+                  )
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: InkWell(
+                onTap: () => {
+                  Frame.doLaunchUniversalLink(Uri(
+                    scheme: 'https',
+                    host: type.host,
+                  )),
+                },
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: btnColor,
+                      borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(30.0),
+                          bottomRight: Radius.circular(30.0))),
+                  child: Center(
+                    child: Frame.myText(
+                      text: '신청하기',
+                      fontSize: 1.1,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+enum LocalType {
+  gwangsangu('광산구','gslifelog.ghealth.or.kr', 'images/gwangsangu.png'),
+  donggu('동구','lifelog.ghealth.or.kr', 'images/donggu.png');// 광산구// 동구
+
+ const LocalType(this.name, this.host, this.imagePath);
+ final String name;
+ final String host;
+ final String imagePath;
 }
 
 

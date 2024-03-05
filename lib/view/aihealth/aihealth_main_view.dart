@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../data/models/authorization.dart';
 import '../../utils/colors.dart';
 import '../../utils/etc.dart';
+import '../../utils/snackbar_utils.dart';
 import '../../widgets/list_item/predict_list_item.dart';
 import '../login/login_view.dart';
 
@@ -37,7 +38,8 @@ class _AiHealthMainViewState extends State<AiHealthMainView> {
     /// AccessToken 확인
     Authorization().checkAuthToken().then((result) {
       if(!result){
-        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        SnackBarUtils.showBGWhiteSnackBar(
+            '권한 만료, 재 로그인 필요합니다.', context);
         Frame.doPagePush(context, const LoginView());
       }
     });

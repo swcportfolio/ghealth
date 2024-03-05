@@ -14,7 +14,9 @@ import 'package:ghealth_app/widgets/custom_appbar.dart';
 import 'package:ghealth_app/widgets/dialog.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
+import '../../data/enum/snackbar_status_type.dart';
 import '../../main.dart';
+import '../../utils/snackbar_utils.dart';
 
 /// 설정 화면
 class SettingView extends StatefulWidget {
@@ -33,7 +35,8 @@ class _SettingViewState extends State<SettingView> {
     /// AccessToken 확인
     Authorization().checkAuthToken().then((result) {
       if(!result){
-        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        SnackBarUtils.showBGWhiteSnackBar(
+            '권한 만료, 재 로그인 필요합니다.', context);
         Frame.doPagePush(context, const LoginView());
       }
     });
@@ -126,14 +129,19 @@ class _SettingViewState extends State<SettingView> {
       if(response.status.code == '200'){
         Authorization().clean();
         Authorization().clearSetStringData();
-        Etc.successSnackBar('로그아웃 되었습니다.', context);
+        SnackBarUtils.showStatusSnackBar(
+            message: '로그아웃 되었습니다.',
+            context: context,
+            statusType: SnackBarStatusType.success
+        );
         Frame.doPageAndRemoveUntil(context, const HomeFrameView());
-      } else {
-        Etc.showSnackBar('서버가 불안정합니다. 다시 시도바랍니다.', context);
+      }
+      else {
+        SnackBarUtils.showDefaultSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
         logger.e('=> 로그아웃 실패:${response.status.code}/  ${response.status.message}');
       }
     } on DioException catch(dioError) {
-      Etc.showSnackBar('서버가 불안정합니다. 다시 시도바랍니다.', context);
+      SnackBarUtils.showDefaultSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
       logger.e('=> 로그아웃 실패:${dioError.message}');
     }
 

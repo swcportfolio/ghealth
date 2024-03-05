@@ -5,10 +5,9 @@ import 'package:gap/gap.dart';
 import 'package:ghealth_app/view/myrecords/health_center_record_viewmodel.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/enum/lifelog_data_type.dart';
 import '../../main.dart';
 import '../../utils/colors.dart';
-import '../../utils/enum/lifelog_data_type.dart';
-import '../../utils/etc.dart';
 import '../../widgets/frame.dart';
 import 'lifelog_bottom_sheet_view.dart';
 
@@ -51,7 +50,8 @@ class _HealthCenterRecordViewState extends State<HealthCenterRecordView> {
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: [
+                children:
+                [
                   buildMetrologyTopTitle(),
 
                   Padding(
@@ -106,7 +106,8 @@ class _HealthCenterRecordViewState extends State<HealthCenterRecordView> {
                 return Container();
               }
 
-              if(snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.connectionState == ConnectionState.done &&
+                  snapshot.data.length != 0) {
                 selectedDate = snapshot.data[0];
                 logger.i('selectedValue: $selectedDate');
               }
@@ -119,7 +120,7 @@ class _HealthCenterRecordViewState extends State<HealthCenterRecordView> {
                       children: [
                         Frame.myText(
                             text: _viewModel.recordDateList.isEmpty
-                                ? '2000-00-00'
+                                ? '0000-00-00'
                                 : _viewModel.recordDateList[0],
                             fontSize: 0.9),
                       ],

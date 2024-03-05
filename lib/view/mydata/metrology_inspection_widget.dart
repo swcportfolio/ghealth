@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../data/enum/mydata_measurement_type.dart';
 import '../../data/models/metrology_inspection.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
-import '../../utils/enum/mydata_measurement_type.dart';
 import '../../widgets/frame.dart';
 import 'bottom_sheet/mydata_bottom_sheet_view.dart';
 

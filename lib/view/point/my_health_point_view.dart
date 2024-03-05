@@ -9,6 +9,8 @@ import 'package:provider/provider.dart';
 import '../../data/models/authorization.dart';
 import '../../utils/colors.dart';
 import '../../utils/etc.dart';
+import '../../utils/snackbar_utils.dart';
+import '../../utils/text_formatter.dart';
 import '../aihealth/health_point_box_widget.dart';
 import '../login/login_view.dart';
 import 'ghealth_shop_banner_widget.dart';
@@ -26,14 +28,20 @@ class MyHealthPointView extends StatefulWidget {
   State<MyHealthPointView> createState() => _MyHealthPointViewState();
 }
 
-class _MyHealthPointViewState extends State<MyHealthPointView> {
+class _MyHealthPointViewState extends State<MyHealthPointView> with TickerProviderStateMixin {
 
   late MyHealthPointViewModel _viewModel;
 
   @override
   void initState() {
     super.initState();
-    _viewModel = MyHealthPointViewModel(context, 1);
+    _viewModel = MyHealthPointViewModel(
+        context, 1,
+        AnimationController(
+            vsync: this,
+            duration: const Duration(seconds: 1),
+            lowerBound: 0.0,
+            upperBound: 1.0));
   }
 
 
@@ -43,7 +51,8 @@ class _MyHealthPointViewState extends State<MyHealthPointView> {
     /// AccessToken 확인
     Authorization().checkAuthToken().then((result) {
       if(!result){
-        Etc.commonSnackBar('권한 만료, 재 로그인 필요합니다.', context, seconds: 6);
+        SnackBarUtils.showBGWhiteSnackBar(
+            '권한 만료, 재 로그인 필요합니다.', context);
         Frame.doPagePush(context, const LoginView());
       }
     });
@@ -79,7 +88,7 @@ class _MyHealthPointViewState extends State<MyHealthPointView> {
                 buildPointAccumulateMethod(),
 
                 /// GHealth 쇼핑몰 광고 및 웹 링크 전환
-                const GHealthShopBannerWidget()
+                GHealthShopBannerWidget(viewModel: _viewModel)
               ],
             ),
           ),
@@ -106,7 +115,7 @@ class _MyHealthPointViewState extends State<MyHealthPointView> {
           const Gap(10),
 
           Frame.myText(
-            text: '건강은 우리 삶의 중요한 부분이며,\n그걸 더 쉽게 관리하고 보호하기 위해 Ghealth \n앱을 소개합니다! 이 앱은 건강한 라이프스타일을\n증진하고, 그 노력에 보상을 제공합니다.',
+            text: '건강포인트"는 G-Health 플랫폼에서 제공되는 \n다양한 재화와 서비스를 구매·이용할 수 있는 현금처럼\n사용가능한 가상의 화폐입니다.',
             fontSize: 1.0,
             align: TextAlign.start,
             maxLinesCount: 5,
@@ -149,7 +158,7 @@ class _MyHealthPointViewState extends State<MyHealthPointView> {
                       ),
                       const Gap(10),
                       Frame.myText(
-                          text: '${Etc.formatNumberWithCommas(int.parse(widget.totalPoint))}P',
+                          text: '${TextFormatter.formatNumberWithCommas(int.parse(widget.totalPoint))}P',
                           color: Colors.white,
                           fontSize: 2.5,
                           fontWeight: FontWeight.w600
@@ -209,7 +218,7 @@ class _MyHealthPointViewState extends State<MyHealthPointView> {
               ),
 
               InkWell(
-                onTap: ()=> Frame.doPagePush(context, const PointSearchView()),
+                onTap: ()=> Frame.doPagePush(context, PointSearchView(viewModel: _viewModel)),
                 child: Row(
                   children: [
                     Frame.myText(
@@ -278,8 +287,8 @@ class _MyHealthPointViewState extends State<MyHealthPointView> {
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
                 child: Frame.myText(
-                    text: "1.Ghealth 앱의 걸음 수 챌린지에 참여하여 매일 목표 걸음 수를 달성하세요. 적립된 포인트는 건강한 신체 활동으로 보상됩니다. 걷기는 즐겁고 효과적인 운동이니, 일상 속에서 건강 포인트를 쌓아보세요!\n\n2.수면은 건강에 중요한 역할을 합니다. Ghealth 앱은 수면 기록을 통해 규칙적인 수면 습관을 만들도록 도와줍니다. 잠을 충분히 취함으로써 얻는 건강한 생활을 경험하며, 그에 따른 포인트를 획득하세요.\n\n3. Ghealth 앱을 통해 건강관리소 방문 시 포인트를 더욱 효과적으로 쌓을 수 있는 기회가 주어집니다!",
-                    fontSize: 0.9,
+                    text: '<포인트 정책>\n- 회원가입 및 라이프로그 장비 측정 : 5,000p\n- 마이데이터 제공 : 5,000p\n- 진단서, 처방전 등록 : 5,000p(유효기간 3년 이내 고혈압, 당뇨 진단서, 처방전 한하며 1인 1회 포인트 제공)\n- 일일 출석체크 : 30p\n- 일일 건강퀴즈 :  20p\n- 걷기 챌린지 : 200p(1일 목표걸음 8천보, 1주일 중 4일 이상 달성 시 지급)\n- 영상시청 후 퀴즈풀기 : 50p',
+                    fontSize: 0.95,
                     softWrap: true,
                     maxLinesCount: 700
                 ),

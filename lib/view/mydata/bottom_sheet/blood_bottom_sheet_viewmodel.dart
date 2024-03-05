@@ -4,12 +4,14 @@ import 'package:ghealth_app/data/models/health_instrumentation_response.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/etc.dart';
 
+import '../../../data/enum/blood_type.dart';
 import '../../../data/models/blood_series_chart_data.dart';
 import '../../../main.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/enum/blood_type.dart';
+
 import '../../../utils/my_exception.dart';
+import '../../../utils/text_formatter.dart';
 
 
 class BloodBottomSheetViewModel extends ChangeNotifier {
@@ -30,7 +32,7 @@ class BloodBottomSheetViewModel extends ChangeNotifier {
           double y1 = double.parse(values[0]);
 
           return BloodSeriesChartData(
-            x: Etc.chartDateFormat(data.issuedDate),
+            x: TextFormatter.seriesChartXAxisDateFormat(data.issuedDate),
             y1: y1,
             barColor: Etc.calculateBloodStatusColor(bloodDataType, y1,
                 badColor:Colors.red, goodColor: mainColor),

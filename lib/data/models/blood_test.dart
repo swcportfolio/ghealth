@@ -1,5 +1,6 @@
 
 import '../../utils/etc.dart';
+import '../../utils/text_formatter.dart';
 import 'health_screening_data.dart';
 
 class BloodTest {
@@ -89,7 +90,7 @@ class BloodTest {
       switch (dataName) {
         case '혈액검사_고밀도 콜레스테롤':
           highDensityCholesterol = dataValue;
-          issuedDate = Etc.defaultDateFormat(value.issuedDate);
+          issuedDate = TextFormatter.defaultDateFormat(value.issuedDate);
           break;
         case '혈액검사_공복혈당':
           fastingBloodSugar = dataValue;

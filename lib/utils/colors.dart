@@ -4,6 +4,10 @@ const Color transparent = Color(0x00000000);
 
 // 메인 색상
 const Color mainColor = Color(0xff5c80fb);
+const Color mainDarkColor = Color(0xff496acc);
+
+const Color greenColor = Color(0xff64d683);
+const Color greenDarkColor = Color(0xff56b870);
 
 // 기본 Black color
 const Color defaultBlack = Color(0xff333333);

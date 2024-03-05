@@ -12,6 +12,7 @@ import '../data/models/week_chart_data.dart';
 import '../main.dart';
 import '../utils/api_exception.dart';
 import '../utils/etc.dart';
+import '../utils/text_formatter.dart';
 
 class HealthService {
 
@@ -205,61 +206,61 @@ class HealthService {
 
         chartSleepData = [
           WeekChartData(
-            x: Etc.setDateTime(0),
+            x: TextFormatter.setXAxisDateTime(0),
             y: calculateSum(daySleep).toInt(),
           ),
           WeekChartData(
-            x: Etc.setDateTime(1),
+            x: TextFormatter.setXAxisDateTime(1),
             y: calculateSum(agoDaySleep).toInt(),
           ),
           WeekChartData(
-            x: Etc.setDateTime(2),
+            x: TextFormatter.setXAxisDateTime(2),
             y: calculateSum(agoTwoDaySleep).toInt(),
           ),
           WeekChartData(
-            x: Etc.setDateTime(3),
+            x: TextFormatter.setXAxisDateTime(3),
             y: calculateSum(agoThreeDaySleep).toInt(),
           ),
           WeekChartData(
-            x: Etc.setDateTime(4),
+            x: TextFormatter.setXAxisDateTime(4),
             y: calculateSum(agoFourthDaySleep).toInt(),
           ),
           WeekChartData(
-            x: Etc.setDateTime(5),
+            x: TextFormatter.setXAxisDateTime(5),
             y: calculateSum(agoFifthDaySleep).toInt(),
           ),
           WeekChartData(
-            x: Etc.setDateTime(6),
+            x: TextFormatter.setXAxisDateTime(6),
             y:calculateSum(agoSixthDaySleep).toInt(),
           ),
         ];
         chartStepData = [
           WeekChartData(
-            x: Etc.setDateTime(0),
+            x: TextFormatter.setXAxisDateTime(0),
             y: int.parse(dayStep.toString()),
           ),
           WeekChartData(
-            x: Etc.setDateTime(1),
+            x: TextFormatter.setXAxisDateTime(1),
             y: int.parse(agoDayStep.toString()),
           ),
           WeekChartData(
-            x: Etc.setDateTime(2),
+            x: TextFormatter.setXAxisDateTime(2),
             y: int.parse(agoTwoDayStep.toString()),
           ),
           WeekChartData(
-            x: Etc.setDateTime(3),
+            x: TextFormatter.setXAxisDateTime(3),
             y: int.parse(agoThreeDayStep.toString()),
           ),
           WeekChartData(
-            x: Etc.setDateTime(4),
+            x: TextFormatter.setXAxisDateTime(4),
             y: int.parse(agoFourthDayStep.toString()),
           ),
           WeekChartData(
-            x: Etc.setDateTime(5),
+            x: TextFormatter.setXAxisDateTime(5),
             y: int.parse(agoFifthStep.toString()),
           ),
           WeekChartData(
-            x: Etc.setDateTime(6),
+            x: TextFormatter.setXAxisDateTime(6),
             y: int.parse(agoSixthStep.toString()),
           ),
         ];

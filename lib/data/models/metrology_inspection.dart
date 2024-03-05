@@ -1,4 +1,5 @@
 import '../../utils/etc.dart';
+import '../../utils/text_formatter.dart';
 import 'health_screening_data.dart';
 
 class MetrologyInspection {
@@ -61,15 +62,15 @@ class MetrologyInspection {
       switch (dataName) {
         case '계측검사_시력':
           visionOld = dataValue;
-          issuedDate = Etc.defaultDateFormat(value.issuedDate);
+          issuedDate = TextFormatter.defaultDateFormat(value.issuedDate);
           break;
         case '계측검사_시력_우':
           visionRight = dataValue;
-          issuedDate = Etc.defaultDateFormat(value.issuedDate);
+          issuedDate = TextFormatter.defaultDateFormat(value.issuedDate);
           break;
         case '계측검사_시력_좌':
           visionLeft = dataValue;
-          issuedDate = Etc.defaultDateFormat(value.issuedDate);
+          issuedDate = TextFormatter.defaultDateFormat(value.issuedDate);
           break;
         case '계측검사_청력':
           hearingAbilityOld = dataValue;

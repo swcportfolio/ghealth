@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/my_exception.dart';
 
+import '../../data/enum/lifelog_data_type.dart';
 import '../../data/models/health_report_response.dart';
 import '../../data/models/lifelog_data.dart';
 import '../../main.dart';
-import '../../utils/enum/lifelog_data_type.dart';
 
 
 class LifeLogBottomSheetViewModel extends ChangeNotifier {

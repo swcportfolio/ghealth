@@ -379,7 +379,6 @@ class Frame{
          case LoadState.completed:
            return ExtendedRawImage(
              image: state.extendedImageInfo?.image,
-
            );
          case LoadState.failed:
            return GestureDetector(
