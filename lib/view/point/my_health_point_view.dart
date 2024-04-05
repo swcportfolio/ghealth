@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 
 import '../../data/models/authorization.dart';
 import '../../utils/colors.dart';
-import '../../utils/etc.dart';
 import '../../utils/snackbar_utils.dart';
 import '../../utils/text_formatter.dart';
 import '../aihealth/health_point_box_widget.dart';
@@ -34,14 +33,8 @@ class _MyHealthPointViewState extends State<MyHealthPointView> with TickerProvid
 
   @override
   void initState() {
+    _viewModel = MyHealthPointViewModel(context);
     super.initState();
-    _viewModel = MyHealthPointViewModel(
-        context, 1,
-        AnimationController(
-            vsync: this,
-            duration: const Duration(seconds: 1),
-            lowerBound: 0.0,
-            upperBound: 1.0));
   }
 
 
@@ -69,7 +62,7 @@ class _MyHealthPointViewState extends State<MyHealthPointView> with TickerProvid
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 10, 10, 20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               children: [
 
@@ -77,7 +70,10 @@ class _MyHealthPointViewState extends State<MyHealthPointView> with TickerProvid
                 buildPointDescription(),
 
                 /// 건강 포인트 위젯
-                HealthPointBoxWidget(totalPoint: widget.totalPoint),
+                HealthPointBoxWidget(
+                    totalPoint: widget.totalPoint,
+                    isOnTap: false
+                ),
                 const Gap(10),
 
                 /// 포인트 적립 / 차감 내역
@@ -101,7 +97,7 @@ class _MyHealthPointViewState extends State<MyHealthPointView> with TickerProvid
   Widget buildPointDescription() {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+      margin: const EdgeInsets.fromLTRB(10, 10, 0, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -204,42 +200,76 @@ class _MyHealthPointViewState extends State<MyHealthPointView> with TickerProvid
 
   /// 포인트 사용/적립 내역을 나타내는 헬퍼
   Widget buildPointHistory(){
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Frame.myText(
-                text: '포인트 적립 / 차감 내역',
-                fontSize: 1.3,
-                fontWeight: FontWeight.w600,
-              ),
 
-              InkWell(
-                onTap: ()=> Frame.doPagePush(context, PointSearchView(viewModel: _viewModel)),
-                child: Row(
-                  children: [
-                    Frame.myText(
-                      text: '더보기',
-                      fontSize: 0.9,
-                      color: Colors.grey
+    return FutureBuilder(
+      future: _viewModel.handlePointHistoryList(mounted),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.hasError) {
+          return Frame.buildFutureBuilderHasError(snapshot.error.toString(), () => {});
+        }
+        else if (snapshot.connectionState == ConnectionState.done) {
+          return Consumer<MyHealthPointViewModel>(
+            builder: (BuildContext context, value, Widget? child) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Frame.myText(
+                          text: '포인트 적립 / 차감 내역',
+                          fontSize: 1.3,
+                          fontWeight: FontWeight.w600,
+                        ),
+
+                        InkWell(
+                          onTap: ()=>
+                              Frame.doPagePush(context, PointSearchView()),
+                          child: Row(
+                            children: [
+                              Frame.myText(
+                                  text: '더보기',
+                                  fontSize: 0.9,
+                                  color: Colors.grey
+                              ),
+                              const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 14)
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 14)
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+                  ),
 
-        const Gap(10),
-        SizedBox(
-          height: 190,
-          child: PointHistoryListWidget(viewModel:_viewModel, listCount: 2),
-        ),
-      ],
+                  const Gap(10),
+                  SizedBox(
+                    height: value.pointHistoryList.length < 2 ? 95 : 190,
+                      child: Card(
+                        elevation: 2,
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                            child: PointHistoryListWidget(
+                              pointHistoryList: value.pointHistoryList,
+                              listCount: 2,
+                            )),
+                      )),
+                  // SizedBox(
+                  //   height: 190,
+                  //   child: PointHistoryListWidget(
+                  //       viewModel:_viewModel, listCount: 2
+                  //   ),
+                  // ),
+                ],
+              );
+            },
+
+          );
+        } else {
+          return Frame.buildFutureBuildProgressIndicator();
+        }
+      },
     );
   }
 

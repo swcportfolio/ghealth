@@ -142,7 +142,7 @@ class ReservedCardItem extends StatelessWidget {
                 ),
                 const Gap(10),
                 Frame.myText(
-                  text: '동구라이프로그 건강관리소',
+                  text: '${reservationData.orgType?.name} 건강관리소',
                   fontWeight: FontWeight.w600,
                   fontSize: 1.1,
                 ),
@@ -205,9 +205,12 @@ class ReservedCardItem extends StatelessWidget {
                     mainContext: context,
                     reservationDate: reservationData.reservationDate!,
                     reservationTime: reservationData.reservationTime!,
+                    type: reservationData.orgType!,
                     cancelReservationFunction: () =>
                         value.handleCancelReservation(int.parse(
-                            reservationData.reservationIdx.toString()))
+                            reservationData.reservationIdx.toString()),
+                            reservationData.orgType!
+                        ),
                 )
               },
               child: Row(

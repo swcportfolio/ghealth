@@ -6,6 +6,7 @@ import 'package:ghealth_app/data/models/medication_detail_response.dart';
 import 'package:ghealth_app/data/models/point_history_response.dart';
 import 'package:ghealth_app/data/models/product_data_response.dart';
 
+import '../../view/reservation/reservation_viewmodel.dart';
 import '../datasource/local_data_source.dart';
 import '../datasource/remote_data_source.dart';
 
@@ -72,12 +73,12 @@ Future<ReservationHistoryResponse> getHistoryReservationDio(int pageIndex){
   return _remoteDataSource.getHistoryReservationDio(pageIndex);
 }
 
-Future<ReservationDayOffResponse> getDayOffReservationDio(DateTime date){
-  return _remoteDataSource.getDayOffReservationDio(date);
+Future<ReservationDayOffResponse> getDayOffReservationDio(RegionType regionType, DateTime date){
+  return _remoteDataSource.getDayOffReservationDio(regionType, date);
 }
 
-Future<ReservationPossibleResponse> getPossibleReservationDio(DateTime date){
-  return _remoteDataSource.getPossibleReservationDio(date);
+Future<ReservationPossibleResponse> getPossibleReservationDio(RegionType regionType, DateTime date){
+  return _remoteDataSource.getPossibleReservationDio(regionType, date);
 }
 
 Future<DefaultResponse> saveReservationDio(Map<String, dynamic> data){

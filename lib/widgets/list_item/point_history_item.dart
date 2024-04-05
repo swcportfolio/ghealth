@@ -37,7 +37,7 @@ class PointHistoryItem extends StatelessWidget {
               const Gap(5),
 
               Frame.myText(
-                  text: TextFormatter.defaultDateFormat(pointHistory.createDT),
+                  text: TextFormatter.pointDateFormat(pointHistory.createDT),
                   fontSize: 1.1,
                   color: Colors.grey
               ),

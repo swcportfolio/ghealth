@@ -1,7 +1,7 @@
 
 
 //const String baseUrl = 'http://106.251.70.71:50011';
-//const String baseUrl = 'http://192.168.0.54:50011';
+//const String baseUrl = 'http://192.168.0.54:50011'; //팀장님 테스트 서버
 const String baseUrl = 'http://api.ghealth.or.kr';
 
 /// Authorization 토큰 유효성 체크 URL
@@ -62,13 +62,13 @@ const String getRecordDateApiUrl = '$baseUrl/ws/private/lifelog/date';
 const String getAiHealthApiUrl = '$baseUrl/ws/private/ai/mydata/predict';
 
 /// 포인트 히스토리 리스트 가져오기 URL
-const String getHistoryListApiUrl = '$baseUrl/ws/public/point/history';
+const String getHistoryListApiUrl = '$baseUrl/ws/private/point/history';
 
 /// 총 포인트 가져오기 URL
-const String getTotalPointApiUrl = '$baseUrl/ws/public/point';
+const String getTotalPointApiUrl = '$baseUrl/ws/private/point';
 
 /// 추천 상품 가져오기 URL
-const String getProductApiUrl = 'http://192.168.0.136:8080/recommended';
+const String getProductApiUrl = '$baseUrl/shop/recommended';
 
 /// 출석 체크 URL
 const String setAttendanceApiUrl = '$baseUrl/ws/public/point/policy/set';

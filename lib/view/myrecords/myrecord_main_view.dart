@@ -82,27 +82,30 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
             }
 
             return SingleChildScrollView(
-              child: Column(
-                children: [
-                  buildTopPhraseWidget(),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    buildTopPhraseWidget(),
 
-                  /// 포인트 위젯
-                  Consumer<MyRecordMainViewModel>(
-                      builder: (BuildContext context, value, Widget? child) {
-                    return HealthPointBoxWidget(totalPoint: value.totalPoint);
-                  }),
+                    /// 포인트 위젯
+                    Consumer<MyRecordMainViewModel>(
+                        builder: (BuildContext context, value, Widget? child) {
+                      return HealthPointBoxWidget(totalPoint: value.totalPoint, isOnTap: true,);
+                    }),
 
-                  /// 출석 체크 버튼
-                  // Consumer<MyRecordMainViewModel>(
-                  //     builder: (BuildContext context, value, Widget? child) {
-                  //       return AttendanceButtonWidget(viewModel: value, isAttendance: value.isAttendance);
-                  //     }),
+                    /// 출석 체크 버튼
+                    // Consumer<MyRecordMainViewModel>(
+                    //     builder: (BuildContext context, value, Widget? child) {
+                    //       return AttendanceButtonWidget(viewModel: value, isAttendance: value.isAttendance);
+                    //     }),
 
-                  /// 라이프로그 검사 결과 자세히 보기 (전신 그림)
-                   const HealthCenterRecordView(),
+                    /// 라이프로그 검사 결과 자세히 보기 (전신 그림)
+                     const HealthCenterRecordView(),
 
-                  buildWearableCharts(),
-                ],
+                    buildWearableCharts(),
+                  ],
+                ),
               ),
             );
           },
@@ -114,7 +117,7 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
   /// 앱 상단 메시지 표시 위젯
   Widget buildTopPhraseWidget() {
     return Padding(
-      padding: const EdgeInsets.only(top: 30, left: 20, bottom: 10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -218,7 +221,7 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
   /// 웨어러블(걷기, 수면) 차트 윗젯
   Widget buildWearableCharts() {
     return Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Card(
             elevation: 5,
             shape: const RoundedRectangleBorder(
@@ -252,7 +255,7 @@ class _MyRecordMainViewState extends State<MyRecordMainView> {
                         ),
 
                         /// 실시간 걸음 랭킹
-                        buildRealTimeStepRanking(),
+                        // buildRealTimeStepRanking(),
 
                         Etc.solidLineWearableBox(context),
 

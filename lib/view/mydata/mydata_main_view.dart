@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/view/mydata/prescription_history_widget.dart';
+import 'package:ghealth_app/view/mydata/test_card_view.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 import 'package:provider/provider.dart';
 
@@ -96,9 +97,12 @@ class _MyDataMainViewState extends State<MyDataMainView> {
                         const Gap(15),
 
                         /// 계측 검사 위젯
-                        MetrologyInspectionWidget(
-                            metrologyInspection: _viewModel.metrologyInspection),
-                        const Gap(5),
+                        TestCardView(
+                          dates: _viewModel.dates,
+                          dataList: _viewModel.dataList,
+                        ),
+                        // MetrologyInspectionWidget(
+                        //     metrologyInspection: _viewModel.metrologyInspection),
 
                         /// AI 질환 예측 결과
                         // AiDiseasePredictionResultWidget(mydataPredict: _viewModel.mydataPredict),
@@ -160,7 +164,7 @@ class _MyDataMainViewState extends State<MyDataMainView> {
                               hint: Row(
                                 children: [
                                   Frame.myText(
-                                      text: value.issuedDateList[0] == null
+                                      text: value.issuedDateList.isEmpty
                                           ? '-'
                                           : TextFormatter.myDataFormatDate(value.issuedDateList[0]),
                                       fontSize: 0.9),

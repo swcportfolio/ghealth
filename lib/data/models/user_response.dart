@@ -12,7 +12,7 @@ class LoginResponse {
   factory LoginResponse.fromJson(Map<String, dynamic> json) {
     return LoginResponse(
       status: Status.fromJson(json['status']),
-      data: json['data'] == ''|| json['data'].toString().contains('전화번호')
+      data: json['data'] == ''|| json['data'].toString().contains('전화번호') || json['data'].toString().contains('인증번호')
           ? json['data'].toString()
           : UserData.fromJson(json['data']),
     );

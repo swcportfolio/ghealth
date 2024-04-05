@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/gallery3d_data.dart';
 import 'package:ghealth_app/view/login/login_view.dart';
 import '../utils/colors.dart';
+import '../view/reservation/reservation_viewmodel.dart';
 import 'frame.dart';
 
 
@@ -260,6 +261,7 @@ class CustomDialog{
     required BuildContext mainContext,
     required String reservationDate,
     required String reservationTime,
+    required RegionType type,
     required Function() saveReservationFunction,
   }) {
     return showDialog(
@@ -296,6 +298,37 @@ class CustomDialog{
                         ],
                       ),
                     ),
+                    // 예약일
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(30, 0, 20, 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Frame.myText(
+                              text: '방문장소',
+                              color: Colors.grey.shade600,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 1.0
+                          ),
+
+                          Container(
+                            height: 35,
+                            width: 150,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(30)
+                            ),
+                            child: Center(
+                              child: Frame.myText(
+                                  text: type.name,
+                                  fontSize: 0.9
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+
 
                     // 예약일
                     Padding(
@@ -424,6 +457,7 @@ class CustomDialog{
     required BuildContext mainContext,
     required String reservationDate,
     required String reservationTime,
+    required RegionType type,
     required Function() cancelReservationFunction,
   }) {
     return showDialog(
@@ -434,7 +468,7 @@ class CustomDialog{
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             content: SizedBox(
-              height: 280,
+              height: 340,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -456,6 +490,36 @@ class CustomDialog{
                           child: const Icon(Icons.close,
                               color: Colors.black, size: 25),
                         ),
+                      ],
+                    ),
+                  ),
+
+                  // 예약일
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Frame.myText(
+                            text: '방문 장소',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 1.0
+                        ),
+
+                        Container(
+                          height: 40,
+                          width: 150,
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(30)
+                          ),
+                          child: Center(
+                            child: Frame.myText(
+                                text: '${type.name} 건강관리소',
+                                fontSize: 0.9
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),

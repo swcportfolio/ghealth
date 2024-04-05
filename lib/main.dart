@@ -5,9 +5,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
+import 'package:ghealth_app/services/connectivity_observer.dart';
 import 'package:ghealth_app/utils/colors.dart';
+import 'package:ghealth_app/utils/etc.dart';
+import 'package:ghealth_app/utils/network_connectivity_observer.dart';
 import 'package:ghealth_app/utils/nocheck_certificate_http.dart';
+import 'package:ghealth_app/utils/snackbar_utils.dart';
 import 'package:ghealth_app/view/home/home_frame_view.dart';
+import 'package:ghealth_app/view/point/my_health_point_viewmodel.dart';
 import 'package:ghealth_app/widgets/girdview/gridview_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:logger/logger.dart';
@@ -48,6 +53,9 @@ Future<void> main() async {
   String? userName = pref.getString('userName') ?? '';
   String? token = pref.getString('token') ?? '';
   String? gender = pref.getString('gneder') ?? '';
+  String? userIDOfD = pref.getString('userIDOfD') ?? '';
+  String? userIDOfG = pref.getString('userIDOfG') ?? '';
+
   String? targetSleep = pref.getString('targetSleep') ?? '0';
   String? targetStep = pref.getString('targetStep') ?? '0';
   bool? isToDayAttendance = pref.getBool('isToDayAttendance') ?? false;
@@ -57,6 +65,8 @@ Future<void> main() async {
     newUserName: userName,
     newToken: token,
     newGender: gender,
+    newUserIDOfD: userIDOfD,
+    newUserIDOfG: userIDOfG,
   );
 
   Authorization().isToDayAttendance = isToDayAttendance;

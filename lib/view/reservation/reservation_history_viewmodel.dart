@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/my_exception.dart';
+import 'package:ghealth_app/view/reservation/reservation_viewmodel.dart';
 
 import '../../data/enum/snackbar_status_type.dart';
 import '../../data/models/reservation_data.dart';
@@ -65,11 +66,12 @@ class ReservationHistoryViewModel extends ChangeNotifier {
  }
 
   /// 예약 취소
-  Future<void> handleCancelReservation(int reservationIdx) async {
+  Future<void> handleCancelReservation(int reservationIdx, RegionType type) async {
     try {
       DefaultResponse response = await _postRepository.cancelReservationDio({
         "serviceType": "lifelog",
-        "reservationIdx": reservationIdx
+        "reservationIdx": reservationIdx,
+        "orgType": type.label,
       });
 
       if(response.status.code == '200'){

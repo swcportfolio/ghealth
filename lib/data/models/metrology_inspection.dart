@@ -1,3 +1,5 @@
+import 'package:ghealth_app/data/models/health_screening_history_data.dart';
+
 import '../../utils/etc.dart';
 import '../../utils/text_formatter.dart';
 import 'health_screening_data.dart';
@@ -11,9 +13,9 @@ class MetrologyInspection {
   String _hearingAbilityRight = '-';
   String _hearingAbilityLeft = '-';
 
-  String _bloodPressure= '-';
-  String _weight= '-';
-  String _height= '-';
+  String _bloodPressure = '-';
+  String _weight = '-';
+  String _height = '-';
   String _waistCircumference = '-';
   String _bodyMassIndex = '-';
   String _issuedDate = '-';
@@ -104,4 +106,53 @@ class MetrologyInspection {
     }
   }
 
+  void parseFromHealthScreeningHistoryList(List<HealthScreeningHistoryData> healthScreeningList) {
+    for (HealthScreeningHistoryData value in healthScreeningList) {
+      String dataName = value.dataName;
+      String dataValue = Etc.removeAfterSpace(value.dataValue);
+
+      switch (dataName) {
+        case '계측검사_시력':
+          visionOld = dataValue;
+          issuedDate = TextFormatter.defaultDateFormat(value.issuedDate);
+          break;
+        case '계측검사_시력_우':
+          visionRight = dataValue;
+          issuedDate = TextFormatter.defaultDateFormat(value.issuedDate);
+          break;
+        case '계측검사_시력_좌':
+          visionLeft = dataValue;
+          issuedDate = TextFormatter.defaultDateFormat(value.issuedDate);
+          break;
+        case '계측검사_청력':
+          hearingAbilityOld = dataValue;
+          break;
+        case '계측검사_청력_우':
+          hearingAbilityRight = dataValue;
+          break;
+        case '계측검사_청력_좌':
+          hearingAbilityLeft = dataValue;
+          break;
+
+        case '계측검사_혈압':
+          bloodPressure = dataValue;
+          break;
+        case '계측검사_몸무게':
+          weight = dataValue;
+          break;
+        case '계측검사_키':
+          height = dataValue;
+          break;
+        case '계측검사_허리둘레':
+          waistCircumference = dataValue;
+          break;
+        case '계측검사_체질량지수':
+          bodyMassIndex = dataValue;
+          break;
+        default:
+        // 처리하지 않는 데이터명의 경우 아무 동작도 하지 않음
+          break;
+      }
+    }
+  }
 }

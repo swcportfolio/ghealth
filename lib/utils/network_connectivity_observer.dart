@@ -1,5 +1,6 @@
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import '../main.dart';
 import '../services/connectivity_observer.dart';
 
 class NetworkConnectivityObserver implements ConnectivityObserver {
@@ -17,14 +18,11 @@ class NetworkConnectivityObserver implements ConnectivityObserver {
           event == ConnectivityResult.other ||
           event == ConnectivityResult.none;
     }).map((event) {
+      logger.i('event: $event');
       switch(event) {
-        case ConnectivityResult.wifi:
-        case ConnectivityResult.ethernet:
-        case ConnectivityResult.mobile:
-        case ConnectivityResult.other:
-          return NetWorkStatus.available;
-
-        default: return NetWorkStatus.unavailable;
+        case ConnectivityResult.none:
+          return NetWorkStatus.unavailable;
+        default: return NetWorkStatus.available;
       }
     });
   }

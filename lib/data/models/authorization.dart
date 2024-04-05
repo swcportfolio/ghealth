@@ -18,6 +18,8 @@ class Authorization{
   late String userName; //ex)강**
   late String token; //ex)eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJV
   late String gender; //ex)(M:남자,F:여자)
+  late String userIDOfD; // 동구 아이디
+  late String userIDOfG; // 광산구 아이디
 
   late String targetSleep;
   late String targetStep;
@@ -43,11 +45,15 @@ class Authorization{
     required String newUserName,
     required String newToken,
     required String newGender,
+    required String newUserIDOfD,
+    required String newUserIDOfG,
   }) {
     userID = newUserID;
     userName = newUserName;
     token = newToken;
     gender = newGender;
+    userIDOfD = newUserIDOfD;
+    userIDOfG = newUserIDOfG;
   }
 
   /// Authorization의 단일 인스턴스를 제공하기 위한 팩토리 메서드
@@ -77,8 +83,10 @@ class Authorization{
     pref.setString('userName',userName);
     pref.setString('token',token);
     pref.setString('gender',gender);
-    pref.setString('targetSleep',targetSleep);
-    pref.setString('targetStep',targetStep);
+    pref.setString('targetSleep', targetSleep);
+    pref.setString('targetStep', targetStep);
+    pref.setString('userIDOfD', userIDOfD);
+    pref.setString('userIDOfG', userIDOfG);
   }
 
   /// SharedPreferences clear
@@ -102,7 +110,11 @@ class Authorization{
      }
    } on DioException catch (dioError){
      logger.e('=> CheckAuthorizationToken: $dioError');
-     return false;
+     if(dioError.type == DioExceptionType.connectionError){
+       return true;
+     } else {
+       return false;
+     }
    }
   }
 

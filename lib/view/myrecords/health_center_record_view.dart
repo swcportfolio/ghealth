@@ -37,7 +37,7 @@ class _HealthCenterRecordViewState extends State<HealthCenterRecordView> {
     return ChangeNotifierProvider(
       create: (BuildContext context) => _viewModel,
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
         child: Stack(
           children: [
             Container(
@@ -120,7 +120,7 @@ class _HealthCenterRecordViewState extends State<HealthCenterRecordView> {
                       children: [
                         Frame.myText(
                             text: _viewModel.recordDateList.isEmpty
-                                ? '0000-00-00'
+                                ? '-'
                                 : _viewModel.recordDateList[0],
                             fontSize: 0.9),
                       ],

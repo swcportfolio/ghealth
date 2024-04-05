@@ -5,9 +5,12 @@ import 'package:ghealth_app/view/aihealth/aihealth_main_view.dart';
 import 'package:ghealth_app/view/home/home_view.dart';
 import 'package:ghealth_app/widgets/dialog.dart';
 
+import '../../data/enum/snackbar_status_type.dart';
 import '../../main.dart';
+import '../../services/connectivity_observer.dart';
 import '../../utils/colors.dart';
 import '../../utils/etc.dart';
+import '../../utils/network_connectivity_observer.dart';
 import '../../utils/snackbar_utils.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/frame.dart';
@@ -26,6 +29,7 @@ class HomeFrameView extends StatefulWidget {
 }
 
 class _HomeFramePageState extends State<HomeFrameView> with WidgetsBindingObserver {
+  //final _connectivity = NetworkConnectivityObserver();
 
   /// BottomNavigationBar의 선택된 항목 인덱스
   int _selectedIndex = 0;
@@ -45,6 +49,14 @@ class _HomeFramePageState extends State<HomeFrameView> with WidgetsBindingObserv
     WidgetsBinding.instance.addObserver(this);
 
     Authorization().fetchDataIfLoggedIn(context); // 출석 체크
+
+    // 네트워크 연결 상태 observe 등록
+    // _connectivity.observe().listen((status) {
+    //   logger.i('네트워크 상태: $status');
+    //   if(status == NetWorkStatus.unavailable){
+    //     SnackBarUtils.showStatusSnackBar(message: '네트워크 연결상태를 확인해주세요.', context: context, statusType: SnackBarStatusType.success);
+    //   }
+    // });
   }
 
   @override

@@ -145,6 +145,8 @@ class LoginViewModel extends ChangeNotifier {
             newUserName: response.data!.userName,
             newToken: response.data!.token,
             newGender: response.data!.gender,
+            newUserIDOfD: response.data!.userIDOfD,
+            newUserIDOfG: response.data!.userIDOfG,
         );
         Authorization().setStringData();
         logger.i(Authorization().toString());
@@ -164,7 +166,13 @@ class LoginViewModel extends ChangeNotifier {
               title: '인증 코드',
               content: '코드를 잘못 입력되었거나\n유효기간이 만료된 코드입니다.',
               mainContext: context
-
+          );
+        } else if (response.data.toString().contains('인증번호')){
+          logger.e('=> 유효하지 않는 인증번호');
+          CustomDialog.showMyDialog(
+              title: '인증 코드',
+              content: '유효기간이 만료된 코드입니다.',
+              mainContext: context
           );
         } else if (response.data.toString().contains('전화번호')){
           logger.e('=> 전화번호가 잘못 입력되었거나 회원가입되지 않은 전화번호입니다.');

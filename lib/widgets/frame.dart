@@ -232,7 +232,8 @@ class Frame{
 
  static showMessageErrorScreen(
      String message,
-     VoidCallback updateFunction){
+     VoidCallback updateFunction
+     ){
    return Center(
      child: Column(
        mainAxisAlignment: MainAxisAlignment.center,

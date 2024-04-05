@@ -17,11 +17,29 @@ import '../../data/models/reservation_default_response.dart';
 import '../../data/models/reservation_possible_response.dart';
 import '../../main.dart';
 import '../../utils/snackbar_utils.dart';
+import '../../widgets/frame.dart';
+import '../login/login_view.dart';
+
+enum RegionType {
+  gwangsangu('G','광산구'),
+  donggu('D', '동구');
+
+  const RegionType(this.label, this.name);
+
+  final String label;
+  final String name;
+}
 
 class ReservationViewModel extends ChangeNotifier {
-
-  ReservationViewModel(this.context);
   late BuildContext context;
+
+  /// 지역 선택 토클 초기값
+  int _toggleIndex = 0;
+
+  ReservationViewModel(this.context){
+    _currentRegionType = setRegionType();
+  }
+
   final _controller = ScrollController();
 
   /// Repository 객체
@@ -46,19 +64,25 @@ class ReservationViewModel extends ChangeNotifier {
   /// 예약 날짜 선택지 Visible
   bool _isVisibleSelectTime = false;
 
-  /// 예약 버튼 Visible
   bool _isVisibleReservationBtn = false;
 
-  List<DateTime> get dayOffDateList => _dayOffDateList;
-  List<String> get possibleDateTime => _possibleDateTime;
-
-  bool get isVisibleSelectTime => _isVisibleSelectTime;
-  bool get isVisibleReservationBtn => _isVisibleReservationBtn;
-  ScrollController get controller => _controller;
-  String? get selectedTime => _selectedTime;
+  /// 지역타입 - default value [RegionType.donggu]
+  RegionType _currentRegionType = RegionType.donggu;
 
   late List<bool> _isSelectedList;
+
+
+  /// 예약 버튼 Visible
+  ScrollController get controller => _controller;
+  List<DateTime> get dayOffDateList => _dayOffDateList;
+  List<String> get possibleDateTime => _possibleDateTime;
   List<bool> get isSelectedList => _isSelectedList;
+  bool get isVisibleSelectTime => _isVisibleSelectTime;
+  bool get isVisibleReservationBtn => _isVisibleReservationBtn;
+  String? get selectedTime => _selectedTime;
+  int get toggleIndex => _toggleIndex;
+  RegionType get currentRegionType => _currentRegionType;
+
 
   /// 예약화면 초기화
   /// 예약이 완료되거나, 예약이 취소했을경우 화면 갱신을위해 필요하다.
@@ -100,7 +124,7 @@ class ReservationViewModel extends ChangeNotifier {
   Future<void> handleDayOffReservation(DateTime date) async {
     try{
       ReservationDayOffResponse response =
-          await _postRepository.getDayOffReservationDio(date);
+          await _postRepository.getDayOffReservationDio(_currentRegionType, date);
 
       if (response.status.code == '200') {
         List<String> newDayOff = List.of(response.data);
@@ -125,7 +149,7 @@ class ReservationViewModel extends ChangeNotifier {
   Future<void> handlePossibleReservation(DateTime dateTime) async {
     try{
       ReservationPossibleResponse response
-          = await _postRepository.getPossibleReservationDio(dateTime);
+          = await _postRepository.getPossibleReservationDio(_currentRegionType, dateTime);
 
       if(response.status.code == '200'){
         List<String> reservationTimeStrings = response.data.map((reservationTimeData) {
@@ -157,6 +181,7 @@ class ReservationViewModel extends ChangeNotifier {
   Future<void> handleSaveReservation() async {
     Map<String, dynamic> toMap = {
       'serviceType': 'lifelog',
+      'orgType': _currentRegionType.label,
       'userID': Authorization().userID,
       'reservationDate': DateFormat('yyyy-MM-dd').format(selectedDay),
       'reservationTime': _selectedTime!,
@@ -172,6 +197,7 @@ class ReservationViewModel extends ChangeNotifier {
           context: context,
           statusType: SnackBarStatusType.success,
         );
+        _currentRegionType = RegionType.donggu;
         initScreen();
       }
       else if(response.status.code == 'ERR_MS_6003'){
@@ -204,7 +230,8 @@ class ReservationViewModel extends ChangeNotifier {
     try {
       DefaultResponse response = await _postRepository.cancelReservationDio({
                "serviceType": "lifelog",
-               "reservationIdx": reservationIdx
+               "reservationIdx": reservationIdx,
+               "orgType": _currentRegionType.label,
          });
 
       if(response.status.code == '200'){
@@ -259,6 +286,7 @@ class ReservationViewModel extends ChangeNotifier {
 
   scrollerMaxScrollExtent(){
     Future.delayed(const Duration(milliseconds: 500), () {
+
       _controller.animateTo(
         _controller.position.maxScrollExtent,
         duration: const Duration(milliseconds: 500),
@@ -275,12 +303,54 @@ class ReservationViewModel extends ChangeNotifier {
     } else {
       _isSelectedList = List.filled(_possibleDateTime.length, false); // Unselect all
       _isSelectedList[index] = true;
-      _selectedTime = sampleTimeList[index];
+      _selectedTime = _possibleDateTime[index];
       logger.i('=> 선택된 데이터 시간: $_selectedTime');
 
       _isVisibleReservationBtn = true;
     }
     notifyListeners();
     scrollerMaxScrollExtent();
+  }
+
+  /// 지역 선택 토글
+  /// index 값 변경 및 _currentRegionType 변경
+  onToggle(int? index){
+    initScreen();
+    _toggleIndex = index ?? 0;
+    if(_toggleIndex == 0){
+      _currentRegionType = RegionType.donggu;
+      _dayOffDateStringList.clear();
+      handleMultipleDayOffReservations();
+
+    } else {
+      _currentRegionType = RegionType.gwangsangu;
+      _dayOffDateStringList.clear();
+      handleMultipleDayOffReservations();
+    }
+    notifyListeners();
+  }
+
+  bool visibleRegionChoice() {
+    print('${Authorization().userIDOfD != '' && Authorization().userIDOfG != ''}');
+    return Authorization().userIDOfD != '' && Authorization().userIDOfG != '';
+  }
+
+  setRegionType(){
+    if(Authorization().userIDOfD == '' && Authorization().userIDOfG == ''){
+      Future.delayed(const Duration(seconds: 1),(){
+        SnackBarUtils.showBGWhiteSnackBar(
+            '권한 만료, 재 로그인 필요합니다.', context);
+        Authorization().clean();
+        Authorization().clearSetStringData();
+        Frame.doPagePush(context, const LoginView());
+      });
+      return RegionType.donggu;
+    }
+
+    else if(Authorization().userIDOfD == ''){
+      return RegionType.gwangsangu;
+    } else {
+      return RegionType.donggu;
+    }
   }
 }

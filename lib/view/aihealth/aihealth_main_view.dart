@@ -148,15 +148,62 @@ class _AiHealthMainViewState extends State<AiHealthMainView> {
             child: Consumer<AiHealthMainViewModel>(
               builder: (BuildContext context, value, Widget? child) {
                 return Column(
-                  children: [
-                    PredictListItem(title: '관절', indicatorColor: Colors.red, percent: double.parse(value.aiHealthData.boneProb)),
-                    PredictListItem(title: '당뇨병', indicatorColor: Colors.red, percent: double.parse(value.aiHealthData.diabetesProb)),
-                    PredictListItem(title: '눈건강', indicatorColor: Colors.red, percent: double.parse(value.aiHealthData.eyeProb)),
-                    PredictListItem(title: '고혈압', indicatorColor: aiHealthBg, percent: double.parse(value.aiHealthData.highpressProb)),
-                    PredictListItem(title: '면역', indicatorColor: aiHealthBg, percent: double.parse(value.aiHealthData.immuneProb)),
-                  ],
-                );
-              },
+                    children: [
+                      PredictListItem(
+                        title: '관절',
+                        indicatorColor: value.aiHealthData.boneState == '정상예측'
+                            ? aiHealthBg
+                            : value.aiHealthData.boneState == '예측 불가' ? Colors.black : Colors.red,
+                        state: value.aiHealthData.boneState,
+                        percent: double.parse(
+                          value.aiHealthData.boneProb,
+                        ),
+                      ),
+                      PredictListItem(
+                        title: '당뇨병',
+                        indicatorColor:
+                            value.aiHealthData.diabetesState == '정상예측'
+                                ? aiHealthBg
+                                : value.aiHealthData.diabetesState == '예측 불가' ? Colors.black : Colors.red,
+                        state: value.aiHealthData.diabetesState,
+                        percent: double.parse(
+                          value.aiHealthData.diabetesProb,
+                        ),
+                      ),
+                      PredictListItem(
+                        title: '눈건강',
+                        indicatorColor: value.aiHealthData.eyeState == '정상예측'
+                            ? aiHealthBg
+                            : value.aiHealthData.eyeState == '예측 불가' ? Colors.black : Colors.red,
+                        state: value.aiHealthData.eyeState,
+                        percent: double.parse(
+                          value.aiHealthData.eyeProb,
+                        ),
+                      ),
+                      PredictListItem(
+                        title: '고혈압',
+                        indicatorColor:
+                            value.aiHealthData.highpressState == '정상예측'
+                                ? aiHealthBg
+                                : value.aiHealthData.highpressState == '예측 불가' ? Colors.black : Colors.red,
+                        state: value.aiHealthData.highpressState,
+                        percent: double.parse(
+                          value.aiHealthData.highpressProb,
+                        ),
+                      ),
+                      PredictListItem(
+                        title: '면역',
+                        indicatorColor: value.aiHealthData.immuneState == '정상예측'
+                            ? aiHealthBg
+                            : value.aiHealthData.immuneState == '예측 불가' ? Colors.black : Colors.red,
+                        state: value.aiHealthData.immuneState,
+                        percent: double.parse(
+                          value.aiHealthData.immuneProb,
+                        ),
+                      ),
+                    ],
+                  );
+                },
             )
           )
         ],

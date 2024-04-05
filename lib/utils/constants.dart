@@ -1,7 +1,7 @@
 
 class Constants {
   static const appName = 'GHealth';
-  static const appVersion = '1.0.3';
+  static const appVersion = '1.0.7';
 
   static List<String> generateTargetList(int start, int end, int step) {
     List<String> targetList = [];

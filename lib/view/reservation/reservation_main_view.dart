@@ -8,6 +8,7 @@ import 'package:ghealth_app/widgets/frame.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 import '../../data/models/authorization.dart';
 import '../../utils/colors.dart';
@@ -39,7 +40,7 @@ class _ReservationMainViewState extends State<ReservationMainView> {
 
     /// AccessToken 확인
     Authorization().checkAuthToken().then((result) {
-      if(!result){
+      if (!result) {
         SnackBarUtils.showBGWhiteSnackBar(
             '권한 만료, 재 로그인 필요합니다.', context);
         Frame.doPagePush(context, const LoginView());
@@ -64,6 +65,8 @@ class _ReservationMainViewState extends State<ReservationMainView> {
 
               buildMyCurrentReservation(),
 
+              buildRegionChoice(),
+
               buildCalendar(context),
 
               buildSelectTime(),
@@ -75,6 +78,7 @@ class _ReservationMainViewState extends State<ReservationMainView> {
       ),
     );
   }
+
   /// 예약 타이틀
   Widget buildTitle() {
     return Container(
@@ -88,9 +92,58 @@ class _ReservationMainViewState extends State<ReservationMainView> {
     );
   }
 
+  /// 지역 선택 토글 위젯
+  Widget buildRegionChoice() {
+    return Visibility(
+      visible: _viewModel.visibleRegionChoice(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  const Icon(
+                      Icons.home_outlined, color: mainColor, size: 30),
+                  const Gap(5),
+
+                  Frame.myText(
+                    text: '방문할 건강관리소',
+                    fontSize: 1.4,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              child: ToggleSwitch(
+                initialLabelIndex: _viewModel.toggleIndex,
+                totalSwitches: 2,
+                animationDuration: 400,
+                inactiveBgColor: Colors.grey.shade200,
+                activeBgColor: [
+                  mainColor
+                ],
+                customWidths: [size.width / 2 - 16, size.width / 2 - 16],
+                labels: const ['동구 건강관리소', '광산구 건강관리소'],
+                fontSize: 14,
+                customTextStyles: const [TextStyle(fontWeight: FontWeight.w600)],
+                onToggle: _viewModel.onToggle,
+              ),
+            )
+
+          ],
+        ),
+      ),
+    );
+  }
+
   /// 내 현재 예약 현황
   /// 가장 최신 예약 내역 1개만 보여준다.
-  Widget buildMyCurrentReservation(){
+  Widget buildMyCurrentReservation() {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
       margin: const EdgeInsets.all(20.0),
@@ -118,7 +171,8 @@ class _ReservationMainViewState extends State<ReservationMainView> {
               ),
 
               InkWell(
-                onTap: ()=> Frame.doPagePush(context, const ReservationHistoryView()),
+                onTap: () =>
+                    Frame.doPagePush(context, const ReservationHistoryView()),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -127,7 +181,8 @@ class _ReservationMainViewState extends State<ReservationMainView> {
                         color: Colors.grey
                     ),
                     const Gap(5),
-                    const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 15,),
+                    const Icon(
+                      Icons.arrow_forward_ios, color: Colors.grey, size: 15,),
                   ],
                 ),
               )
@@ -141,18 +196,17 @@ class _ReservationMainViewState extends State<ReservationMainView> {
             child: FutureBuilder(
               future: _viewModel.handleRecentReservation(),
               builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if(snapshot.hasError){
+                if (snapshot.hasError) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     child: Center(
                       child: Frame.myText(
-                          text: '방문 예약 내역을 불러오지 못했습니다.',
-
+                        text: '방문 예약 내역을 불러오지 못했습니다.',
                       ),
                     ),
                   );
                 }
-                else if(snapshot.connectionState == ConnectionState.waiting){
+                else if (snapshot.connectionState == ConnectionState.waiting) {
                   return Frame.buildFutureBuildProgressIndicator();
                 }
                 else {
@@ -179,7 +233,7 @@ class _ReservationMainViewState extends State<ReservationMainView> {
 
                             /// 예약장소
                             Padding(
-                              padding: const EdgeInsets.only(left:10, top:15),
+                              padding: const EdgeInsets.only(left: 10, top: 15),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -190,7 +244,7 @@ class _ReservationMainViewState extends State<ReservationMainView> {
                                   ),
                                   const Gap(10),
                                   Frame.myText(
-                                    text: '동구라이프로그 건강관리소',
+                                    text: '${value.recentReservationData.orgType?.name} 건강관리소',
                                     fontWeight: FontWeight.w600,
                                     fontSize: 1.1,
                                   ),
@@ -200,7 +254,8 @@ class _ReservationMainViewState extends State<ReservationMainView> {
 
                             /// 예약 날짜, 시간
                             Padding(
-                              padding: const EdgeInsets.only(left:10, top:10, bottom: 10),
+                              padding: const EdgeInsets.only(
+                                  left: 10, top: 10, bottom: 10),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -211,8 +266,10 @@ class _ReservationMainViewState extends State<ReservationMainView> {
                                   ),
                                   const Gap(10),
                                   Frame.myText(
-                                    text: '${value.recentReservationData.reservationDate} / '
-                                        '${value.recentReservationData.reservationTime}',
+                                    text: '${value.recentReservationData
+                                        .reservationDate} / '
+                                        '${value.recentReservationData
+                                        .reservationTime}',
                                     fontWeight: FontWeight.w500,
                                     fontSize: 1.1,
                                   ),
@@ -222,7 +279,8 @@ class _ReservationMainViewState extends State<ReservationMainView> {
 
                             /// 예약 상태
                             Padding(
-                              padding: const EdgeInsets.only(left:10, bottom: 0),
+                              padding: const EdgeInsets.only(
+                                  left: 10, bottom: 0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -234,7 +292,8 @@ class _ReservationMainViewState extends State<ReservationMainView> {
                                   const Gap(10),
 
                                   Frame.myText(
-                                    text: '${value.recentReservationData.reservationStatus}',
+                                    text: '${value.recentReservationData
+                                        .reservationStatus}',
                                     fontWeight: FontWeight.w600,
                                     fontSize: 1.1,
                                   ),
@@ -246,18 +305,25 @@ class _ReservationMainViewState extends State<ReservationMainView> {
                             Etc.solidLine(context),
 
                             Visibility(
-                              visible: Etc.possibleToCancel(value.recentReservationData.reservationStatus!),
+                              visible: Etc.possibleToCancel(
+                                  value.recentReservationData
+                                      .reservationStatus!),
                               child: InkWell(
-                                onTap: () => {
+                                onTap: () =>
+                                {
                                   CustomDialog.showCancelReservationDialog(
                                       mainContext: context,
-                                      reservationDate: value.recentReservationData.reservationDate!,
+                                      reservationDate: value
+                                          .recentReservationData
+                                          .reservationDate!,
                                       reservationTime: value.recentReservationData.reservationTime!,
+                                      type: value.recentReservationData.orgType!,
                                       cancelReservationFunction: () =>
-                                          value.handleCancelReservation(int.parse(value
-                                              .recentReservationData
-                                              .reservationIdx
-                                              .toString()))
+                                          value.handleCancelReservation(
+                                              int.parse(value
+                                                  .recentReservationData
+                                                  .reservationIdx
+                                                  .toString()))
                                   )
                                 },
                                 child: Padding(
@@ -274,7 +340,6 @@ class _ReservationMainViewState extends State<ReservationMainView> {
                           ],
                         ),
                       );
-
                     },
                   );
                 }
@@ -287,14 +352,15 @@ class _ReservationMainViewState extends State<ReservationMainView> {
   }
 
   /// 예약 달력 위젯
-  Widget buildCalendar(BuildContext context){
+  Widget buildCalendar(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 30, 20, 30),
       child: Column(
         children: [
           Row(
             children: [
-              const Icon(Icons.calendar_month_outlined, color: mainColor, size: 30),
+              const Icon(
+                  Icons.calendar_month_outlined, color: mainColor, size: 30),
               const Gap(5),
 
               Frame.myText(
@@ -327,77 +393,85 @@ class _ReservationMainViewState extends State<ReservationMainView> {
                 padding: const EdgeInsets.all(15.0),
                 child: Consumer<ReservationViewModel>(
                   builder: (BuildContext context, value, Widget? child) {
-                    return SingleChildScrollView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      child: TableCalendar(
-                        locale: 'ko_KR',
-                        calendarBuilders: CalendarBuilders(
-                          /// week Text Style
-                            dowBuilder: (context, day) {
-                              switch(day.weekday){
-                                case 1:
-                                  return const Center(child: Text('월'),);
-                                case 2:
-                                  return const Center(child: Text('화'),);
-                                case 3:
-                                  return const Center(child: Text('수'),);
-                                case 4:
-                                  return const Center(child: Text('목'),);
-                                case 5:
-                                  return const Center(child: Text('금'),);
-                                case 6:
-                                  return const Center(child: Text('토',style: TextStyle(color: Colors.red)),);
-                                case 7:
-                                  return const Center(child: Text('일',style: TextStyle(color: Colors.red)));
-                              }
-                              return null;
-                            }),
+                    return TableCalendar(
+                      locale: 'ko_KR',
+                      availableGestures: AvailableGestures.horizontalSwipe,
+                      calendarBuilders: CalendarBuilders(
+                        /// week Text Style
+                          dowBuilder: (context, day) {
+                            switch (day.weekday) {
+                              case 1:
+                                return const Center(child: Text('월'),);
+                              case 2:
+                                return const Center(child: Text('화'),);
+                              case 3:
+                                return const Center(child: Text('수'),);
+                              case 4:
+                                return const Center(child: Text('목'),);
+                              case 5:
+                                return const Center(child: Text('금'),);
+                              case 6:
+                                return const Center(child: Text('토',
+                                    style: TextStyle(color: Colors.red)),);
+                              case 7:
+                                return const Center(child: Text('일',
+                                    style: TextStyle(color: Colors.red)));
+                            }
+                            return null;
+                          }),
 
-                        /// 달력 타이틀 해드 스타일 옵션
-                        headerStyle: const HeaderStyle(
-                            titleTextStyle: TextStyle(color: mainColor, fontSize: 18, fontWeight: FontWeight.w600),
-                            leftChevronIcon: Icon(Icons.chevron_left, color: mainColor),
-                            rightChevronIcon: Icon(Icons.chevron_right, color: mainColor),
-                            formatButtonVisible: false,
-                            titleCentered: true
-                        ),
-
-                        /// 특정 날짜 비활성화
-                        enabledDayPredicate: (DateTime dateTime){
-                          // 주말인 경우 선택을 비활성화합니다.
-                          if (dateTime.weekday == 6 || dateTime.weekday == 7) {
-                            return false;
-                          }
-
-                          // 추가적인 휴일 설정
-                          return !value.dayOffDateList.any((date) =>isSameDay(date, dateTime));
-                        },
-                        firstDay: DateTime.now().add(const Duration(days: 1)),
-                        lastDay: DateTime.utc(2030, 1, 1),
-                        focusedDay: value.focusedDay,
-                        calendarStyle: CalendarStyle(
-                            outsideDaysVisible: true,
-                            weekendTextStyle: const TextStyle().copyWith(color: Colors.red),
-                            todayDecoration: BoxDecoration(
-                                color: Colors.transparent,
-                                shape: BoxShape.circle,
-                                border: Border.all(color: mainColor, width: 3)),
-                            selectedDecoration: const BoxDecoration(
-                              color: mainColor,
-                              shape: BoxShape.circle,
-                            ),
-                            todayTextStyle: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: mainColor
-                            )),
-
-                        onDaySelected: (DateTime selectedDay, DateTime focusedDay) =>
-                            value.onDaySelectedCalendar(selectedDay, focusedDay),
-                        selectedDayPredicate: (DateTime day) {
-                          // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
-                          return isSameDay(value.selectedDay, day);
-                        },
+                      /// 달력 타이틀 해드 스타일 옵션
+                      headerStyle: const HeaderStyle(
+                          titleTextStyle: TextStyle(color: mainColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600),
+                          leftChevronIcon: Icon(
+                              Icons.chevron_left, color: mainColor),
+                          rightChevronIcon: Icon(
+                              Icons.chevron_right, color: mainColor),
+                          formatButtonVisible: false,
+                          titleCentered: true
                       ),
+
+                      /// 특정 날짜 비활성화
+                      enabledDayPredicate: (DateTime dateTime) {
+                        // 주말인 경우 선택을 비활성화합니다.
+                        if (dateTime.weekday == 6 || dateTime.weekday == 7) {
+                          return false;
+                        }
+
+                        // 추가적인 휴일 설정
+                        return !value.dayOffDateList.any((date) =>
+                            isSameDay(date, dateTime));
+                      },
+                      firstDay: DateTime.now().add(const Duration(days: 1)),
+                      lastDay: DateTime.utc(2030, 1, 1),
+                      focusedDay: value.focusedDay,
+                      calendarStyle: CalendarStyle(
+                          outsideDaysVisible: true,
+                          weekendTextStyle: const TextStyle().copyWith(
+                              color: Colors.red),
+                          todayDecoration: BoxDecoration(
+                              color: Colors.transparent,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: mainColor, width: 3)),
+                          selectedDecoration: const BoxDecoration(
+                            color: mainColor,
+                            shape: BoxShape.circle,
+                          ),
+                          todayTextStyle: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: mainColor
+                          )),
+
+                      onDaySelected: (DateTime selectedDay,
+                          DateTime focusedDay) =>
+                          value.onDaySelectedCalendar(
+                              selectedDay, focusedDay),
+                      selectedDayPredicate: (DateTime day) {
+                        // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
+                        return isSameDay(value.selectedDay, day);
+                      },
                     );
                   },
                 ),
@@ -442,20 +516,22 @@ class _ReservationMainViewState extends State<ReservationMainView> {
   }
 
   /// 예약 버튼 위젯
-  ///
-  Widget buildReservationBtn(){
+  Widget buildReservationBtn() {
     return Consumer<ReservationViewModel>(
       builder: (BuildContext context, value, Widget? child) {
         return Visibility(
           visible: value.isVisibleReservationBtn,
           child: InkWell(
-            onTap: ()=>{
+            onTap: () =>
+            {
               CustomDialog.showReservationDialog(
                   width: size.width,
                   mainContext: context,
-                  reservationDate: DateFormat('yyyy-MM-dd').format(value.selectedDay),
+                  reservationDate: DateFormat('yyyy-MM-dd').format(
+                      value.selectedDay),
                   reservationTime: value.selectedTime!,
-                  saveReservationFunction: ()=> value.handleSaveReservation()
+                  saveReservationFunction: () => value.handleSaveReservation(),
+                  type: value.currentRegionType
               )
             },
             child: Container(
@@ -481,8 +557,8 @@ class _ReservationMainViewState extends State<ReservationMainView> {
     );
   }
 
-  Widget buildSelectTimeGridview(List<String> possibleDateTimeList){
-    return  Consumer<ReservationViewModel>(
+  Widget buildSelectTimeGridview(List<String> possibleDateTimeList) {
+    return Consumer<ReservationViewModel>(
       builder: (BuildContext context, value, Widget? child) {
         return possibleDateTimeList.isEmpty
             ? Container(
@@ -532,11 +608,10 @@ class _ReservationMainViewState extends State<ReservationMainView> {
     );
   }
 
-  Widget _buildSortOption(
-      String time,
+  Widget _buildSortOption(String time,
       ReservationViewModel value,
       bool selected,
-      int index) {
+      int index,) {
     return GestureDetector(
       onTap: () {
         value.onTapSelectItem(index);
@@ -544,9 +619,9 @@ class _ReservationMainViewState extends State<ReservationMainView> {
       child: Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: selected ?  mainColor : Colors.white,
+          color: selected ? mainColor : Colors.white,
           border: Border.all(
-            color:  selected ? mainColor : Colors.grey.shade400,
+            color: selected ? mainColor : Colors.grey.shade400,
             width: 1.0,
             style: BorderStyle.solid,
           ),
@@ -558,7 +633,7 @@ class _ReservationMainViewState extends State<ReservationMainView> {
             child: Frame.myText(
               text: time,
               fontSize: 1.0,
-              fontWeight: selected? FontWeight.w600 : FontWeight.w400,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
               color: selected ? Colors.white : Colors.black,
             ),
           ),
@@ -567,76 +642,5 @@ class _ReservationMainViewState extends State<ReservationMainView> {
     );
   }
 }
-// Widget buildMultiSelectTime(){
-//   return Container(
-//     height: 140,
-//     margin: const EdgeInsets.all(15),
-//     child: GridView.builder(
-//       itemCount: sampleTimeList.length,
-//       scrollDirection: Axis.vertical,           //default
-//       reverse: false,                           //default
-//       controller: ScrollController(),
-//       primary: false,
-//       physics: const NeverScrollableScrollPhysics(),
-//       shrinkWrap: true,
-//       padding: const EdgeInsets.all(5.0),
-//       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-//     crossAxisCount: 3,
-//     mainAxisSpacing: 10.0,
-//     crossAxisSpacing: 10.0,
-//           childAspectRatio:3.1
-//     ),
-//     semanticChildCount: 3,
-//     cacheExtent: 0.0,
-//     dragStartBehavior: DragStartBehavior.start,
-//     clipBehavior: Clip.hardEdge,
-//     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
-//     itemBuilder: (BuildContext context, int index) {
-//         return _buildSortOption(sampleTimeList[index], isSelected[index], index);
-//     },
-//       // List of Widgets
-//     ),
-//   );
-// }
-// Widget _buildSortOption(String time, bool selected, int index) {
-//   return GestureDetector(
-//     onTap: () {
-//       setState(() {
-//         isSelected = List.filled(7, false); // Unselect all
-//         if(selected){
-//           isSelected[index] = false;
-//           selectedIndex == null;
-//         } else {
-//           isSelected[index] = true; // Select the tapped item
-//           selectedIndex = index;
-//         }
-//
-//       });
-//     },
-//     child: Container(
-//       padding: const EdgeInsets.all(5),
-//       decoration: BoxDecoration(
-//         color: selected ? mainColor : Colors.white,
-//         border: Border.all(
-//           color: selected ? mainColor : Colors.grey.shade400,
-//           width: 1.5,
-//           style: BorderStyle.solid,
-//         ),
-//         borderRadius: BorderRadius.circular(20),
-//       ),
-//       child: Padding(
-//         padding: const EdgeInsets.all(2.0),
-//         child: Center(
-//           child: Frame.myText(
-//             text: time,
-//             fontSize: 1.1,
-//             fontWeight: FontWeight.w400,
-//             color: selected ? Colors.white : Colors.black,
-//             ),
-//           ),
-//         ),
-//       ),
-//   );
-// }
 
 

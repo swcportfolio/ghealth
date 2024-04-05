@@ -445,50 +445,50 @@ Widget buildGallery3D() {
     Color btnColor,
   ) {
     return Expanded(
-      child: Container(
-        height: 330,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30.0),
-          color: color,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 7,
-              offset: const Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Gap(30),
-                  Image.asset(type.imagePath),
-                  const Gap(20),
-                  Frame.myText(
-                    text: '${type.name}\n라이프로그\n건강관리소',
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    maxLinesCount: 3,
-                    align: TextAlign.center,
-                    fontSize: 1.3,
-                  )
-                ],
+      child: InkWell(
+        onTap: () => {
+          Frame.doLaunchUniversalLink(Uri(
+            scheme: 'https',
+            host: type.host,
+          )),
+        },
+        child: Container(
+          height: 330,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30.0),
+            color: color,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 2,
+                blurRadius: 7,
+                offset: const Offset(0, 3), // changes position of shadow
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: InkWell(
-                onTap: () => {
-                  Frame.doLaunchUniversalLink(Uri(
-                    scheme: 'https',
-                    host: type.host,
-                  )),
-                },
+            ],
+          ),
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Gap(30),
+                    Image.asset(type.imagePath),
+                    const Gap(20),
+                    Frame.myText(
+                      text: '${type.name}\n라이프로그\n건강관리소',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      maxLinesCount: 3,
+                      align: TextAlign.center,
+                      fontSize: 1.3,
+                    )
+                  ],
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
                 child: Container(
                   height: 50,
                   decoration: BoxDecoration(
@@ -498,16 +498,16 @@ Widget buildGallery3D() {
                           bottomRight: Radius.circular(30.0))),
                   child: Center(
                     child: Frame.myText(
-                      text: '신청하기',
+                      text: '예약하기',
                       fontSize: 1.1,
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );

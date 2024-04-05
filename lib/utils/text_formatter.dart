@@ -1,5 +1,8 @@
 
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
+
+import '../main.dart';
 
 class TextFormatter {
 
@@ -15,6 +18,16 @@ class TextFormatter {
     return formattedDate;
   }
 
+
+  static pointDateFormat(String dateInput) {
+    if (dateInput == '') {
+      return '';
+    }
+    DateTime date = DateTime.parse(dateInput);
+    String formattedDate = DateFormat('yyyy-MM-dd').format(date);
+
+    return formattedDate;
+  }
 
   /// 백단위로 ,(콤마) 생성
   static String formatNumberWithCommas(int number) {

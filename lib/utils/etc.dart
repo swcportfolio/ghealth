@@ -295,4 +295,39 @@ class Etc {
     double rate = (value / target) * 100;
     return rate;
   }
+
+  static Color getBloodPressureColor(String resultText, String resultLabel) {
+    Color borderColor = Colors.blueAccent;
+
+    if(resultLabel == '청력(좌/우)') {
+      if(resultText.contains('비정상') || resultText.contains('비 정상')) {
+        borderColor = Colors.red;
+      }
+    } else if(resultLabel == '혈압') {
+
+      List<int> values = resultText
+          .split('/')
+          .map((value) => int.tryParse(value.trim()) ?? 0)
+          .toList();
+
+      // 추출한 혈압 값이 유효한지 확인
+      if (values.length == 2) {
+        int systolic = values[0];
+        int diastolic = values[1];
+
+        // 혈압이 정상 범위인 경우 파랑색 반환
+        if (systolic <= 120 && diastolic <= 80) {
+          return borderColor;
+        }
+        // 그 외의 경우 빨간색을 반환
+        else {
+          return Colors.red;
+        }
+      } else {
+        // 혈압 값이 올바르게 구성되지 않은 경우 파랑색 반환
+        return borderColor;
+      }
+    }
+    return borderColor;
+  }
 }

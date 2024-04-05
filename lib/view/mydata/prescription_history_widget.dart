@@ -22,7 +22,6 @@ class PrescriptionHistoryWidget extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
       child: Card(
         color: Colors.grey.shade100,
-        elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
         ),

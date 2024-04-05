@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:ghealth_app/utils/text_formatter.dart';
+import 'package:intl/intl.dart';
 
 import '../../data/enum/mydata_measurement_type.dart';
 import '../../data/models/metrology_inspection.dart';
 import '../../utils/colors.dart';
 import '../../utils/constants.dart';
+import '../../utils/etc.dart';
 import '../../widgets/frame.dart';
 import 'bottom_sheet/mydata_bottom_sheet_view.dart';
 
-/// 계측 검사 위젯
+/// 나의 건강 검진 - 계측 검사 위젯
 class MetrologyInspectionWidget extends StatefulWidget {
   const MetrologyInspectionWidget(
-      {super.key, required this.metrologyInspection});
+      {super.key, required this.metrologyInspection, required this.date});
 
   /// 계측검사 결과 데이터 클래스
   final MetrologyInspection metrologyInspection;
+  final String date;
 
   @override
   State<MetrologyInspectionWidget> createState() => _MetrologyInspectionWidgetState();
@@ -24,7 +28,7 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+      padding: const EdgeInsets.fromLTRB(0, 0, 10, 10),
       child: Stack(
         children: [
           Container(
@@ -49,10 +53,13 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
                         fontWeight: FontWeight.w600),
 
                     /// 검진 날짜
-                    // Frame.myText(
-                    //   text: '최근 검진일 : ${widget.metrologyInspection.issuedDate}',
-                    //   fontSize: 0.9,
-                    // )
+                    Visibility(
+                      visible: widget.date.isEmpty ? false : true,
+                      child: Frame.myText(
+                        text: '검진일 : ${TextFormatter.defaultDateFormat(widget.date)}',
+                        fontSize: 0.9,
+                      ),
+                    )
                   ],
                 ),
 
@@ -77,7 +84,7 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
 
           /// 각 항목 Positioned Container
           buildMeasurementResultPositionedItem(
-              40, 80, null, null,
+              0, 84, 200, null,
               '${widget.metrologyInspection.visionOld == '-'
                   ? (widget.metrologyInspection.visionLeft == '-'
                     ? '-'
@@ -87,22 +94,22 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
               MyDataMeasurementType.vision
           ),
           buildMeasurementResultPositionedItem(
-              20, 200, null, null, '${widget.metrologyInspection.bloodPressure}',
+              0, 205, 240, null, '${widget.metrologyInspection.bloodPressure}',
               '혈압',
               MyDataMeasurementType.bloodPressure
           ),
           buildMeasurementResultPositionedItem(
-              30, 360, null, null, '${widget.metrologyInspection.weight}',
+              0, 365, 200, null, '${widget.metrologyInspection.weight}',
               '몸무게',
               MyDataMeasurementType.weight
           ),
           buildMeasurementResultPositionedItem(
-              35, 460, null, null, '${widget.metrologyInspection.height}',
+              0, 460, 200, null, '${widget.metrologyInspection.height}',
               '키',
               MyDataMeasurementType.height
           ),
           buildMeasurementResultPositionedItem(
-              null, 83, 50, null,
+              180, 90, 0, null,
                   '${widget.metrologyInspection.hearingAbilityOld == '-'
                   ? (widget.metrologyInspection.hearingAbilityLeft == '-'
                   ? '-'
@@ -112,13 +119,13 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
               MyDataMeasurementType.hearingAbility
           ),
           buildMeasurementResultPositionedItem(
-              null, 205, 40, null,
+              200, 210, 0, null,
               '${widget.metrologyInspection.waistCircumference}',
               '허리둘레',
               MyDataMeasurementType.waistCircumference
           ),
           buildMeasurementResultPositionedItem(
-              null, 335, 25, null,
+              220, 340, 0, null,
               '${widget.metrologyInspection.bodyMassIndex}',
               '체질량지수',
               MyDataMeasurementType.bodyMassIndex
@@ -135,6 +142,9 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
       String resultLabel,
       MyDataMeasurementType dataType,
       ) {
+    // 청력, 혈압 기준값에 의해서 borderbox 컬러값 설정
+    Color borderColor = Etc.getBloodPressureColor(resultText, resultLabel);
+
     return Positioned(
       top: top,
       left: left,
@@ -150,24 +160,27 @@ class _MetrologyInspectionWidgetState extends State<MetrologyInspectionWidget> {
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) {
                   return MyDataBottomSheetView(screeningsDataType: dataType);
-                })
+                },
+            )
           }
         },
         child: Column(
           children: [
             /// 검사 결과 박스
             Container(
-              height: 35,
-              width: 80,
+              height: 30,
+              width: 65,
               decoration: BoxDecoration(
                   color: metrologyInspectionBgColor,
                   borderRadius: BorderRadius.circular(30.0),
-                  border: Border.all(width: 1, color: Colors.blueAccent)),
+                  border: Border.all(width: 1, color: borderColor)),
               child: Center(
                 child: Frame.myText(
                     text: resultText,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blueAccent),
+                    color: borderColor,
+                    fontSize: 0.9
+                ),
               ),
             ),
             const Gap(5),

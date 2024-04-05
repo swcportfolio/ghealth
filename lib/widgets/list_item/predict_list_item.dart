@@ -11,11 +11,13 @@ class PredictListItem extends StatelessWidget {
     required this.title,
     required this.indicatorColor,
     required this.percent,
+    required this.state,
   });
 
   final String title;
   final Color indicatorColor;
   final double percent;
+  final String state;
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +61,10 @@ class PredictListItem extends StatelessWidget {
                 ),
 
                 Frame.myText(
-                    text: '${(double.parse(percent.toStringAsFixed(2))*100).toInt()}%',
-                    color: (double.parse(percent.toStringAsFixed(2))*100).toInt() >=50 ? Colors.red : Colors.black,
-                    fontSize: 1.0,
-                    fontWeight: FontWeight.w500
+                    text: state,
+                    color: indicatorColor,
+                    fontSize: 1.1,
+                    fontWeight: FontWeight.w600
                 ),
                 const Gap(10),
 

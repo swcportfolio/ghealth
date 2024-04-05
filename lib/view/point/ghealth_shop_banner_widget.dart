@@ -27,7 +27,14 @@ class GHealthShopBannerWidget extends StatelessWidget {
       future: viewModel.handleProductDio(),
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         if (snapshot.hasError) {
-          return Frame.buildFutureBuilderHasError(snapshot.error.toString(), () => {});
+          return SizedBox(
+            height: 100,
+            child: Center(
+              child: Frame.myText(
+                text:'상품을 불러오지 못했습니다.'
+              ),
+            ),
+          ); //Frame.buildFutureBuilderHasError(snapshot.error.toString(), () => {});
         }
         else if (snapshot.connectionState == ConnectionState.done) {
           return Consumer<MyHealthPointViewModel>(

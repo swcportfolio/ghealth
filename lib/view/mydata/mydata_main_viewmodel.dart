@@ -1,6 +1,8 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:ghealth_app/data/models/health_screening_data.dart';
+import 'package:ghealth_app/data/models/health_screening_history_data.dart';
 
 import 'package:ghealth_app/data/repository/post_repository.dart';
 import 'package:ghealth_app/utils/etc.dart';
@@ -23,6 +25,8 @@ class MyDataMainViewModel extends ChangeNotifier {
   /// 계측 검사 결과 객체
   /// 시력, 청력, 혈압, 허리둘레, 체질량지수 등등
   final _metrologyInspection = MetrologyInspection();
+
+  final _metrologyInspectionList = <MetrologyInspection>[];
 
   /// 혈액검사 결과 객체
   final _bloodTest = BloodTest();
@@ -79,10 +83,8 @@ class MyDataMainViewModel extends ChangeNotifier {
       if(response.status.code == '200' && response.data != null) {
         _summaryData = response.data;
         dataParsingByWidget();
-
         return summaryData;
       } else {
-
         return null;
       }
     }  on DioException catch (dioError) {
@@ -105,6 +107,7 @@ class MyDataMainViewModel extends ChangeNotifier {
   dataParsingByWidget() {
     parsingHealthScreeningList();
     parsingMetrologyInspection();
+    parsingMetrologyInspection2();
     parsingBloodTest();
     _mydataPredict = _summaryData?.mydataPredict;
 
@@ -142,6 +145,28 @@ class MyDataMainViewModel extends ChangeNotifier {
     }
   }
 
+  /// [_summaryData]의 건강 검진 목록에서 계측 검사 데이터를 파싱하는 역할을 합니다.
+  /// 건강 검진 목록이 null이 아니라면, [_metrologyInspection] 객체를 사용하여
+  /// 데이터를 파싱하고 추가적인 사용을 위해 저장합니다.
+  void parsingMetrologyInspection2(){
+    dates.clear();
+    dataList.clear();
+
+    if(_summaryData?.healthScreeningList != null) {
+      _summaryData!.healthScreeningHistoryList?.forEach((date, data) {
+        print('날짜: $date');
+        dates.add(date);
+
+        final metrologyInspection = MetrologyInspection();
+        metrologyInspection.parseFromHealthScreeningHistoryList(data);
+        dataList.add(metrologyInspection);
+      });
+    }
+  }
+
+  List<String> dates = [];
+  List<MetrologyInspection> dataList = [];
+
 
   /// [_summaryData]의 건강 검진 목록에서 혈액 검사 데이터를 파싱하는 역할을 합니다.
   /// 만약 건강 검진 목록이 null이 아니라면, [_bloodTest] 객체를 사용하여 데이터를 파싱하고 추가적인 사용을 위해 저장합니다.
@@ -150,5 +175,4 @@ class MyDataMainViewModel extends ChangeNotifier {
       _bloodTest.parseFromHealthScreeningList(_summaryData!.healthScreeningList!);
     }
   }
-
 }
