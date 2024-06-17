@@ -19,7 +19,10 @@ enum MedicationInfoType{
 }
 
 class MedicationDetailView extends StatefulWidget {
-  const MedicationDetailView({super.key, required this.medicationCode});
+  const MedicationDetailView({
+    super.key,
+    required this.medicationCode
+  });
 
   /// 처방 약 코드
   final String medicationCode;

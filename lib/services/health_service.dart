@@ -279,6 +279,8 @@ class HealthService {
    DefaultResponse response = await _postRepository
        .saveHealthDataDio(dataType, dioMap(dataType, healthDataMap));
 
+   logger.i('${dioMap(dataType, healthDataMap)}');
+
    if(response.status.code == '200'){
     logger.i('=> dataType: health data transmission successful');
    } else {

@@ -49,7 +49,7 @@ class RemoteDataSource {
 
     dio.options.headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'GHEALTH  ${Authorization().token}'
+      'Authorization': 'GHEALTH ${Authorization().token}'
     };
     return dio;
   }
@@ -82,6 +82,7 @@ class RemoteDataSource {
       Response response =
           await _createPublicDio().post(sendAuthMessageApiUrl, data: data);
 
+      logger.i(response.data);
       // API 응답을 모델로 변환
       SendMessageResponse sendMessageResponse =
           SendMessageResponse.fromJson(response.data);
@@ -199,10 +200,12 @@ class RemoteDataSource {
   /// 라이프로그 건강검진 결과 조회
   Future<HealthReportResponse> getHealthReportLifeLogDio(
       String deviceID, String selectedDate) async {
+    logger.i(selectedDate);
     try {
       // Dio를 사용하여 API 호출
       Response response = await _createPrivateDio().get(healthLifeLogApiUrl,
           queryParameters: {'deviceID': deviceID, 'date': selectedDate});
+      logger.i(response);
 
       // API 응답을 모델로 변환
       HealthReportResponse healthReportResponse =
@@ -347,7 +350,7 @@ class RemoteDataSource {
     }
   }
 
-  /// 예약 취소
+
   Future<DefaultResponse> logoutDio() async {
     try {
       // Dio를 사용하여 API 호출
@@ -407,7 +410,7 @@ class RemoteDataSource {
     }
   }
 
-  /// 나의 일상기록 건강관리소 방문 날짜 리스트 가져오기s
+  /// 나의 일상기록 건강관리소 방문 날짜 리스트 가져오기
   Future<RecordDateResponse> getRecordDateDio() async {
     try {
       // Dio를 사용하여 API 호출
@@ -417,6 +420,7 @@ class RemoteDataSource {
       RecordDateResponse recordDateResponse =
           RecordDateResponse.fromJson(response.data);
 
+      logger.i(response);
       return recordDateResponse;
     } on DioException catch (dioError) {
       rethrow;

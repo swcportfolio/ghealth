@@ -49,14 +49,6 @@ class _HomeFramePageState extends State<HomeFrameView> with WidgetsBindingObserv
     WidgetsBinding.instance.addObserver(this);
 
     Authorization().fetchDataIfLoggedIn(context); // 출석 체크
-
-    // 네트워크 연결 상태 observe 등록
-    // _connectivity.observe().listen((status) {
-    //   logger.i('네트워크 상태: $status');
-    //   if(status == NetWorkStatus.unavailable){
-    //     SnackBarUtils.showStatusSnackBar(message: '네트워크 연결상태를 확인해주세요.', context: context, statusType: SnackBarStatusType.success);
-    //   }
-    // });
   }
 
   @override
@@ -96,7 +88,7 @@ class _HomeFramePageState extends State<HomeFrameView> with WidgetsBindingObserv
 
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          boxShadow: <BoxShadow>[ // 그림자효과
+          boxShadow: [ // 그림자효과
             BoxShadow(
               color: Colors.grey,
               blurRadius: 2,

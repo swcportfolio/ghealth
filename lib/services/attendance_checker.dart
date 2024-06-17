@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
 
+import '../common/service/health_service.dart';
 import '../data/models/attendance_data.dart';
 import '../main.dart';
-import 'health_service.dart';
 
 
 /// `AttendanceChecker` 클래스는 출석과 관련된 작업을 수행하는 데 사용됩니다.
@@ -25,7 +25,7 @@ class AttendanceChecker {
     // attendanceBox.add(attendanceDay);
 
     if (specificDateAttendance.isNotEmpty) {
-      logger.i('=> 출석이 완료 되었습니다.');
+      logger.i('=> 이미 출석완료 했습니다.');
       logger.i('=> 마지막 출석 날짜: ${specificDateAttendance[0].date}');
     } else {
       logger.i('=> 금일 날짜에 출석되어 있지 않습니다.');

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:ghealth_app/layers/presentation/tab/daily/point/vm_my_health_point.dart';
 import 'package:ghealth_app/view/point/point_history_list_widget.dart';
 import 'package:ghealth_app/view/point/point_search_view.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
@@ -58,7 +59,7 @@ class _MyHealthPointViewState extends State<MyHealthPointView> with TickerProvid
       ),
 
       body: ChangeNotifierProvider(
-        create: (BuildContext context) => _viewModel,
+        create: (_) => MyHealthPointViewModelTest(),
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           child: Padding(

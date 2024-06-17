@@ -112,7 +112,7 @@ class MyDataMainViewModel extends ChangeNotifier {
     _mydataPredict = _summaryData?.mydataPredict;
 
     if(_summaryData?.medicationInfoList != null) {
-      _issuedDateList = List.of(_summaryData!.issuedDateList).cast<String>().toList();
+      _issuedDateList = List.of(_summaryData!.issuedDateList).cast<String>().toSet().toList();
       _medicationInfoList = _summaryData!.medicationInfoList;
     }
     notifyListeners(); // 상태 변경을 알립니다.

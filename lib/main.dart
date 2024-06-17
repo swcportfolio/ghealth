@@ -1,29 +1,23 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:ghealth_app/data/models/authorization.dart';
-import 'package:ghealth_app/services/connectivity_observer.dart';
-import 'package:ghealth_app/utils/colors.dart';
-import 'package:ghealth_app/utils/etc.dart';
-import 'package:ghealth_app/utils/network_connectivity_observer.dart';
+import 'package:ghealth_app/common/common.dart';
+import 'package:ghealth_app/layers/presentation/auth/vm_login.dart';
 import 'package:ghealth_app/utils/nocheck_certificate_http.dart';
-import 'package:ghealth_app/utils/snackbar_utils.dart';
-import 'package:ghealth_app/view/home/home_frame_view.dart';
-import 'package:ghealth_app/view/point/my_health_point_viewmodel.dart';
-import 'package:ghealth_app/widgets/girdview/gridview_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'common/data/preference/app_preferences.dart';
+import 'common/data/preference/prefs.dart';
+import 'common/di/di.dart';
 import 'data/models/attendance_data.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
+import 'layers/model/authorization_test.dart';
+import 'my_app.dart';
 
 var logger = Logger(
     printer: PrettyPrinter(
@@ -33,91 +27,90 @@ var logger = Logger(
         colors: true, // Colorful log messages
         printEmojis: true, // Print an emoji for each log message
         printTime: false // Should each log print contain a timestamp
-    )
+        )
 );
 
+
 Future<void> main() async {
+  // 플랫폼 채널의 위젯 바인딩을 보장해야한다.
+  WidgetsFlutterBinding.ensureInitialized();
 
-  WidgetsFlutterBinding.ensureInitialized(); // 플랫폼 채널의 위젯 바인딩을 보장해야한다.
-  HttpOverrides.global = NoCheckCertificateHttpOverrides(); // 생성된 HttpOverrides 객체 등록
+  // HttpOverrides 등록
+  HttpOverrides.global = NoCheckCertificateHttpOverrides();
 
-  /// Hive local DB 초기화
-  /// 경로 추가 이후: [flutter packages pub run build_runner build]
-  await Hive.initFlutter();
-  initHive();
+  // SharedPreferences 초기화
+  await AppPreferences.init();
 
-  await Permission.activityRecognition.request(); // 신체활동 데이터 접근 퍼미션
+  // Hive 초기화
+  await initHive();
 
-  var pref = await SharedPreferences.getInstance();
-  String? userID = pref.getString('userID') ?? '';
-  String? userName = pref.getString('userName') ?? '';
-  String? token = pref.getString('token') ?? '';
-  String? gender = pref.getString('gneder') ?? '';
-  String? userIDOfD = pref.getString('userIDOfD') ?? '';
-  String? userIDOfG = pref.getString('userIDOfG') ?? '';
+  // Locator 초기화
+  initLocator();
 
-  String? targetSleep = pref.getString('targetSleep') ?? '0';
-  String? targetStep = pref.getString('targetStep') ?? '0';
-  bool? isToDayAttendance = pref.getBool('isToDayAttendance') ?? false;
+  // 사용자 정보 초기화
+  await initAuthorization();
 
-  Authorization().setValues(
-    newUserID: userID,
-    newUserName: userName,
-    newToken: token,
-    newGender: gender,
-    newUserIDOfD: userIDOfD,
-    newUserIDOfG: userIDOfG,
-  );
+  // 신체활동 데이터 접근 퍼미션 요청
+  await Permission.activityRecognition.request();
 
-  Authorization().isToDayAttendance = isToDayAttendance;
-  Authorization().targetSleep = targetSleep;
-  Authorization().targetStep = targetStep;
-
-  initializeDateFormatting().then((_) => runApp(
-      MultiProvider(
+  // 날짜 형식 초기화 후 runApp 실행
+  initializeDateFormatting().then((_) => runApp(MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-              create: (BuildContext context) => ReservationTime()
-          ),
+          ChangeNotifierProvider(create: (context) => LoginViewModelTest()),
         ],
         child: MyApp(),
-      )
+      ),
   ));
 }
 
 
-/// Hive를 데이터 저장을 위해 초기화합니다.
+/// Hive 데이터베이스 초기화
 ///
+/// /// 경로 추가 이후: [flutter packages pub run build_runner build]
 /// 이 메소드는 Hive를 설정하여 애플리케이션 문서 디렉터리로 초기화하고
 /// [AttendanceData] 클래스에 대한 어댑터를 등록합니다.
 Future<void> initHive() async {
+  // Hive 초기화
+  Hive.initFlutter();
+
+  // 애플리케이션 문서 디렉터리 경로 가져오기
   final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDir.path);
+
+  // AttendanceData 클래스에 대한 어댑터 등록
   Hive.registerAdapter(AttendanceDataAdapter());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
 
-  final themeData = ThemeData();
+/// 사용자 정보 초기화 함수
+Future<void> initAuthorization() async {
+  // 사용자 정보 가져오기
+  final userID = Prefs.userID.get();
+  final userName = Prefs.userName.get();
+  final token = Prefs.token.get();
+  final gender = Prefs.gender.get();
+  final userIDOfD = Prefs.userIDOfD.get();
+  final userIDOfG = Prefs.userIDOfG.get();
 
-  @override
-  Widget build(BuildContext context) {
-    /// 앱 화면 세로 위쪽 방향으로 고정
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // 목표 및 설정 정보 가져오기
+  final targetStep = Prefs.targetStep.get();
+  final targetSleep = Prefs.targetSleep.get();
+  final isToDayAttendance = Prefs.isToDayAttendance.get();
+  final permissionDenied = Prefs.permissionDenied.get();
+  final isCompletedPermission = Prefs.isCompletedPermission.get();
 
-    return MaterialApp(
-      title: 'GHealth',
-      debugShowCheckedModeBanner: false,
-      theme:Theme.of(context).copyWith(
-        colorScheme: themeData.colorScheme.copyWith(primary: mainColor),
-      ),
+  // 사용자 정보 AuthorizationTest에 저장
+  AuthorizationTest().userID = userID;
+  AuthorizationTest().userName = userName;
+  AuthorizationTest().token = token;
+  AuthorizationTest().gender = gender;
+  AuthorizationTest().userIDOfD = userIDOfD;
+  AuthorizationTest().userIDOfG = userIDOfG;
 
-      initialRoute:'home_frame_view',
-      routes: {
-        'home_frame_view': (context) => const HomeFrameView(),
-      },
-    );
-  }
+  // 목표 및 설정 정보 AuthorizationTest에 저장
+  AuthorizationTest().targetStep = targetStep;
+  AuthorizationTest().targetSleep = targetSleep;
+  AuthorizationTest().isToDayAttendance = isToDayAttendance;
+  AuthorizationTest().permissionDenied = permissionDenied;
+  AuthorizationTest().isCompletedPermission = isCompletedPermission;
 }
-

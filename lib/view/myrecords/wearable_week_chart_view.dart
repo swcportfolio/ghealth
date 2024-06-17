@@ -6,7 +6,6 @@ import 'package:ghealth_app/widgets/custom_appbar.dart';
 
 import '../../data/models/week_chart_data.dart';
 import '../../utils/colors.dart';
-import '../../utils/etc.dart';
 import '../../utils/snackbar_utils.dart';
 import '../../widgets/bar_chart.dart';
 import '../../widgets/frame.dart';

@@ -23,12 +23,10 @@ class HealthCenterRecordView extends StatefulWidget {
 class _HealthCenterRecordViewState extends State<HealthCenterRecordView> {
 
   late HealthCenterRecordViewModel _viewModel;
-  String selectedDate = '';
 
   @override
   void initState() {
     super.initState();
-
     _viewModel = HealthCenterRecordViewModel();
   }
 
@@ -108,75 +106,71 @@ class _HealthCenterRecordViewState extends State<HealthCenterRecordView> {
 
               if (snapshot.connectionState == ConnectionState.done &&
                   snapshot.data.length != 0) {
-                selectedDate = snapshot.data[0];
-                logger.i('selectedValue: $selectedDate');
               }
 
               if(snapshot.hasData) {
-                return DropdownButtonHideUnderline(
-                  child: DropdownButton2<String>(
-                    isExpanded: true,
-                    hint: Row(
-                      children: [
-                        Frame.myText(
-                            text: _viewModel.recordDateList.isEmpty
-                                ? '-'
-                                : _viewModel.recordDateList[0],
-                            fontSize: 0.9),
-                      ],
-                    ),
-                    items: _viewModel.recordDateList
-                        .map((String item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Frame.myText(
-                            text: item,
-                            fontSize: 0.9,
-                            overflow: TextOverflow.ellipsis)))
-                        .toList(),
-                    value: selectedDate,
-                    onChanged: (selectedValue) => {
-                      setState(() {
-                        selectedDate = selectedValue ?? '';
-                      })
-                    },
-                    alignment: AlignmentDirectional.center,
-                    buttonStyleData: ButtonStyleData(
-                      height: 35,
-                      width: 160,
-                      padding: const EdgeInsets.only(left: 14, right: 14),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black26),
-                        color: Colors.white,
+                return Consumer<HealthCenterRecordViewModel>(
+                  builder: (context, provider, child) {
+                    return  DropdownButtonHideUnderline(
+                      child: DropdownButton2<String>(
+                        isExpanded: true,
+                        hint: Row(
+                          children: [
+                            Frame.myText(
+                                text: provider.selectedDate,
+                                fontSize: 0.9),
+                          ],
+                        ),
+                        items: provider.recordDateList
+                            .map((String item) => DropdownMenuItem<String>(
+                            value: item,
+                            child: Frame.myText(
+                                text: item,
+                                fontSize: 0.9,
+                                overflow: TextOverflow.ellipsis)))
+                            .toList(),
+                        value: provider.selectedDate,
+                        onChanged: provider.onChanged,
+                        alignment: AlignmentDirectional.center,
+                        buttonStyleData: ButtonStyleData(
+                          height: 35,
+                          width: 160,
+                          padding: const EdgeInsets.only(left: 14, right: 14),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.black26),
+                            color: Colors.white,
+                          ),
+                        ),
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                          ),
+                          iconSize: 25,
+                          iconEnabledColor: Colors.grey,
+                          iconDisabledColor: Colors.grey,
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 200,
+                          width: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                          ),
+                          offset: const Offset(0, 0),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(20),
+                            thickness: MaterialStateProperty.all(3),
+                            thumbVisibility: MaterialStateProperty.all(true),
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 40,
+                          padding: EdgeInsets.only(left: 14, right: 14),
+                        ),
                       ),
-                    ),
-                    iconStyleData: const IconStyleData(
-                      icon: Icon(
-                        Icons.keyboard_arrow_down_rounded,
-                      ),
-                      iconSize: 25,
-                      iconEnabledColor: Colors.grey,
-                      iconDisabledColor: Colors.grey,
-                    ),
-                    dropdownStyleData: DropdownStyleData(
-                      maxHeight: 200,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                      ),
-                      offset: const Offset(0, 0),
-                      scrollbarTheme: ScrollbarThemeData(
-                        radius: const Radius.circular(20),
-                        thickness: MaterialStateProperty.all(3),
-                        thumbVisibility: MaterialStateProperty.all(true),
-                      ),
-                    ),
-                    menuItemStyleData: const MenuItemStyleData(
-                      height: 40,
-                      padding: EdgeInsets.only(left: 14, right: 14),
-                    ),
-                  ),
+                    );
+                  },
                 );
               }
               else {
@@ -204,7 +198,10 @@ class _HealthCenterRecordViewState extends State<HealthCenterRecordView> {
                 context: context,
                 backgroundColor: Colors.transparent,
                 builder: (BuildContext context) {
-                  return LifeLogBottomSheetView(healthReportType: type, selectedDate: selectedDate);
+                  return LifeLogBottomSheetView(
+                      healthReportType: type,
+                      selectedDate: _viewModel.selectedDate,
+                  );
                 });
           },
           child: Container(

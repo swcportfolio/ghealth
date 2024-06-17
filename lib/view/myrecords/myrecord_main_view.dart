@@ -17,7 +17,7 @@ import 'attendance_button_widget.dart';
 import 'health_center_record_view.dart';
 import 'myrecord_main_viewmodel.dart';
 
-enum HealthDataType  {
+enum HealthDataType {
   sleep,
   step,
 }

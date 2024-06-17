@@ -101,12 +101,6 @@ class _MyDataMainViewState extends State<MyDataMainView> {
                           dates: _viewModel.dates,
                           dataList: _viewModel.dataList,
                         ),
-                        // MetrologyInspectionWidget(
-                        //     metrologyInspection: _viewModel.metrologyInspection),
-
-                        /// AI 질환 예측 결과
-                        // AiDiseasePredictionResultWidget(mydataPredict: _viewModel.mydataPredict),
-                        // const Gap(5),
 
                         /// 처방 이력
                         PrescriptionHistoryWidget(

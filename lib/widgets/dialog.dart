@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/data/models/gallery3d_data.dart';
 import 'package:ghealth_app/view/login/login_view.dart';
+import '../layers/presentation/auth/login_view.dart';
 import '../utils/colors.dart';
 import '../view/reservation/reservation_viewmodel.dart';
 import 'frame.dart';
@@ -182,8 +183,8 @@ class CustomDialog{
                                       side: BorderSide(width: 1.0, color: mainColor),
                                       borderRadius: BorderRadius.only(bottomRight: Radius.circular(5.0)))),
                               onPressed: () =>{
-                                Navigator.pop(context),
-                                Frame.doPagePush(context, const LoginView()),
+                                //Navigator.pop(context),
+                                Frame.doPagePush(context, const LoginViewTest()),
                               } ,
                               child: Frame.myText(text: '로그인', color: Colors.white),
                           ),

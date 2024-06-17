@@ -62,7 +62,7 @@ class MedicationDetailViewModel extends ChangeNotifier {
     return null;
   }
 
-  void onPressedChip(MedicationInfoType type) {
+   onPressedChip(MedicationInfoType type) {
     _isSelectedList = List.generate(6, (int index) => false);
 
     switch(type) {

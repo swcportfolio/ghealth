@@ -9,7 +9,6 @@ import 'frame.dart';
 
 
 /// CustomPicker class
-/// 나이, 교육정도, 동거 수, 사고 당시 속도, 종교, 차량 색상, 직업 picker
 class CustomPicker{
 
   var tempData;

@@ -24,6 +24,7 @@ class Authorization{
   late String targetSleep;
   late String targetStep;
   late bool isToDayAttendance;// 당일 출석 여부
+  late bool permissionDenied;
 
 
   @override
@@ -122,7 +123,8 @@ class Authorization{
   /// 로그인 상태일때, HealthService 퍼미션 수락시
   /// 로컬에 저장된 출석데이터를 이용하여 수집된 건강데이터를 전송한다.
   Future<void> fetchDataIfLoggedIn(BuildContext context) async {
-    if (Authorization().token.isNotEmpty) {
+
+    if (Authorization().token.isNotEmpty && !Authorization().permissionDenied) {
       bool permissionRequired = await HealthService().requestPermission();
 
       if (permissionRequired) {
@@ -133,6 +135,10 @@ class Authorization{
           content: '권한및 데이터 접근 퍼미션이\n 미 허용되었습니다.',
           mainContext: context,
         );
+
+        Authorization().permissionDenied = true;
+        var pref = await SharedPreferences.getInstance();
+        pref.setBool('permissionDenied', true);
       }
     }
   }

@@ -6,15 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/data/models/reservation_default_response.dart';
 import 'package:ghealth_app/data/repository/post_repository.dart';
-import 'package:ghealth_app/utils/etc.dart';
 import 'package:ghealth_app/view/home/home_frame_view.dart';
 import 'package:ghealth_app/view/login/login_view.dart';
+import 'package:ghealth_app/view/setting/v_terms_full.dart';
 import 'package:ghealth_app/view/setting/version_view.dart';
 import 'package:ghealth_app/widgets/custom_appbar.dart';
 import 'package:ghealth_app/widgets/dialog.dart';
 import 'package:ghealth_app/widgets/frame.dart';
 
+import '../../common/util/nav.dart';
 import '../../data/enum/snackbar_status_type.dart';
+import '../../layers/presentation/tab/setting/opensource/v_opensource.dart';
 import '../../main.dart';
 import '../../utils/snackbar_utils.dart';
 
@@ -52,8 +54,8 @@ class _SettingViewState extends State<SettingView> {
             children:
             [
               _buildMenu('버전 정보'),
-              _buildMenu('서비스 이용약관'),
-              _buildMenu('개인정보 처리 방침'),
+              _buildMenu('이용 약관 및 정책'),
+              _buildMenu('오픈소스 라이선스'),
               _buildMenu('로그 아웃'),
             ],
           ),
@@ -79,20 +81,12 @@ class _SettingViewState extends State<SettingView> {
               Frame.doPagePush(context, const VersionView());
               break;
             }
-          case '서비스 이용약관': {
-            Frame.doLaunchUniversalLink(Uri(
-              scheme: 'https',
-              host: 'www.ghealth.or.kr',
-              path: '/terms/service',
-            ));
+          case '이용 약관 및 정책': {
+            Nav.doPush(context, TermsFullView());
             break;
           }
-          case '개인정보 처리 방침': {
-            Frame.doLaunchUniversalLink(Uri(
-              scheme: 'https',
-              host: 'www.ghealth.or.kr',
-              path: '/terms/privacy',
-            ));
+          case '오픈소스 라이선스': {
+            Nav.doPush(context, const OpensourceView());
             break;
           }
         }
@@ -144,6 +138,5 @@ class _SettingViewState extends State<SettingView> {
       SnackBarUtils.showDefaultSnackBar('서버가 불안정합니다. 다시 시도 바랍니다.', context);
       logger.e('=> 로그아웃 실패:${dioError.message}');
     }
-
   }
 }
