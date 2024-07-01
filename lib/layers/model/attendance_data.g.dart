@@ -6,6 +6,7 @@ part of 'attendance_data.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+
 class AttendanceDataAdapter extends TypeAdapter<AttendanceData> {
   @override
   final int typeId = 0;
@@ -35,7 +36,7 @@ class AttendanceDataAdapter extends TypeAdapter<AttendanceData> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AttendanceDataAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+          other is AttendanceDataAdapter &&
+              runtimeType == other.runtimeType &&
+              typeId == other.typeId;
 }

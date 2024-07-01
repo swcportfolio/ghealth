@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/data/preference/prefs.dart';
+import '../../common/service/attendance_checker.dart';
 import '../../common/service/health_service.dart';
-import '../../services/attendance_checker.dart';
-import '../../widgets/dialog.dart';
+import '../presentation/widgets/w_custom_dialog.dart';
 
 /// Attributes to store user authorization information
 class AuthorizationTest{

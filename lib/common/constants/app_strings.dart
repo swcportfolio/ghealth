@@ -7,5 +7,5 @@ class AppStrings {
 
   static const imagePath = 'assets/images';
 
-  static const testMsg = '안녕하세요';
+  //static const testMsg = '안녕하세요';
 }

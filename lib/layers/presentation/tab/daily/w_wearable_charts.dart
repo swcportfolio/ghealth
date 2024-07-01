@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/common/common.dart';
-import 'package:ghealth_app/data/models/authorization.dart';
 import 'package:ghealth_app/layers/presentation/tab/daily/vm_daily.dart';
 import 'package:ghealth_app/layers/presentation/tab/daily/w_health_circular_chart.dart';
 import 'package:intl/intl.dart';

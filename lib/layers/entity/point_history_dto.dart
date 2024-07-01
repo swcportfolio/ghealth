@@ -1,7 +1,5 @@
 import 'package:ghealth_app/layers/entity/status_dto.dart';
 
-import '../../data/models/point_hisstory.dart';
-
 class PointHistoryDTO {
   final StatusDTO status;
   final List<PointHistoryDataDTO>? data;

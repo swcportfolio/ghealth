@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/layers/presentation/tab/daily/point/v_my_health_point.dart';
-import 'package:ghealth_app/view/point/my_health_point_view.dart';
 
 import '../../../../../common/common.dart';
 import '../../../../../common/util/text_format.dart';

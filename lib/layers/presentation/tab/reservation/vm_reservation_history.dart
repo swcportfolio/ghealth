@@ -2,14 +2,13 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:ghealth_app/layers/presentation/tab/reservation/vm_reservation.dart';
 
 import '../../../../../common/util/dio/dio_exceptions.dart';
 import '../../../../../main.dart';
-import '../../../../widgets/dialog.dart';
 import '../../../domain/usecase/ghealth/reservation_usecase.dart';
 import '../../../entity/reservation_dto.dart';
 import '../../../model/enum/region_type.dart';
+import '../../widgets/w_custom_dialog.dart';
 
 class ReservationHistoryViewModelTest extends ChangeNotifier {
   bool _isLoading = true;

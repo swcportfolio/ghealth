@@ -4,11 +4,10 @@ import 'package:ghealth_app/common/common.dart';
 import 'package:ghealth_app/common/data/validate/auth_validation_mixin.dart';
 import 'package:ghealth_app/layers/presentation/tab/daily/point/vm_point_detail.dart';
 import 'package:ghealth_app/layers/presentation/tab/daily/point/w_point_history_list_frame.dart';
+import 'package:ghealth_app/layers/presentation/widgets/style_text.dart';
 import 'package:ghealth_app/layers/presentation/widgets/w_future_handler.dart';
-import 'package:ghealth_app/widgets/frame.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../model/authorization_test.dart';
 import '../../../widgets/frame_scaffold.dart';
 
 
@@ -50,14 +49,14 @@ class _PointDetailViewState extends State<PointDetailView> with AuthValidationMi
                 [
                   const Gap(AppDim.large),
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: AppDim.small),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppDim.small),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Frame.myText(
+                        StyleText(
                           text: '포인트 적립 / 차감 내역',
-                          fontSize: 1.3,
+                          size: AppDim.fontSizeLarge,
                           fontWeight: AppDim.weightBold,
                         ),
                       ],

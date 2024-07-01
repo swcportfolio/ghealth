@@ -5,10 +5,10 @@ import 'package:ghealth_app/common/common.dart';
 import 'package:ghealth_app/common/util/snackbar_utils.dart';
 import 'package:ghealth_app/layers/presentation/tab/setting/v_terms_full.dart';
 import 'package:ghealth_app/layers/presentation/tab/setting/v_version.dart';
+import 'package:ghealth_app/layers/presentation/tab/v_tab_frame.dart';
 import 'package:ghealth_app/layers/presentation/widgets/frame_scaffold.dart';
 import 'package:ghealth_app/layers/presentation/widgets/style_text.dart';
 import 'package:ghealth_app/layers/presentation/widgets/w_custom_dialog.dart';
-import 'package:ghealth_app/view/home/home_frame_view.dart';
 
 import '../../../../common/data/validate/auth_validation_mixin.dart';
 import '../../../../main.dart';
@@ -146,7 +146,7 @@ class _SettingViewState extends State<SettingViewTest> with AuthValidationMixin{
         context: context,
         statusType: SnackBarStatusType.success,
       );
-    Nav.doAndRemoveUntil(context, const HomeFrameView());
+    Nav.doAndRemoveUntil(context, const TabFrameViewTest());
   }
 
   _performLogoutFailure(String message) {

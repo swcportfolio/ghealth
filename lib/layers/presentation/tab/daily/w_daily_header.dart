@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ghealth_app/common/common.dart';
-import 'package:ghealth_app/data/models/authorization.dart';
 
 import '../../../model/authorization_test.dart';
 import '../../widgets/style_text.dart';

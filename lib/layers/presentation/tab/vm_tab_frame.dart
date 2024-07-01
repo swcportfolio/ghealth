@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import '../../../widgets/dialog.dart';
 import '../../model/authorization_test.dart';
+import '../widgets/w_custom_dialog.dart';
 import 'aihealth/v_ai_health.dart';
 import 'checkup/v_checkup.dart';
 import 'daily/v_daily.dart';

@@ -3,7 +3,6 @@
 import 'package:dio/dio.dart';
 import 'package:ghealth_app/common/cli_common.dart';
 
-import '../../../data/models/authorization.dart';
 import '../../../layers/model/authorization_test.dart';
 import 'custom_log_interceptor.dart';
 

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:ghealth_app/common/common.dart';
-import 'package:ghealth_app/common/constants/app_constants.dart';
 import 'package:ghealth_app/layers/presentation/tab/setting/v_setting.dart';
 import 'package:ghealth_app/layers/presentation/widgets/style_text.dart';
 import 'package:ghealth_app/layers/presentation/widgets/w_custom_dialog.dart';
 
-import '../../../common/constants/app_colors.dart';
-import '../../../common/constants/app_dimensions.dart';
-import '../../../view/setting/setting_view.dart';
 import '../../model/authorization_test.dart';
 
 

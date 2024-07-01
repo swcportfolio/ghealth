@@ -1,8 +1,8 @@
 import 'package:hive/hive.dart';
 
-import '../common/service/health_service.dart';
-import '../data/models/attendance_data.dart';
-import '../main.dart';
+import '../../layers/model/attendance_data.dart';
+import '../../main.dart';
+import 'health_service.dart';
 
 
 /// `AttendanceChecker` 클래스는 출석과 관련된 작업을 수행하는 데 사용됩니다.

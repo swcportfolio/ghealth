@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:ghealth_app/common/common.dart';
 import 'package:ghealth_app/layers/presentation/auth/vm_login.dart';
-import 'package:ghealth_app/utils/nocheck_certificate_http.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:logger/logger.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -13,9 +10,9 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'common/data/preference/app_preferences.dart';
 import 'common/data/preference/prefs.dart';
 import 'common/di/di.dart';
-import 'data/models/attendance_data.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
+import 'layers/model/attendance_data.dart';
 import 'layers/model/authorization_test.dart';
 import 'my_app.dart';
 
@@ -36,7 +33,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // HttpOverrides 등록
-  HttpOverrides.global = NoCheckCertificateHttpOverrides();
+  //HttpOverrides.global = NoCheckCertificateHttpOverrides();
 
   // SharedPreferences 초기화
   await AppPreferences.init();
