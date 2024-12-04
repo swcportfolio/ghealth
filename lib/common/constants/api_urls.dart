@@ -1,9 +1,4 @@
 
-
-
-const String baseUrl = 'http://api.ghealth.or.kr';
-
-
 /// 로그인
 const String loginApiUrl = '$baseUrl/ws/public/user/login';
 
