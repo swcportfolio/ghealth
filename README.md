@@ -1,29 +1,25 @@
-# ghealth_app
+# GHealth 
 
-ver2 GHealth_App project.
+광주 인공지능 기반 헬스케어서비스 GHealth 앱 개발
 
-## Getting Started
+광주 지역 헬스케어 서비스를 혁신하기 위해 인공지능 기반 개인 맞춤형 건강 관리 솔루션 앱  개발
 
-This project is a starting point for a Flutter application.
+## 주요 화면
+- 예약화면: 동구, 광산구에서 실시하는 건강검진을 예약할 수 있다.
+- AI 건강 예측 화면: 마이데이터 기반으로 예측된 건강 예측 서비스 화면이다.
+- 나의 건강 검진 화면: 국가에서 주기적으로 검진하는 건강검진 기록을 확인 할 수있는 화면이다. 
+- 나의 일상 기록 화면: 포인트, 걸음수, 출석체크, 건강관리소 등에서 측정된 검사 결과를 확인 할 수 있는 앱이다.
 
-A few resources to get you started if this is your first Flutter project:
+## 사용된 기술 스택
+- 언어: Dart
+- 아키텍처: Clean Architecture
+- 패턴: MVVM
+- 상태 관리: Provider
+- 통신: dio
+- 내부 DB: hive
+- 의존성 주입: get_it
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-- Flutter SDK vserion: 3.13.5
-- 작성자: psw
+## 버전
+- Flutter: 3.13.5
 
 
-파일 네이밍 규칙
-------------------------------------------------------------------
-Object       File name         Description
-------------------------------------------------------------------
-Widget       w_{name}.dart     위젯
-View         v_{name}.dart     전체 디바이스를 덮는 화면
-Fragment     f_{name}.dart     Screen 내부에 일부로 존재하는 큰 화면 Widget
-ViewModel    vm_{name}.dart    View의 상태를 관리하고 View의 비즈니스 로직을 담당
-Dialog       d_{name}.dart     Dialog 혹은 Bottom sheet
-ValueObject  vo_{name}.dart    UI에서 사용하는 객체
-DTO          dto_{name}.dart   통신이나 데이터 저장에 사용하는 객체
-나머지         소문자,숫자,_조합     공식가이드
-------------------------------------------------------------------
