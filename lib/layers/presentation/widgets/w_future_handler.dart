@@ -22,6 +22,7 @@ class FutureHandler extends StatelessWidget {
     required this.errorMessage,
     required this.child,
   });
+  double get indicatorSize => 35.0;
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +30,17 @@ class FutureHandler extends StatelessWidget {
       return Platform.isAndroid
           ? Center(
               child: SizedBox(
-                  height: 35.0,
-                  width: 35.0,
+                  height: indicatorSize,
+                  width: indicatorSize,
                   child: CircularProgressIndicator(
                     strokeWidth: 3,
                     color: AppColors.primaryColor,
                   )))
-          : const Center(
+          :  Center(
               child: SizedBox(
-                  height: 40.0,
-                  width: 40.0,
-                  child: CupertinoActivityIndicator(radius: 15)),
+                  height: indicatorSize,
+                  width: indicatorSize,
+                  child: const CupertinoActivityIndicator(radius: 15)),
             );
     } else if (isError) {
       // 에러가 발생했을 때 에러 메시지와 재시도 버튼을 표시

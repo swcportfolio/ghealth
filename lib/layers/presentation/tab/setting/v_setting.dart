@@ -68,7 +68,8 @@ class _SettingViewState extends State<SettingViewTest> with AuthValidationMixin{
                   title: '로그아웃',
                   text: '\n로그아웃 하시겠습니까?',
                   mainContext: context,
-                  onPressed: () => handleLogout());
+                  onPressed: () => handleLogout()
+              );
               break;
             }
           case '버전 정보': {

@@ -113,8 +113,7 @@ class ReservationHistoryViewModelTest extends ChangeNotifier {
 
 
   /// 스크롤 이벤트 등록
-  /// 히스토리 전체보기에서 스크롤시 하단에 근접하면
-  /// 다음 페이지 데이터를 불러온다.
+  /// 히스토리 전체보기에서 스크롤시 하단에 근접하면 다음 페이지 데이터를 불러온다.
   addScrollListener() {
     scrollController.addListener(() {
       if (scrollController.position.pixels >
